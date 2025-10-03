@@ -11,6 +11,7 @@ function getClientIP(request: NextRequest): string {
   if (forwarded) {
     return forwarded.split(',')[0].trim();
   }
+  // Fixed: Removed invalid request.ip property access
   return 'unknown';
 }
 
