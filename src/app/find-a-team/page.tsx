@@ -47,15 +47,19 @@ export default function FindATeamPage() {
           </p>
           
           {/* Add Skills Button */}
-          <TeamProfileForm />
+          <div className="mb-4">
+            <TeamProfileForm />
+          </div>
           
           {/* Disclaimer */}
-          <p 
-            className="text-sm mt-4 text-center"
-            style={{ fontFamily: 'Raleway, sans-serif', color: '#666' }}
-          >
-            Submissions are public and may be removed if found to violate guidelines.
-          </p>
+          <div className="mt-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p 
+              className="text-sm text-center font-medium"
+              style={{ fontFamily: 'Raleway, sans-serif', color: '#8b5a00' }}
+            >
+              ⚠️ Submissions are public and may be removed if found to violate guidelines.
+            </p>
+          </div>
         </div>
 
         {/* Profiles Grid */}
