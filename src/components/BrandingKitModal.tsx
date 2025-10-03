@@ -66,7 +66,7 @@ function buildPrompts(problemText: string, solutionText: string, inputs: Brandin
     : inferInsightIfEmpty(inputs.industry, inputs.targetAudience);
 
   // Shared context block
-  const ctx = {
+  const ctx: Record<string, unknown> = {
     problem: problemText,
     proposed_solution: solutionText,
     business_name: inputs.businessName,
