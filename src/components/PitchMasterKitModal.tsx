@@ -948,7 +948,8 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
                           demo: 'demo_script',
                           qa: 'qa_preparation'
                         }[activePreview];
-                        copy(generated.prompts[promptKey], `${activePreview} content`);
+                        const prompts = (generated as Record<string, unknown>)?.prompts as Record<string, unknown>;
+                        copy(prompts?.[promptKey] as string, `${activePreview} content`);
                       }}
                     >
                       Copy for Gamma
