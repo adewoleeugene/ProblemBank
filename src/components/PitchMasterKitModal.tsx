@@ -968,7 +968,8 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
                         demo: 'demo_script',
                         qa: 'qa_preparation'
                       }[activePreview];
-                      return generated.prompts[promptKey] || '';
+                      const prompts = (generated as Record<string, unknown>)?.prompts as Record<string, unknown>;
+                      return (prompts?.[promptKey] as string) || '';
                     })()}
                   />
                 </div>
