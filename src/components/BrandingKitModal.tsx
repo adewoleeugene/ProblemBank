@@ -698,7 +698,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
                     rows={10}
                     className="w-full p-3 rounded-lg border"
                     style={{ borderColor: '#e8ddd0', backgroundColor: '#fff', color: '#403f3e', fontFamily: 'Raleway, sans-serif' }}
-                    value={activePreview === 'brand' ? ((generatedObj as any)?.prompts?.plain_brand_strategy_prompt || '') : ((generatedObj as any)?.prompts?.flat_logo_concepts_prompt || '')}
+                    value={activePreview === 'brand' ? ((generatedObj as Record<string, unknown>)?.prompts as Record<string, unknown>)?.plain_brand_strategy_prompt as string || '') : ((generatedObj as Record<string, unknown>)?.prompts as Record<string, unknown>)?.flat_logo_concepts_prompt as string || '')}
                   />
                   <div className="mt-2">
                     {activePreview === 'brand' ? (
