@@ -289,7 +289,7 @@ function buildPrompts(problemText: string, solutionText: string, inputs: Brandin
         user: [
           `Context: ${JSON.stringify(ctx)}`,
           'Task: Generate both Brand Strategy and Logo/Visual deliverables in one shot, adhering to the schemas specified for each sub-prompt above.',
-          'Output: Return JSON {"brand_strategy_output": any, "logo_and_visuals_output": any} where each key follows the schemas defined for their corresponding prompts. No prose or commentary outside JSON.',
+          'Output: Return JSON {"brand_strategy_output": object, "logo_and_visuals_output": object} where each key follows the schemas defined for their corresponding prompts. No prose or commentary outside JSON.',
         ].join('\n'),
       },
     },
@@ -316,7 +316,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
     accentColor: DEFAULT_COLORS.accent,
   });
   const [generated, setGenerated] = useState<string>('');
-  const [generatedObj, setGeneratedObj] = useState<any>(null);
+  const [generatedObj, setGeneratedObj] = useState<Record<string, unknown> | null>(null);
   const [activePreview, setActivePreview] = useState<'brand' | 'logo'>('brand');
   const [showStep1Errors, setShowStep1Errors] = useState(false);
   const [showStep2Errors, setShowStep2Errors] = useState(false);
@@ -380,7 +380,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
     }
   };
 
-  const copySection = async (data: any, label: string) => {
+  const copySection = async (data: Record<string, unknown>, label: string) => {
     try {
       await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
       alert(`${label} copied to clipboard`);
@@ -533,7 +533,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
                     {personalityCount < 3 ? 'Please provide at least 3 adjectives.' : `Adjectives: ${personalityCount} (max is soft)`}
                   </p>
                   <p className="text-[11px]" style={{ fontFamily: 'Raleway, sans-serif', color: '#666' }}>
-                    Use commas between adjectives, e.g., "modern, playful, trustworthy".
+                    Use commas between adjectives, e.g., &quot;modern, playful, trustworthy&quot;.
                   </p>
                   {showStep1Errors && personalityCount < 3 && (
                     <p className="mt-1 text-xs" style={{ fontFamily: 'Raleway, sans-serif', color: '#a16207' }}>Please enter at least 3 comma-separated adjectives.</p>

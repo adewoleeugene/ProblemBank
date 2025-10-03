@@ -123,7 +123,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
           className="text-2xl md:text-3xl text-center"
           style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e', fontWeight: 500 }}
         >
-          Builder's Kits
+          Builder&apos;s Kits
         </h3>
         <p
           className="mt-2 text-sm md:text-base text-center"
@@ -167,8 +167,8 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
                     color: '#403f3e',
                     fontWeight: 600,
                     display: '-webkit-box',
-                    WebkitLineClamp: 2 as any,
-                    WebkitBoxOrient: 'vertical' as any,
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                   }}
                 >
@@ -181,7 +181,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
                     className="text-center text-sm"
                     style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e', fontWeight: 500 }}
                   >
-                    YOU'LL CREATE:
+                    YOU&apos;LL CREATE:
                   </div>
                   <ul className="mt-2 space-y-1">
                     {kit.items.map((it) => (
