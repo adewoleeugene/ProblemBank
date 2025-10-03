@@ -29,7 +29,7 @@ const ResourcesSubnav: React.FC = () => {
             backgroundColor: pathname === '/resources/kits' ? '#f2e8dc' : 'transparent',
           }}
         >
-          Builder's Kits
+          Builder&apos;s Kits
         </Link>
         <span 
           className="mx-2 text-sm"

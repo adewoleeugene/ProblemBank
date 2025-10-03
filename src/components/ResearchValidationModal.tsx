@@ -103,7 +103,7 @@ const ResearchValidationModal: React.FC<ResearchValidationModalProps> = ({ onClo
     }
   };
 
-  const generateValidationPrompt = (stepIndex: number, data: any): string => {
+  const generateValidationPrompt = (stepIndex: number, data: Record<string, unknown>): string => {
     const prompts = {
       0: `# Business Idea Validation for Sierra Leone Market
 

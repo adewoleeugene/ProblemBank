@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navigation from '@/components/Navigation';
 import ResourcesSubnav from '@/components/ResourcesSubnav';
 import TechStackFilters from '@/components/TechStackFilters';
@@ -13,7 +13,7 @@ export default function ResourcesTechPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -32,11 +32,11 @@ export default function ResourcesTechPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery, selectedCategories]);
 
   useEffect(() => {
     fetchItems();
-  }, [searchQuery, selectedCategories, fetchItems]);
+  }, [fetchItems]);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f9f2e9' }}>

@@ -377,7 +377,7 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
     },
   });
 
-  const [generated, setGenerated] = useState<any>(null);
+  const [generated, setGenerated] = useState<Record<string, unknown> | null>(null);
   const [activePreview, setActivePreview] = useState<'pitch' | 'summary' | 'demo' | 'qa'>('pitch');
   const [showErrors, setShowErrors] = useState<boolean[]>([false, false, false, false, false]);
 
@@ -610,7 +610,7 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
 
                 <div>
                   <label className="text-sm" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}>
-                    6. Your "Secret Sauce"
+                    6. Your &quot;Secret Sauce&quot;
                   </label>
                   <textarea
                     rows={3}
@@ -921,7 +921,7 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
                       color: '#403f3e',
                       fontFamily: 'Raleway, sans-serif'
                     }}
-                    onClick={() => setActivePreview(key as any)}
+                    onClick={() => setActivePreview(key as 'pitch' | 'summary' | 'demo' | 'qa')}
                   >
                     {label}
                   </button>

@@ -559,8 +559,6 @@ function HackathonAnnouncementSection() {
   const r3 = useTransform(scrollYProgress, [0, 1], [0, scale(2)]);
 
   // Countdown
-  const START_DATE = new Date('2025-11-06T00:00:00Z'); // Sierra Leone (UTC+0)
-  const END_DATE = new Date('2025-12-02T00:00:00Z'); // End date start-of-day
   const [countdown, setCountdown] = useState<{ label: 'Starts in' | 'In Progress' | 'Completed'; days: number; hours: number; minutes: number; seconds: number }>({
     label: 'Starts in',
     days: 0,
@@ -570,6 +568,9 @@ function HackathonAnnouncementSection() {
   });
 
   useEffect(() => {
+    const START_DATE = new Date('2025-11-06T00:00:00Z'); // Sierra Leone (UTC+0)
+    const END_DATE = new Date('2025-12-02T00:00:00Z'); // End date start-of-day
+    
     const tick = () => {
       const now = new Date();
       let target = START_DATE;
@@ -595,7 +596,7 @@ function HackathonAnnouncementSection() {
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [START_DATE, END_DATE]);
+  }, []);
 
   return (
     <section className="relative z-40 w-full py-12 md:py-16 lg:py-20 col">

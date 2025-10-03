@@ -268,12 +268,12 @@ const UIPrototypeKitModal: React.FC<UIPrototypeKitModalProps> = ({ onClose, prob
                       <label key={key} className="flex items-center gap-2 text-sm cursor-pointer" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}>
                         <input
                           type="checkbox"
-                          checked={(blueprint.platforms as any)[key] as boolean}
+                          checked={(blueprint.platforms as Record<string, boolean>)[key] as boolean}
                           onChange={(e) => setBlueprint((s) => ({ ...s, platforms: { ...s.platforms, [key]: e.target.checked } }))}
                           className="w-4 h-4 rounded border-2 cursor-pointer"
                           style={{
                             borderColor: '#e8ddd0',
-                            backgroundColor: (blueprint.platforms as any)[key] ? '#403f3e' : '#fff',
+                            backgroundColor: (blueprint.platforms as Record<string, boolean>)[key] ? '#403f3e' : '#fff',
                             accentColor: '#403f3e'
                           }}
                         />
@@ -309,7 +309,7 @@ const UIPrototypeKitModal: React.FC<UIPrototypeKitModalProps> = ({ onClose, prob
                     onChange={(e) => setDesign((s) => ({ ...s, brandPersonality: e.target.value }))}
                   />
                   <p className="text-[11px] mt-1" style={{ fontFamily: 'Raleway, sans-serif', color: '#666' }}>
-                    Use commas between adjectives, e.g., "modern, playful, trustworthy".
+                    Use commas between adjectives, e.g., &quot;modern, playful, trustworthy&quot;.
                   </p>
                   {showStep1Errors && normalizeList(design.brandPersonality).length < 3 && (
                     <p className="mt-1 text-xs" style={{ fontFamily: 'Raleway, sans-serif', color: '#a16207' }}>Please enter at least 3 comma-separated adjectives.</p>

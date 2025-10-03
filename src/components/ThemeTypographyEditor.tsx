@@ -121,7 +121,7 @@ export default function ThemeTypographyEditor() {
           throw new Error('Failed to fetch fonts');
         }
         const json = await res.json();
-        const items: GoogleFont[] = (json.items || []).map((it: any) => ({ family: it.family, category: it.category }));
+        const items: GoogleFont[] = (json.items || []).map((it: Record<string, unknown>) => ({ family: it.family as string, category: it.category as string }));
         setFonts(items);
       } catch (e) {
         // Fallback minimal list if API fails
