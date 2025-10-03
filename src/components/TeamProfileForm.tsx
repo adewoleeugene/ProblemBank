@@ -46,7 +46,7 @@ export default function TeamProfileForm() {
         const data = await response.json();
         const profiles = data.profiles || [];
         // Check if any profile belongs to current user (isMine: true)
-        const userHasProfile = profiles.some((profile: any) => profile.isMine);
+        const userHasProfile = profiles.some((profile: Record<string, unknown>) => profile.isMine === true);
         setHasExistingProfile(userHasProfile);
       }
     } catch (error) {
