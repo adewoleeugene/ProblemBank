@@ -18,7 +18,7 @@ export default async function IdeaDetailPage({ params }: { params: Promise<{ slu
                   Idea not found
                 </h1>
                 <p className="mt-2" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}>
-                  We couldn\'t locate that idea. Try navigating back to the ideas list.
+                  We couldn&apos;t locate that idea. Try navigating back to the ideas list.
                 </p>
               </div>
             ) : (
@@ -52,7 +52,6 @@ export default async function IdeaDetailPage({ params }: { params: Promise<{ slu
                   const s = typeof idea.solution === 'string' ? idea.solution.trim() : '';
                   const b = typeof idea.blurb === 'string' ? idea.blurb.trim() : '';
                   const solutionText = s.length > 0 ? s : b;
-                  const problemText = typeof idea.problem === 'string' && idea.problem.trim().length > 0 ? idea.problem.trim() : idea.title;
                   return solutionText.length > 0 ? (
                     <section className="mt-10 text-center">
                       <h2 className="text-3xl md:text-4xl" style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e', fontWeight: 500 }}>

@@ -80,7 +80,7 @@ export default function ResourcesKitsPage() {
             className="text-4xl md:text-5xl lg:text-6xl mb-4"
             style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e', fontWeight: 500 }}
           >
-            Builder's Kits
+            Builder&apos;s Kits
           </h1>
           <p
             className="text-lg md:text-xl max-w-3xl mx-auto"

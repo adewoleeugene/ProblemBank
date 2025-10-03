@@ -93,7 +93,7 @@ const BrandingKitCard: React.FC<BrandingKitCardProps> = ({
             >
               <span className="text-white text-xs">●</span>
             </span>
-            YOU'LL CREATE:
+            YOU&apos;LL CREATE:
           </h4>
           <div className="space-y-2">
             {items.map((item, index) => (

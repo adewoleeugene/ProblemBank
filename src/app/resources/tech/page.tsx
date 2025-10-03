@@ -36,7 +36,7 @@ export default function ResourcesTechPage() {
 
   useEffect(() => {
     fetchItems();
-  }, [searchQuery, selectedCategories]);
+  }, [searchQuery, selectedCategories, fetchItems]);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f9f2e9' }}>

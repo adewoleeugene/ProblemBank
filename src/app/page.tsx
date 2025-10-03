@@ -1,7 +1,6 @@
 'use client';
 import { Navigation } from '../components';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { kits as kitsData, slugifyTitle } from '../lib/kits';
@@ -596,7 +595,7 @@ function HackathonAnnouncementSection() {
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [START_DATE, END_DATE]);
 
   return (
     <section className="relative z-40 w-full py-12 md:py-16 lg:py-20 col">

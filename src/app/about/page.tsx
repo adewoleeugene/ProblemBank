@@ -194,7 +194,7 @@ export default function AboutPage() {
                           className="text-sm leading-relaxed text-center"
                           style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
                         >
-                          Follow the kit's guidance to build your project, iterate based on feedback, and bring your idea to life.
+                          Follow the kit&apos;s guidance to build your project, iterate based on feedback, and bring your idea to life.
                         </p>
                       </div>
                     </div>

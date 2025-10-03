@@ -1,5 +1,5 @@
 import { Navigation } from '../../components';
-import { fetchIdeasPage, IdeaItem, fetchAllCategories } from '../../lib/airtable';
+import { fetchIdeasPage, fetchAllCategories } from '../../lib/airtable';
 import Link from 'next/link';
 
 function slugify(title: string): string {

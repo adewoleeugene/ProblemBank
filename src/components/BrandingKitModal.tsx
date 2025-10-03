@@ -84,7 +84,7 @@ function buildPrompts(problemText: string, solutionText: string, inputs: Brandin
       primary: normalizeHexLocal(inputs.primaryColor, DEFAULT_COLORS.primary),
       secondary: normalizeHexLocal(inputs.secondaryColor, DEFAULT_COLORS.secondary),
       accent: normalizeHexLocal(inputs.accentColor, DEFAULT_COLORS.accent),
-    } as any;
+    };
   }
 
   const flatPrompt = [
