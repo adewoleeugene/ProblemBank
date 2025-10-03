@@ -709,7 +709,11 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
                       <button
                         className="px-4 py-2 rounded-full"
                         style={{ backgroundColor: '#f2e8dc', border: '1px solid #d8cdbc', color: '#403f3e', fontFamily: 'Raleway, sans-serif' }}
-                        onClick={() => copyText((generatedObj as Record<string, unknown>)?.prompts as Record<string, unknown>)?.plain_brand_strategy_prompt as string, 'Brand Strategy prompt')}
+                        onClick={() => {
+                          const prompts = (generatedObj as Record<string, unknown>)?.prompts as Record<string, unknown>;
+                          const prompt = prompts?.plain_brand_strategy_prompt as string;
+                          copyText(prompt, 'Brand Strategy prompt');
+                        }}
                       >
                         Copy Brand Strategy Prompt
                       </button>
@@ -717,7 +721,11 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
                       <button
                         className="px-4 py-2 rounded-full"
                         style={{ backgroundColor: '#f2e8dc', border: '1px solid #d8cdbc', color: '#403f3e', fontFamily: 'Raleway, sans-serif' }}
-                        onClick={() => copyText((generatedObj as Record<string, unknown>)?.prompts as Record<string, unknown>)?.flat_logo_concepts_prompt as string, 'Logo Concepts prompt')}
+                        onClick={() => {
+                          const prompts = (generatedObj as Record<string, unknown>)?.prompts as Record<string, unknown>;
+                          const prompt = prompts?.flat_logo_concepts_prompt as string;
+                          copyText(prompt, 'Logo Concepts prompt');
+                        }}
                       >
                         Copy Logo Concepts Prompt
                       </button>
