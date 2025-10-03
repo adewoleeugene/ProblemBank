@@ -46,7 +46,12 @@ const Navigation: React.FC<NavigationProps> = ({
         <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16">
           {/* Left: Brand */}
           <div className="flex items-center">
-            <Link href="/" aria-label="Go to home">
+            <Link href="/" aria-label="Go to home" className="flex items-center space-x-2">
+              <img 
+                src="/cf-logo.svg" 
+                alt="CF Logo" 
+                className="w-8 h-8"
+              />
               <span
                 className="text-[22px] inline-block"
                 style={{ fontFamily: 'Decoy, serif', color: '#403f3e' }}
