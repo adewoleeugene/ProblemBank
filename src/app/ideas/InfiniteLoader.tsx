@@ -145,7 +145,7 @@ export default function IdeasInfiniteLoader({ initialOffset, initialCount = 0 }:
                         />
                       </div>
                       <p
-                        className="text-sm leading-relaxed text-center"
+                        className="text-sm leading-relaxed text-center line-clamp-5"
                         style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
                       >
                         {item.blurb}

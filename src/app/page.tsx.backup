@@ -222,10 +222,9 @@ export default function Home() {
           {/* Cards Grid */}
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
             {ideas.map((item, idx) => (
-              <Link
+              <div
                 key={item.title}
-                href={`/ideas/${slugifyTitle(item.title)}`}
-                className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] block"
+                className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px]"
                 style={{
                   height: '400px',
                   backgroundColor: idx % 2 === 0 ? '#fffaf3' : '#f2e8dc',
@@ -277,14 +276,14 @@ export default function Home() {
                       />
                     </div>
                     <p
-                      className="text-sm leading-relaxed text-center line-clamp-5"
+                      className="text-sm leading-relaxed text-center"
                       style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
                     >
                       {item.blurb}
                     </p>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

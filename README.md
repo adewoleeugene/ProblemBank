@@ -34,3 +34,27 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Environment Variables
+
+### Find-a-Team Feature
+
+The Find-a-Team feature requires Airtable configuration. Add these environment variables to your `.env.local` file:
+
+```bash
+# Airtable credentials for TeamBoard
+AIRTABLE_TEAM_TOKEN=your_airtable_token
+AIRTABLE_TEAM_BASE_ID=appXXXqFjLgeJNRDi
+AIRTABLE_TEAM_TABLE_ID=tblZKsVPjgaD7J9IG
+```
+
+**Note:** If `AIRTABLE_TEAM_*` variables are not set, the system will fall back to the base `AIRTABLE_*` variables.
+
+### Airtable Table Schema
+
+The TeamBoard table should have the following fields:
+- `Name` (text): Twitter/X handle (e.g., `@handle`) [required]
+- `X(twitter)` (text): full profile URL (e.g., `https://x.com/handle`)
+- `LinkedIn` (text): full LinkedIn profile URL (optional)
+- `Skillset` (multiple select): list of skills. Field allows adding new options; API will create options as needed.
+- `Repo` (long text): one or more repository URLs (newline or comma separated)

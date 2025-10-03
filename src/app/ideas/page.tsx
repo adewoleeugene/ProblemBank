@@ -1,6 +1,7 @@
 import { Navigation } from '../../components';
 import { fetchIdeasPage, fetchAllCategories } from '../../lib/airtable';
 import Link from 'next/link';
+import IdeasInfiniteLoader from './InfiniteLoader';
 
 function slugify(title: string): string {
   return title
@@ -158,7 +159,7 @@ export default async function IdeasPage({ searchParams }: { searchParams?: Recor
                           />
                         </div>
                         <p
-                          className="text-sm leading-relaxed text-center"
+                          className="text-sm leading-relaxed text-center line-clamp-5"
                           style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
                         >
                           {item.blurb}
@@ -178,6 +179,3 @@ export default async function IdeasPage({ searchParams }: { searchParams?: Recor
     </div>
   );
 }
-
-// Import client component
-import IdeasInfiniteLoader from './InfiniteLoader';
