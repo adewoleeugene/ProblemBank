@@ -1,3 +1,5 @@
+'use client';
+
 import TeamProfileForm from '@/components/TeamProfileForm';
 import TeamProfilesClient from '@/components/TeamProfilesClient';
 import { Navigation } from '@/components';
