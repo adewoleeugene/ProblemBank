@@ -14,6 +14,8 @@ export default function TeamProfileForm() {
   const [isSkillsOpen, setIsSkillsOpen] = useState(false);
   const [skillSearch, setSkillSearch] = useState('');
   const [formKey, setFormKey] = useState(0);
+  const [hasExistingProfile, setHasExistingProfile] = useState(false);
+  const [isCheckingProfile, setIsCheckingProfile] = useState(true);
   const skillsRef = useRef<HTMLDivElement>(null);
   
   const availableSkills = [
@@ -35,6 +37,29 @@ export default function TeamProfileForm() {
   });
 
   const router = useRouter();
+
+  // Check if user already has a profile
+  const checkExistingProfile = async () => {
+    try {
+      const response = await fetch('/api/teamboard');
+      if (response.ok) {
+        const data = await response.json();
+        const profiles = data.profiles || [];
+        // Check if any profile belongs to current user (isMine: true)
+        const userHasProfile = profiles.some((profile: any) => profile.isMine);
+        setHasExistingProfile(userHasProfile);
+      }
+    } catch (error) {
+      console.error('Error checking existing profile:', error);
+    } finally {
+      setIsCheckingProfile(false);
+    }
+  };
+
+  useEffect(() => {
+    checkExistingProfile();
+  }, []);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -167,6 +192,7 @@ export default function TeamProfileForm() {
     }
     setSuccess(false);
     setIsOpen(false);
+    setHasExistingProfile(true); // User now has a profile
     router.refresh();
   };
 
@@ -221,6 +247,11 @@ export default function TeamProfileForm() {
         </div>
       </div>
     );
+  }
+
+  // Don't show button if user already has a profile or is still checking
+  if (hasExistingProfile || isCheckingProfile) {
+    return null;
   }
 
   return (

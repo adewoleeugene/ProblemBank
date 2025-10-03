@@ -7,9 +7,10 @@ import { Button } from './ui/button';
 
 interface TeamProfilesClientProps {
   initialProfiles?: (TeamProfile & { isMine?: boolean })[];
+  onProfileDeleted?: () => void;
 }
 
-export default function TeamProfilesClient({ initialProfiles = [] }: TeamProfilesClientProps) {
+export default function TeamProfilesClient({ initialProfiles = [], onProfileDeleted }: TeamProfilesClientProps) {
   const [profiles, setProfiles] = useState<(TeamProfile & { isMine?: boolean })[]>(initialProfiles);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +56,11 @@ export default function TeamProfilesClient({ initialProfiles = [] }: TeamProfile
 
       // Remove the deleted profile from the list
       setProfiles(prev => prev.filter(p => p.id !== profileId));
+      
+      // Notify parent component that a profile was deleted
+      if (onProfileDeleted) {
+        onProfileDeleted();
+      }
     } catch (err) {
       console.error('Error deleting profile:', err);
       alert(err instanceof Error ? err.message : 'Failed to delete profile');

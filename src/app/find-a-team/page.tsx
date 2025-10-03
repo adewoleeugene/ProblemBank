@@ -1,6 +1,7 @@
 import TeamProfileForm from '@/components/TeamProfileForm';
 import TeamProfilesClient from '@/components/TeamProfilesClient';
 import { Navigation } from '@/components';
+import { useState } from 'react';
 
 // Background color utility (same as other pages)
 function getBackgroundForGlobalIndex(index1Based: number): string {
@@ -23,6 +24,13 @@ function getRotationAngleForGlobalIndex(index1Based: number): number {
 }
 
 export default function FindATeamPage() {
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleProfileDeleted = () => {
+    // Force refresh of the TeamProfileForm component
+    setRefreshKey(prev => prev + 1);
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f9f2e9' }}>
       <Navigation />
@@ -44,11 +52,11 @@ export default function FindATeamPage() {
           </p>
           
           {/* Add Skills Button */}
-          <TeamProfileForm />
+          <TeamProfileForm key={refreshKey} />
         </div>
 
         {/* Profiles Grid */}
-        <TeamProfilesClient />
+        <TeamProfilesClient onProfileDeleted={handleProfileDeleted} />
       </main>
     </div>
   );
