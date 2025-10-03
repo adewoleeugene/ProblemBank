@@ -1,13 +1,10 @@
 import { TeamProfile } from '@/lib/teamboard';
-import { Button } from '@/components/ui/button';
 
 interface TeamProfileCardProps {
-  profile: TeamProfile & { isMine?: boolean };
-  canDelete?: boolean;
-  onDelete?: () => void;
+  profile: TeamProfile;
 }
 
-export default function TeamProfileCard({ profile, canDelete, onDelete }: TeamProfileCardProps) {
+export default function TeamProfileCard({ profile }: TeamProfileCardProps) {
   return (
     <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
       {/* Header with handle and social links */}
@@ -106,23 +103,6 @@ export default function TeamProfileCard({ profile, canDelete, onDelete }: TeamPr
         </div>
       )}
 
-      {/* Delete button at the bottom */}
-      {canDelete && onDelete && (
-        <div className="mt-4 flex justify-center">
-          <Button
-            variant="outline"
-            onClick={onDelete}
-            className="text-xs px-3 py-1"
-            style={{ 
-              borderColor: '#d8cdbc', 
-              color: '#403f3e',
-              backgroundColor: '#fffaf3'
-            }}
-          >
-            Delete
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

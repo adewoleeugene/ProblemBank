@@ -11,7 +11,6 @@ export type TeamProfile = {
   skills: string[];
   repos: string[];
   createdAt?: string;
-  clientIp?: string;
 };
 
 type AirtableSelectOption = string | { name: string };
@@ -102,7 +101,6 @@ export async function listTeamProfiles(limit = 50): Promise<TeamProfile[]> {
           skills,
           repos,
           createdAt: new Date().toISOString(), // Use current time since we don't have a Created time field
-          clientIp: f['Client IP'] as string,
         };
   });
 
@@ -115,7 +113,6 @@ export async function createTeamProfile(input: {
   linkedinUrl?: string;
   skills: string[];
   repos: string[];
-  clientIp?: string;
 }): Promise<{ id: string }> {
   const token = getEnv('AIRTABLE_TEAM_TOKEN', process.env['AIRTABLE_TOKEN']);
   const baseId = getEnv('AIRTABLE_TEAM_BASE_ID', process.env['AIRTABLE_BASE_ID']);
@@ -149,7 +146,6 @@ export async function createTeamProfile(input: {
           'LinkedIn': input.linkedinUrl || '',
           'Skillset': input.skills.filter(skill => skill.trim().length > 0), // Filter out empty skills
           'Repo': input.repos.join('\n'),
-          'Client IP': input.clientIp || '',
         },
       };
 
@@ -198,7 +194,7 @@ export async function deleteTeamProfile(recordId: string): Promise<void> {
   }
 }
 
-export async function getTeamProfile(recordId: string): Promise<TeamProfile & { clientIp?: string }> {
+export async function getTeamProfile(recordId: string): Promise<TeamProfile> {
   const token = getEnv('AIRTABLE_TEAM_TOKEN', process.env['AIRTABLE_TOKEN']);
   const baseId = getEnv('AIRTABLE_TEAM_BASE_ID', process.env['AIRTABLE_BASE_ID']);
   const tableId = getEnv('AIRTABLE_TEAM_TABLE_ID', process.env['AIRTABLE_TABLE_ID']);
@@ -265,7 +261,6 @@ export async function getTeamProfile(recordId: string): Promise<TeamProfile & { 
     skills,
     repos,
     createdAt: new Date().toISOString(),
-    clientIp: f['Client IP'] as string,
   };
 }
 

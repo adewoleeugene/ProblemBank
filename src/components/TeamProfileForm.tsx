@@ -14,8 +14,6 @@ export default function TeamProfileForm() {
   const [isSkillsOpen, setIsSkillsOpen] = useState(false);
   const [skillSearch, setSkillSearch] = useState('');
   const [formKey, setFormKey] = useState(0);
-  const [hasExistingProfile, setHasExistingProfile] = useState(false);
-  const [isCheckingProfile, setIsCheckingProfile] = useState(true);
   const skillsRef = useRef<HTMLDivElement>(null);
   
   const availableSkills = [
@@ -33,32 +31,10 @@ export default function TeamProfileForm() {
     linkedin: '',
     skills: [] as string[],
     repos: '',
-    website: '', // Honeypot field
   });
 
   const router = useRouter();
 
-  // Check if user already has a profile
-  const checkExistingProfile = async () => {
-    try {
-      const response = await fetch('/api/teamboard');
-      if (response.ok) {
-        const data = await response.json();
-        const profiles = data.profiles || [];
-        // Check if any profile belongs to current user (isMine: true)
-        const userHasProfile = profiles.some((profile: Record<string, unknown>) => profile.isMine === true);
-        setHasExistingProfile(userHasProfile);
-      }
-    } catch (error) {
-      console.error('Error checking existing profile:', error);
-    } finally {
-      setIsCheckingProfile(false);
-    }
-  };
-
-  useEffect(() => {
-    checkExistingProfile();
-  }, []);
 
 
   useEffect(() => {
@@ -160,7 +136,6 @@ export default function TeamProfileForm() {
         linkedin: '',
         skills: [],
         repos: '',
-        website: '',
       });
       setSkillSearch('');
       setIsSkillsOpen(false);
@@ -192,7 +167,6 @@ export default function TeamProfileForm() {
     }
     setSuccess(false);
     setIsOpen(false);
-    setHasExistingProfile(true); // User now has a profile
     router.refresh();
   };
 
@@ -249,10 +223,6 @@ export default function TeamProfileForm() {
     );
   }
 
-  // Don't show button if user already has a profile or is still checking
-  if (hasExistingProfile || isCheckingProfile) {
-    return null;
-  }
 
   return (
     <>
@@ -265,7 +235,6 @@ export default function TeamProfileForm() {
                     linkedin: '',
                     skills: [],
                     repos: '',
-                    website: '',
                   });
                   setSkillSearch('');
                   setIsSkillsOpen(false);
@@ -500,19 +469,6 @@ export default function TeamProfileForm() {
                   </p>
                 </div>
 
-                {/* Honeypot field - hidden */}
-                <div style={{ display: 'none' }}>
-                  <label htmlFor="website">Website</label>
-                  <input
-                    type="text"
-                    id="website"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleChange}
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                </div>
 
                 {/* Submit buttons */}
                 <div className="flex space-x-3 pt-4">

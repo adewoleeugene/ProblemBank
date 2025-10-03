@@ -26,13 +26,6 @@ function getRotationAngleForGlobalIndex(index1Based: number): number {
 }
 
 export default function FindATeamPage() {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleProfileDeleted = () => {
-    // Force refresh of the TeamProfileForm component
-    setRefreshKey(prev => prev + 1);
-  };
-
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f9f2e9' }}>
       <Navigation />
@@ -54,11 +47,19 @@ export default function FindATeamPage() {
           </p>
           
           {/* Add Skills Button */}
-          <TeamProfileForm key={refreshKey} />
+          <TeamProfileForm />
+          
+          {/* Disclaimer */}
+          <p 
+            className="text-sm mt-4 text-center"
+            style={{ fontFamily: 'Raleway, sans-serif', color: '#666' }}
+          >
+            Submissions are public and may be removed if found to violate guidelines.
+          </p>
         </div>
 
         {/* Profiles Grid */}
-        <TeamProfilesClient onProfileDeleted={handleProfileDeleted} />
+        <TeamProfilesClient />
       </main>
     </div>
   );

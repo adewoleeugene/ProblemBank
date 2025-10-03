@@ -6,12 +6,11 @@ import TeamProfileCard from './TeamProfileCard';
 import { Button } from './ui/button';
 
 interface TeamProfilesClientProps {
-  initialProfiles?: (TeamProfile & { isMine?: boolean })[];
-  onProfileDeleted?: () => void;
+  initialProfiles?: TeamProfile[];
 }
 
-export default function TeamProfilesClient({ initialProfiles = [], onProfileDeleted }: TeamProfilesClientProps) {
-  const [profiles, setProfiles] = useState<(TeamProfile & { isMine?: boolean })[]>(initialProfiles);
+export default function TeamProfilesClient({ initialProfiles = [] }: TeamProfilesClientProps) {
+  const [profiles, setProfiles] = useState<TeamProfile[]>(initialProfiles);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,37 +34,6 @@ export default function TeamProfilesClient({ initialProfiles = [], onProfileDele
     }
   };
 
-  const handleDelete = async (profileId: string) => {
-    if (!confirm('Are you sure you want to delete this profile? This action cannot be undone.')) {
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/teamboard', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: profileId }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete profile');
-      }
-
-      // Remove the deleted profile from the list
-      setProfiles(prev => prev.filter(p => p.id !== profileId));
-      
-      // Notify parent component that a profile was deleted
-      if (onProfileDeleted) {
-        onProfileDeleted();
-      }
-    } catch (err) {
-      console.error('Error deleting profile:', err);
-      alert(err instanceof Error ? err.message : 'Failed to delete profile');
-    }
-  };
 
   useEffect(() => {
     if (initialProfiles.length === 0) {
@@ -144,8 +112,6 @@ export default function TeamProfilesClient({ initialProfiles = [], onProfileDele
             >
               <TeamProfileCard
                 profile={profile}
-                canDelete={profile.isMine}
-                onDelete={() => handleDelete(profile.id)}
               />
             </div>
           </div>
