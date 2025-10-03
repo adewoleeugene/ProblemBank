@@ -25,7 +25,7 @@ export const kits: Kit[] = [
     tags: ['ui-design', 'prototyping', 'user-flows'],
     items: [
       'UI component library',
-      'Interactive user flow prototypes',
+      'Interactive user flow',
       'Responsive design system',
     ],
     moreLabel: '+1 more',

@@ -86,7 +86,6 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
       tags: ['ui-design', 'prototyping', 'user-flows'],
       items: [
         'Complete UI component library',
-        'Interactive user flow prototypes',
         'Responsive design system',
       ],
       moreLabel: '+1 more',
@@ -108,7 +107,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
         'Create a comprehensive brand identity from strategy to visual assets. Guides you through market research, brand positioning, and visual identity creation using AI tools.',
       tags: ['branding', 'design', 'strategy'],
       items: [
-        'Brand strategy document (including market insights)',
+        'Brand strategy document',
         'Logo and visual assets',
         'Brand voice guidelines',
       ],
