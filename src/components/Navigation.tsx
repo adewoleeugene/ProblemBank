@@ -48,8 +48,8 @@ const Navigation: React.FC<NavigationProps> = ({
           <div className="flex items-center">
             <Link href="/" aria-label="Go to home" className="flex items-center space-x-2">
               <img 
-                src="/cf-logo.svg" 
-                alt="CF Logo" 
+                src="/images/black%20logo%20mark%20size=48@2x.png" 
+                alt="Problem Bank logo" 
                 className="w-8 h-8"
               />
               <span
