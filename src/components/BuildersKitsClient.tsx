@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import BrandingKitModal from './BrandingKitModal';
-import UIPrototypeKitModal from './UIPrototypeKitModal';
+import PRDKitModal from './PRDKitModal';
 import PitchMasterKitModal from './PitchMasterKitModal';
 
 interface BuildersKitsClientProps {
@@ -12,6 +12,8 @@ interface BuildersKitsClientProps {
   solutionText: string;
   defaultBusinessName?: string;
   category?: string | null;
+  pillar?: string;
+  technology?: string;
 }
 
 function getCategoryIcon(label?: string | null): string {
@@ -46,7 +48,7 @@ function getRotationAngleForGlobalIndex(index1Based: number): number {
   return block % 2 === 0 ? angle : -angle;
 }
 
-export default function BuildersKitsClient({ problemText, solutionText, defaultBusinessName, category }: BuildersKitsClientProps) {
+export default function BuildersKitsClient({ problemText, solutionText, defaultBusinessName, category, pillar, technology }: BuildersKitsClientProps) {
   const [open, setOpen] = useState(false);
   const [openUIProto, setOpenUIProto] = useState(false);
   const [openPitchMaster, setOpenPitchMaster] = useState(false);
@@ -56,7 +58,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
       window.open('https://tweakcn.com/editor/theme', '_blank', 'noopener,noreferrer');
       return;
     }
-    if (kitTitle === 'UI Prototype Kit') {
+    if (kitTitle === 'PRD Kit') {
       setOpenUIProto(true);
       return;
     }
@@ -80,15 +82,16 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
       moreLabel: '+1 more',
     },
     {
-      title: 'UI Prototype Kit',
+      title: 'PRD Kit',
       description:
-        "Build complete UI components and user flows for your prototype using AI-powered design and development tools. Focus on creating polished, interactive interfaces that demonstrate your product's core user experience.",
-      tags: ['ui-design', 'prototyping', 'user-flows'],
+        "Create a comprehensive Product Requirements Document with user personas, features, and phased implementation plans. Get AI-ready prompts for Cursor, Trae, V0, and Bolt to build your product step-by-step.",
+      tags: ['prd', 'requirements', 'ai-implementation'],
       items: [
-        'Complete UI component library',
-        'Responsive design system',
+        'User personas and stories',
+        'Feature requirements',
+        'Phase-by-phase AI prompts',
       ],
-      moreLabel: '+1 more',
+      moreLabel: '+2 more',
     },
     {
       title: 'Pitch Master Kit',
@@ -256,9 +259,11 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
         />
       )}
       {openUIProto && (
-        <UIPrototypeKitModal
+        <PRDKitModal
           problemText={problemText}
           solutionText={solutionText}
+          pillar={pillar}
+          technology={technology}
           onClose={() => setOpenUIProto(false)}
         />
       )}

@@ -69,21 +69,28 @@ export async function fetchFeaturedIdeas(limit = 4): Promise<IdeaItem[]> {
     url.searchParams.set('sort[0][direction]', sortDirection);
   }
 
-  const res = await fetch(url.toString(), {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    // Ensure server-side only
-    cache: 'no-store',
-  });
+  let data: AirtableListResponse;
+  
+  try {
+    const res = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      // Ensure server-side only
+      cache: 'no-store',
+    });
 
-  if (!res.ok) {
-    // Swallow error and fallback in UI
+    if (!res.ok) {
+      console.warn(`Airtable API error: ${res.status} ${res.statusText}`);
+      return [];
+    }
+    
+    data = (await res.json()) as AirtableListResponse;
+  } catch (error) {
+    console.warn('Failed to fetch featured ideas from Airtable:', error);
     return [];
   }
-
-  const data = (await res.json()) as AirtableListResponse;
 
   const titleField = getEnv('AIRTABLE_TITLE_FIELD', true) || 'Title';
   const blurbField = getEnv('AIRTABLE_BLURB_FIELD', true) || 'Blurb';
@@ -174,19 +181,27 @@ if (searchQuery && searchQuery.trim()) {
     url.searchParams.set('filterByFormula', formula);
   }
 
-  const res = await fetch(url.toString(), {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-store',
-  });
+  let data: AirtableListResponse;
   
-  if (!res.ok) {
+  try {
+    const res = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
+    
+    if (!res.ok) {
+      console.warn(`Airtable API error: ${res.status} ${res.statusText}`);
+      return { items: [], offset: undefined };
+    }
+    
+    data = (await res.json()) as AirtableListResponse;
+  } catch (error) {
+    console.warn('Failed to fetch from Airtable:', error);
     return { items: [], offset: undefined };
   }
-
-  const data = (await res.json()) as AirtableListResponse;
 
   const titleField = process.env['AIRTABLE_TITLE_FIELD'] || 'Title';
   const blurbField = process.env['AIRTABLE_BLURB_FIELD'] || 'Blurb';

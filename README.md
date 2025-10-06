@@ -37,6 +37,26 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Environment Variables
 
+### Ideas Page Feature
+
+The Ideas page requires Airtable configuration. Add these environment variables to your `.env.local` file:
+
+```bash
+# Airtable credentials for Ideas page
+AIRTABLE_TOKEN=your_airtable_token
+AIRTABLE_BASE_ID=your_base_id
+AIRTABLE_TABLE_NAME=your_table_name
+
+# Optional: Field names (defaults will be used if not set)
+AIRTABLE_TITLE_FIELD=Title
+AIRTABLE_BLURB_FIELD=Blurb
+AIRTABLE_CATEGORY_FIELD=Category
+AIRTABLE_SORT_FIELD=Order
+AIRTABLE_SORT_DIRECTION=asc
+```
+
+**Note:** If these variables are not set, the Ideas page will show an empty state gracefully.
+
 ### Find-a-Team Feature
 
 The Find-a-Team feature requires Airtable configuration. Add these environment variables to your `.env.local` file:

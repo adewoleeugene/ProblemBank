@@ -19,16 +19,16 @@ export const kits: Kit[] = [
     moreLabel: '+1 more',
   },
   {
-    title: 'UI Prototype Kit',
+    title: 'PRD Kit',
     description:
-      "Build complete UI components and user flows for your prototype using AI-powered design and development tools. Focus on creating polished, interactive interfaces that demonstrate your product's core user experience.",
-    tags: ['ui-design', 'prototyping', 'user-flows'],
+      "Create a comprehensive Product Requirements Document with user personas, features, and phased implementation plans. Get AI-ready prompts for Cursor, Trae, V0, and Bolt to build your product step-by-step.",
+    tags: ['prd', 'requirements', 'ai-implementation'],
     items: [
-      'UI component library',
-      'Interactive user flow',
-      'Responsive design system',
+      'User personas and stories',
+      'Feature requirements',
+      'Phase-by-phase AI prompts',
     ],
-    moreLabel: '+1 more',
+    moreLabel: '+2 more',
   },
   {
     title: 'Pitch Master Kit',

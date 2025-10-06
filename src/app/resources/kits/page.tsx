@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import BrandingKitModal from '@/components/BrandingKitModal';
-import UIPrototypeKitModal from '@/components/UIPrototypeKitModal';
+import PRDKitModal from '@/components/PRDKitModal';
 import PitchMasterKitModal from '@/components/PitchMasterKitModal';
 import TechStackChecklistModal from '@/components/TechStackChecklistModal';
 import SocialMediaContentModal from '@/components/SocialMediaContentModal';
@@ -44,7 +44,7 @@ export default function ResourcesKitsPage() {
       window.open('https://tweakcn.com/editor/theme', '_blank', 'noopener,noreferrer');
       return;
     }
-    if (kitTitle === 'UI Prototype Kit') {
+    if (kitTitle === 'PRD Kit') {
       setOpenUIProto(true);
       return;
     }
@@ -219,9 +219,9 @@ export default function ResourcesKitsPage() {
         />
       )}
       {openUIProto && (
-        <UIPrototypeKitModal
-          problemText="Create interactive UI prototypes"
-          solutionText="Build complete user interfaces and user flows for your product"
+        <PRDKitModal
+          problemText=""
+          solutionText=""
           onClose={() => setOpenUIProto(false)}
         />
       )}
