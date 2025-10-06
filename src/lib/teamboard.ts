@@ -11,6 +11,7 @@ export type TeamProfile = {
   skills: string[];
   repos: string[];
   createdAt?: string;
+  clientIp?: string;
 };
 
 type AirtableSelectOption = string | { name: string };
@@ -93,6 +94,9 @@ export async function listTeamProfiles(limit = 50): Promise<TeamProfile[]> {
       .map(r => r.trim())
       .filter(r => r && (r.startsWith('http://') || r.startsWith('https://')));
 
+    // Client IP (if stored in Airtable)
+    const clientIp = (f['Client IP'] as string) || undefined;
+
         return {
           id: r.id,
           handle: name,
@@ -101,6 +105,7 @@ export async function listTeamProfiles(limit = 50): Promise<TeamProfile[]> {
           skills,
           repos,
           createdAt: new Date().toISOString(), // Use current time since we don't have a Created time field
+          clientIp,
         };
   });
 
@@ -113,6 +118,7 @@ export async function createTeamProfile(input: {
   linkedinUrl?: string;
   skills: string[];
   repos: string[];
+  clientIp?: string;
 }): Promise<{ id: string }> {
   const token = getEnv('AIRTABLE_TEAM_TOKEN', process.env['AIRTABLE_TOKEN']);
   const baseId = getEnv('AIRTABLE_TEAM_BASE_ID', process.env['AIRTABLE_BASE_ID']);
@@ -146,6 +152,7 @@ export async function createTeamProfile(input: {
           'LinkedIn': input.linkedinUrl || '',
           'Skillset': input.skills.filter(skill => skill.trim().length > 0), // Filter out empty skills
           'Repo': input.repos.join('\n'),
+          'Client IP': input.clientIp || '',
         },
       };
 
@@ -253,6 +260,9 @@ export async function getTeamProfile(recordId: string): Promise<TeamProfile> {
     .map(r => r.trim())
     .filter(r => r && (r.startsWith('http://') || r.startsWith('https://')));
 
+  // Client IP (if stored in Airtable)
+  const clientIp = (f['Client IP'] as string) || undefined;
+
   return {
     id: record.id,
     handle: name,
@@ -261,6 +271,7 @@ export async function getTeamProfile(recordId: string): Promise<TeamProfile> {
     skills,
     repos,
     createdAt: new Date().toISOString(),
+    clientIp,
   };
 }
 
