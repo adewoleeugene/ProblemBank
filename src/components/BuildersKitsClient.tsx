@@ -262,7 +262,6 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
         <PRDKitModal
           problemText={problemText}
           solutionText={solutionText}
-          pillar={pillar}
           technology={technology}
           onClose={() => setOpenUIProto(false)}
         />

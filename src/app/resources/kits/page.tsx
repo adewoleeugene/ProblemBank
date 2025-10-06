@@ -222,6 +222,7 @@ export default function ResourcesKitsPage() {
         <PRDKitModal
           problemText=""
           solutionText=""
+          technology=""
           onClose={() => setOpenUIProto(false)}
         />
       )}

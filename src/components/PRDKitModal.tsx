@@ -6,7 +6,6 @@ interface PRDKitModalProps {
   onClose: () => void;
   problemText?: string;
   solutionText?: string;
-  pillar?: string;
   technology?: string;
 }
 
@@ -46,7 +45,7 @@ type ImplementationPhase = {
 
 const stepLabels = ['Core Concept', 'Target Users', 'Features & User Stories', 'Scope Definition', 'Success Metrics'] as const;
 
-const PRDKitModal: React.FC<PRDKitModalProps> = ({ onClose, problemText, solutionText, pillar, technology }) => {
+const PRDKitModal: React.FC<PRDKitModalProps> = ({ onClose, problemText, solutionText, technology }) => {
   const [step, setStep] = useState<number>(0);
   const [projectName, setProjectName] = useState('');
   const [coreProblem, setCoreProblem] = useState(problemText || '');
@@ -1023,7 +1022,7 @@ ${impactGoal}`,
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Success Metrics</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Define how you'll measure the success of your product.
+                  Define how you&apos;ll measure the success of your product.
                 </p>
               </div>
 
