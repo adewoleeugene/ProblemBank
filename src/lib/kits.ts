@@ -21,7 +21,7 @@ export const kits: Kit[] = [
   {
     title: 'PRD Kit',
     description:
-      "Create a comprehensive Product Requirements Document with user personas, features, and phased implementation plans. Get AI-ready prompts for Cursor, Trae, V0, and Bolt to build your product step-by-step.",
+      "Create a comprehensive Product Requirements Document with user personas, features, and phased implementation plans. Get AI-ready prompts for Cursor, Trae, v0, and Bolt to build your product step-by-step.",
     tags: ['prd', 'requirements', 'ai-implementation'],
     items: [
       'User personas and stories',
