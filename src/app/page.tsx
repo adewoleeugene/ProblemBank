@@ -119,7 +119,7 @@ export default function Home() {
                 transform: 'rotate(-2.2deg)' 
               }}
             >
-              FIND INSPO
+              FIND IDEAS
             </div>
             <div 
               className="block"
@@ -129,7 +129,7 @@ export default function Home() {
                 transform: 'rotate(-1.9deg)' 
               }}
             >
-              FOR YOUR
+              FOR YOUR NEXT
             </div>
             <div 
               className="block"
@@ -139,7 +139,7 @@ export default function Home() {
                 transform: 'rotate(1.1deg)' 
               }}
             >
-              NEXT BUILD
+              BIG SOLUTION
             </div>
           </h1>
           
@@ -148,7 +148,8 @@ export default function Home() {
               className="text-lg text-gray-600 mt-8 max-w-2xl"
               style={{ fontFamily: 'Raleway, sans-serif' }}
             >
-              We&#39;ve collected 25+ ideas that are perfect for your hackathon project. Whether you&#39;re a beginner or a seasoned builder, there&#39;s something for everyone.
+              Here are 25+ problems Sierra Leone faces. Whether you&#39;re a beginner or a seasoned builder, there&#39;s something for everyone.
+              
             </p>
 
             {/* Buttons */}
@@ -201,7 +202,7 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-black transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100 rounded-full" />
                 <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
-                  Random Ideas
+                  Random Idea
                 </span>
               </button>
             </div>
@@ -359,9 +360,9 @@ function ParallaxLaunchpadSection() {
 
   return (
     <section className="relative z-40 w-full py-12 md:py-16 lg:py-20">
-      <div className="mt-12 md:mt-16 lg:mt-20">
+      <div className="mt-12 md:mt-16 lg:mt-20 mx-auto max-w-7xl px-4 md:px-8">
         <div ref={ref} className="bg-[#121212] overflow-hidden rounded-[28px] md:rounded-[40px] lg:rounded-[56px]">
-          <div className="mx-auto max-w-7xl px-4 md:px-8 py-24 md:py-32">
+          <div className="px-4 md:px-8 py-24 md:py-32">
             {/* Heading */}
             <div className="relative flex flex-col items-center text-center select-none">
               <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
@@ -601,9 +602,9 @@ function HackathonAnnouncementSection() {
 
   return (
     <section className="relative z-40 w-full py-12 md:py-16 lg:py-20 col">
-      <div className="-mt-4 md:-mt-8 lg:-mt-12">
+      <div className="-mt-4 md:-mt-8 lg:-mt-12 mx-auto max-w-7xl px-4 md:px-8">
         <div ref={ref} className="bg-[#121212] overflow-hidden rounded-[28px] md:rounded-[40px] lg:rounded-[56px]">
-          <div className="mx-auto max-w-7xl px-4 md:px-8 py-16 md:py-20 lg:py-20 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="px-4 md:px-8 py-16 md:py-20 lg:py-20 grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Heading */}
             <div className="relative flex flex-col items-center text-center select-none md:mt-6">
               {(countdown.label === 'Starts in' || countdown.label === 'In Progress') && (
