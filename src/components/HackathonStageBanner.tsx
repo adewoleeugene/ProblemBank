@@ -185,7 +185,7 @@ export default function HackathonStageBanner() {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto px-4 mt-2">
+    <div className="w-full max-w-3xl mx-auto px-4 mt-2">
       <a
         href="https://mocti.gov.sl/ai-challenge/"
         target="_blank"
