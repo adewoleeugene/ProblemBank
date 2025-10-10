@@ -1,0 +1,379 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+
+interface HackathonStage {
+  id: string;
+  title: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  description: string;
+  status: 'upcoming' | 'active' | 'completed';
+}
+
+const HACKATHON_STAGES: HackathonStage[] = [
+  {
+    id: 'call-for-applications',
+    title: 'Call for Applications',
+    startDate: new Date('2025-09-01T00:00:00Z'),
+    endDate: new Date('2025-10-17T23:59:59Z'),
+    description: 'Applications open for all tracks.',
+    status: 'upcoming'
+  },
+  {
+    id: 'shortlisting',
+    title: 'Shortlisting',
+    startDate: null,
+    endDate: null,
+    description: 'Review and selection of applicants.',
+    status: 'upcoming'
+  },
+  {
+    id: 'notification',
+    title: 'Notification',
+    startDate: null,
+    endDate: null,
+    description: 'Successful applicants are notified and assigned to tracks.',
+    status: 'upcoming'
+  },
+  {
+    id: 'preparation-period',
+    title: 'Preparation Period',
+    startDate: null,
+    endDate: null,
+    description: 'Teams prepare for the hackathon with virtual mentorship.',
+    status: 'upcoming'
+  },
+  {
+    id: 'bootcamp',
+    title: 'Bootcamp (Freetown)',
+    startDate: new Date('2025-10-27T00:00:00Z'),
+    endDate: new Date('2025-11-05T23:59:59Z'),
+    description: '10-day immersive training with AI & blockchain experts. Team formation.',
+    status: 'upcoming'
+  },
+  {
+    id: 'solution-development',
+    title: 'Solution Development Standstill',
+    startDate: new Date('2025-11-06T00:00:00Z'),
+    endDate: new Date('2025-12-02T23:59:59Z'),
+    description: 'Teams refine prototypes with virtual mentorship and assessments.',
+    status: 'upcoming'
+  },
+  {
+    id: 'final-hackathon',
+    title: 'Final Hackathon',
+    startDate: new Date('2025-12-05T00:00:00Z'),
+    endDate: new Date('2025-12-07T23:59:59Z'),
+    description: '48-Hour Non-Stop Hackathon: Teams Refine Final Solution, Present Solutions, Winners Awarded.',
+    status: 'upcoming'
+  }
+];
+
+function getCurrentStage(): HackathonStage | null {
+  const now = new Date();
+  
+  // Find the current active stage
+  for (const stage of HACKATHON_STAGES) {
+    if (stage.startDate && stage.endDate) {
+      if (now >= stage.startDate && now <= stage.endDate) {
+        return { ...stage, status: 'active' };
+      }
+    }
+  }
+  
+  // If no active stage, find the next upcoming stage
+  const upcomingStages = HACKATHON_STAGES.filter(stage => 
+    stage.startDate && stage.startDate > now
+  );
+  
+  if (upcomingStages.length > 0) {
+    return { ...upcomingStages[0], status: 'upcoming' };
+  }
+  
+  // If all stages are completed, return the last stage
+  return { ...HACKATHON_STAGES[HACKATHON_STAGES.length - 1], status: 'completed' };
+}
+
+function formatDateRange(startDate: Date | null, endDate: Date | null): string {
+  if (!startDate || !endDate) return 'TBC';
+  
+  const start = startDate.toLocaleDateString('en-GB', { 
+    day: 'numeric', 
+    month: 'short' 
+  });
+  const end = endDate.toLocaleDateString('en-GB', { 
+    day: 'numeric', 
+    month: 'short',
+    year: 'numeric'
+  });
+  
+  return `${start} - ${end}`;
+}
+
+interface CountdownTime {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+export default function HackathonStageBanner() {
+  const [currentStage, setCurrentStage] = useState<HackathonStage | null>(null);
+  const [countdown, setCountdown] = useState<CountdownTime>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  const calculateCountdown = (endDate: Date | null): CountdownTime => {
+    if (!endDate) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    
+    const now = new Date();
+    const difference = endDate.getTime() - now.getTime();
+    
+    if (difference <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    
+    return { days, hours, minutes, seconds };
+  };
+
+  useEffect(() => {
+    const updateStageAndCountdown = () => {
+      const stage = getCurrentStage();
+      setCurrentStage(stage);
+      
+      if (stage?.endDate) {
+        setCountdown(calculateCountdown(stage.endDate));
+      }
+    };
+    
+    updateStageAndCountdown();
+    
+    // Update every second for countdown
+    const interval = setInterval(updateStageAndCountdown, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!currentStage) return null;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active':
+        return 'bg-[#E6B800] text-white';
+      case 'upcoming':
+        return 'bg-[#f2e8dc] text-[#403f3e]';
+      case 'completed':
+        return 'bg-[#d8cdbc] text-[#403f3e]';
+      default:
+        return 'bg-[#f2e8dc] text-[#403f3e]';
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'active':
+        return 'Currently Active';
+      case 'upcoming':
+        return 'Upcoming';
+      case 'completed':
+        return 'Completed';
+      default:
+        return 'Upcoming';
+    }
+  };
+
+  return (
+    <div className="w-full max-w-lg mx-auto px-4 mt-2">
+      <a
+        href="https://mocti.gov.sl/ai-challenge/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] p-6 md:p-8 cursor-pointer"
+        style={{
+          backgroundColor: currentStage.status === 'active' ? '#513f2a' : '#F1E7DB',
+          transform: 'rotate(1.2deg)',
+          transformOrigin: 'center center',
+          willChange: 'transform',
+        }}
+      >
+        {/* Noise texture overlay */}
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{
+            backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
+            backgroundSize: '200px 200px',
+            backgroundRepeat: 'repeat',
+          }}
+        />
+        
+        <div className="relative z-10">
+          {/* Status Badge */}
+          <div className="flex items-center justify-between mb-4">
+            <div
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(currentStage.status)}`}
+            >
+              <div
+                className="w-2 h-2 rounded-full mr-2"
+                style={{
+                  backgroundColor: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                }}
+              />
+              {getStatusText(currentStage.status)}
+            </div>
+            
+            {/* Date Range */}
+            <div
+              className="text-sm font-medium"
+              style={{
+                fontFamily: 'Raleway, sans-serif',
+                color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+              }}
+            >
+              {formatDateRange(currentStage.startDate, currentStage.endDate)}
+            </div>
+          </div>
+
+          {/* Stage Title */}
+          <h2
+            className="text-2xl md:text-3xl lg:text-4xl mb-3"
+            style={{
+              fontFamily: 'Decoy, sans-serif',
+              fontWeight: 500,
+              color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+            }}
+          >
+            {currentStage.title}
+          </h2>
+
+          {/* Description */}
+          <p
+            className="text-base md:text-lg leading-relaxed mb-6"
+            style={{
+              fontFamily: 'Raleway, sans-serif',
+              color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+              fontWeight: 600,
+            }}
+          >
+            {currentStage.description}
+          </p>
+
+          {/* Countdown Timer */}
+          {currentStage.endDate && currentStage.status !== 'completed' && (
+            <div className="mt-6">
+              <div className="flex items-center  justify-end *:border-r *:pr-3">
+                {/* Days */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="text-xl md:text-xl font-bold mb-1"
+                    style={{
+                      fontFamily: 'Decoy, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                    }}
+                  >
+                    {String(countdown.days).padStart(2, '0')}
+                  </div>
+                  <div
+                    className="text-xs uppercase tracking-wide"
+                    style={{
+                      fontFamily: 'Raleway, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                      opacity: 0.8,
+                    }}
+                  >
+                    Days
+                  </div>
+                </div>
+
+                {/* Hours */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="text-xl md:text-xl font-bold mb-1"
+                    style={{
+                      fontFamily: 'Decoy, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                    }}
+                  >
+                    {String(countdown.hours).padStart(2, '0')}
+                  </div>
+                  <div
+                    className="text-xs uppercase tracking-wide"
+                    style={{
+                      fontFamily: 'Raleway, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                      opacity: 0.8,
+                    }}
+                  >
+                    Hours
+                  </div>
+                </div>
+
+                {/* Minutes */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="text-xl md:text-xl font-bold mb-1"
+                    style={{
+                      fontFamily: 'Decoy, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                    }}
+                  >
+                    {String(countdown.minutes).padStart(2, '0')}
+                  </div>
+                  <div
+                    className="text-xs uppercase tracking-wide"
+                    style={{
+                      fontFamily: 'Raleway, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                      opacity: 0.8,
+                    }}
+                  >
+                    Minutes
+                  </div>
+                </div>
+
+                {/* Seconds */}
+                <div className="flex flex-col items-center border-none">
+                  <div
+                    className="text-xl md:text-xl font-bold mb-1"
+                    style={{
+                      fontFamily: 'Decoy, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                    }}
+                  >
+                    {String(countdown.seconds).padStart(2, '0')}
+                  </div>
+                  <div
+                    className="text-xs uppercase tracking-wide"
+                    style={{
+                      fontFamily: 'Raleway, sans-serif',
+                      color: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                      opacity: 0.8,
+                    }}
+                  >
+                    Seconds
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Stage Completed Message */}
+          {currentStage.status === 'completed' && (
+            <div className="mt-6 text-center">
+              <div
+                className="text-lg font-semibold"
+                style={{
+                  fontFamily: 'Raleway, sans-serif',
+                  color: '#403f3e',
+                }}
+              >
+                Stage Completed
+              </div>
+            </div>
+          )}
+        </div>
+      </a>
+    </div>
+  );
+}

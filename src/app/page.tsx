@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { kits as kitsData, slugifyTitle } from '../lib/kits';
+import PixelBlast from '../components/PixelBlast';
+import HackathonStageBanner from '../components/HackathonStageBanner';
+import FAQSection from '../components/FAQSection';
 
 type IdeaCard = { title: string; blurb: string; category?: string };
 
@@ -44,7 +47,26 @@ function useBreakpointIntensity() {
   return intensity;
 }
 
+// Mobile detection for PixelBlast optimization
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(max-width: 639px)').matches);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  return isMobile;
+}
+
 export default function Home() {
+  // Mobile detection for PixelBlast optimization
+  const isMobile = useIsMobile();
+  
   // Client-side fetch fallback: we won't call Airtable directly from the client because of secrets.
   // Instead, we attempt to read pre-fetched data via a harmless call (will be wired via API route soon),
   // and fallback to static placeholders for now.
@@ -92,9 +114,9 @@ export default function Home() {
   }, []);
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#f9f2e9]">
-      {/* Noise Texture Overlay */}
+      {/* Noise Texture Overlay - Keep for additional texture */}
       <div 
-        className="fixed inset-0 pointer-events-none z-10 opacity-30"
+        className="fixed inset-0 pointer-events-none z-10 opacity-20"
         style={{
           backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
           backgroundRepeat: 'repeat',
@@ -108,7 +130,38 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="relative z-30 flex items-center justify-center min-h-screen px-4 md:px-8">
-        <div className="text-center max-w-4xl mx-auto -mt-24">
+        {/* Hackathon Stage Banner */}
+        <div className="absolute top-8 left-0 right-0 z-40">
+          <HackathonStageBanner />
+        </div>
+        {/* PixelBlast Background with Feathered Hero Exclusion - Only in Hero */}
+        {!isMobile && (
+          <div 
+            className="absolute inset-0 pointer-events-none z-0"
+            style={{
+              WebkitMaskImage: 'radial-gradient(ellipse 40% 50% at 50% 40%, transparent 15%, black 60%)',
+              maskImage: 'radial-gradient(ellipse 40% 50% at 50% 40%, transparent 15%, black 60%)'
+            }}
+          >
+            <PixelBlast
+              variant="circle"
+              pixelSize={8}
+              color="#f0b420"
+              patternScale={1.5}
+              patternDensity={0.8}
+              pixelSizeJitter={0.3}
+              enableRipples={true}
+              rippleIntensityScale={0.6}
+              rippleThickness={0.15}
+              rippleSpeed={0.4}
+              edgeFade={0.3}
+              speed={2}
+              transparent={true}
+              className="opacity-60"
+            />
+          </div>
+        )}
+        <div className="relative z-10 text-center max-w-4xl mx-auto -mt-24">
           {/* Main Heading */}
           <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-8xl leading-none tracking-tight text-[#1e1e1e] mb-6">
             <div 
@@ -297,6 +350,8 @@ export default function Home() {
       <BuilderKitsSection />
       {/* Hackathon Announcement Section */}
       <HackathonAnnouncementSection />
+      {/* FAQ Section */}
+      <FAQSection />
     </div>
   );
 }

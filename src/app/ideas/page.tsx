@@ -3,6 +3,16 @@ import { fetchIdeasPage, fetchAllCategories } from '../../lib/airtable';
 import Link from 'next/link';
 import IdeasInfiniteLoader from './InfiniteLoader';
 
+// Category captions mapping
+const CATEGORY_CAPTIONS: Record<string, string> = {
+  'All': 'The Big 5: Pillars of Sierra Leone\'s National Transformation',
+  'Feed Salone': 'This initiative aims to revolutionize Sierra Leone\'s agricultural sector by leveraging AI and other technologies to boost food security, increase production, and build resilience against climate change.',
+  'Human Capital Development': 'By leveraging inclusive educational technology (EdTech), this initiative is empowering Sierra Leoneans with the skills needed to thrive in the digital age, ensuring a competitive and future-ready workforce.',
+  'Youth Employment Scheme': 'The YES! initiative aims to combat youth unemployment by fostering the gig economy and building robust digital employment platforms to connect young Sierra Leoneans with local and global opportunities.',
+  'Public Service Architecture Revamp': 'Centered on the comprehensive reform of public administration, this initiative establishes a new standard of governance through digital transformation. The core objective is to improve the citizen-government relationship by implementing a secure Digital ID system, creating a foundation for efficient and transparent services.',
+  'Tech and Infrastructure': 'As the enabling pillar for all national priorities, this initiative is dedicated to developing a resilient and scalable digital infrastructure. The strategy involves implementing blockchain technology to guarantee transparency and applying AI to optimize efficiency, creating a secure foundation for a modern, digital-first economy.',
+};
+
 function slugify(title: string): string {
   return title
     .toLowerCase()
@@ -106,6 +116,27 @@ export default async function IdeasPage({ searchParams }: { searchParams?: Recor
                 </Link>
               ))}
             </div>
+
+            {/* Category Caption */}
+            {(categories.length > 0 || active.size === 0) && (
+              <div className="mt-6 text-center max-w-2xl mx-auto">
+                <p 
+                  className="text-lg md:text-xl"
+                  style={{ 
+                    fontFamily: 'Raleway, sans-serif', 
+                    color: '#403f3e',
+                    fontStyle: 'italic' 
+                  }}
+                >
+                  {categories.length === 0 
+                    ? CATEGORY_CAPTIONS['All']
+                    : categories.length === 1 
+                      ? CATEGORY_CAPTIONS[categories[0]]
+                      : `Cross-cutting solutions spanning ${categories.join(' and ')} - innovative approaches that address multiple national priorities simultaneously.`
+                  }
+                </p>
+              </div>
+            )}
 
             {/* Cards Grid - reuse featured card design */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">

@@ -1,6 +1,6 @@
 import { Navigation } from '../../../components';
 import { fetchIdeaBySlug } from '../../../lib/airtable';
-import BuildersKitsClient from '../../../components/BuildersKitsClient';
+import IdeaResourcesClient from '../../../components/IdeaResourcesClient';
 
 export default async function IdeaDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -69,23 +69,19 @@ export default async function IdeaDetailPage({ params }: { params: Promise<{ slu
             )}
           </div>
         </section>
-        {/* Full-width Builder's Kits section to match featured cards styling */}
+        {/* Full-width Resources section with Builder's Kits and Tech Stack */}
         {idea && (() => {
           const s = typeof idea.solution === 'string' ? idea.solution.trim() : '';
           const b = typeof idea.blurb === 'string' ? idea.blurb.trim() : '';
           const solutionText = s.length > 0 ? s : b;
           const problemText = typeof idea.problem === 'string' && idea.problem.trim().length > 0 ? idea.problem.trim() : idea.title;
           return solutionText.length > 0 ? (
-            <section className="relative z-30 w-full -mt-30">
-              <div className="mx-auto max-w-7xl px-4 md:px-8 py-10 md:py-14 lg:py-16">
-                <BuildersKitsClient
-                  problemText={problemText}
-                  solutionText={solutionText}
-                  defaultBusinessName={idea.title}
-                  category={idea.category || null}
-                />
-              </div>
-            </section>
+            <IdeaResourcesClient
+              problemText={problemText}
+              solutionText={solutionText}
+              defaultBusinessName={idea.title}
+              category={idea.category || null}
+            />
           ) : null;
         })()}
       </main>
