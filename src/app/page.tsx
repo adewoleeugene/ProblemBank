@@ -705,7 +705,7 @@ function HackathonAnnouncementSection() {
 
             {/* Countdown Card */}
             <div className="relative justify-self-center md:justify-self-end" style={{ transform: 'rotate(1.4deg)' }}>
-              <div className="w-[420px] md:w-[460px] border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] bg-[#f2e8dc] p-6 md:p-8 text-center">
+              <div className="w-full max-w-[420px] md:max-w-[460px] border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] bg-[#f2e8dc] p-6 md:p-8 text-center">
                 {/* Subheading */}
                 <p className="text-center text-base md:text-lg mb-2" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600 }}>
                   Sierra Leone&#39;s Ministry of Communication is inviting young developers and innovators to the Big 5 Artificial Intelligence & Blockchain Hackathon 2025.
