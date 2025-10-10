@@ -158,6 +158,7 @@ export default function Home() {
               speed={2}
               transparent={true}
               className="opacity-60"
+              style={{}}
             />
           </div>
         )}
