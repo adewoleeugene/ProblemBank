@@ -81,6 +81,7 @@ export default async function IdeaDetailPage({ params }: { params: Promise<{ slu
               solutionText={solutionText}
               defaultBusinessName={idea.title}
               category={idea.category || null}
+              repo={idea.repo}
             />
           ) : null;
         })()}

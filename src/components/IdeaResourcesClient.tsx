@@ -10,13 +10,15 @@ interface IdeaResourcesClientProps {
   solutionText: string;
   defaultBusinessName: string;
   category: string | null;
+  repo?: string;
 }
 
 export default function IdeaResourcesClient({ 
   problemText, 
   solutionText, 
   defaultBusinessName, 
-  category 
+  category,
+  repo 
 }: IdeaResourcesClientProps) {
   const [activeTab, setActiveTab] = useState<'builders-kits' | 'tech-stack'>('builders-kits');
 
@@ -37,7 +39,7 @@ export default function IdeaResourcesClient({
         )}
         
         {activeTab === 'tech-stack' && (
-          <TechStackSection />
+          <TechStackSection repo={repo} />
         )}
       </div>
     </section>

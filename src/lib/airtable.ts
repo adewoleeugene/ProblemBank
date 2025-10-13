@@ -12,6 +12,7 @@ export type IdeaItem = {
   category?: string;
   problem?: string;
   solution?: string;
+  repo?: string;
 };
 
 export type TechStackItem = {
@@ -228,7 +229,8 @@ if (searchQuery && searchQuery.trim()) {
 
     const route = (f[typeField] as string) || undefined;
     const order = orderField && typeof f[orderField] === 'number' ? (f[orderField] as number) : undefined;
-    return { id: r.id, title, blurb, category, route, order };
+    const repo = (f['Repo'] as string) || undefined;
+    return { id: r.id, title, blurb, category, route, order, repo };
   });
 
   items.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -306,8 +308,9 @@ export async function fetchIdeaByTitle(title: string): Promise<IdeaItem | null> 
 
   const route = (f[typeField] as string) || undefined;
   const order = sortField && typeof f[sortField] === 'number' ? (f[sortField] as number) : undefined;
+  const repo = (f['Repo'] as string) || undefined;
 
-  return { id: record.id, title: mappedTitle, blurb, category, route, order, problem, solution };
+  return { id: record.id, title: mappedTitle, blurb, category, route, order, problem, solution, repo };
 }
 
 // Fetch distinct category values from the table (dynamic chips)
