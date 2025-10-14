@@ -129,9 +129,9 @@ export default function Home() {
       <Navigation logoText="ProblemBank" />
 
       {/* Hero Section */}
-      <main className="relative z-30 flex items-center justify-center min-h-screen px-4 md:px-8">
+      <main className="relative z-30 flex flex-col items-center justify-center min-h-screen px-4 md:px-8">
         {/* Hackathon Stage Banner */}
-        <div className="absolute top-8 left-0 right-0 z-40">
+        <div className="w-full top-8 left-0 right-0 z-40 mb-30 mt-10">
           <HackathonStageBanner />
         </div>
         {/* PixelBlast Background with Feathered Hero Exclusion - Only in Hero */}
