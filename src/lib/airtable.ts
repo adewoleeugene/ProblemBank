@@ -78,8 +78,11 @@ export async function fetchFeaturedIdeas(limit = 4): Promise<IdeaItem[]> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // Ensure server-side only
-      cache: 'no-store',
+      // Cache for 5 minutes with revalidation
+      next: { 
+        revalidate: 300, // 5 minutes
+        tags: ['featured-ideas']
+      },
     });
 
     if (!res.ok) {
@@ -190,7 +193,11 @@ if (searchQuery && searchQuery.trim()) {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      cache: 'no-store',
+      // Cache for 5 minutes with revalidation
+      next: { 
+        revalidate: 300, // 5 minutes
+        tags: ['ideas-page']
+      },
     });
     
     if (!res.ok) {
@@ -259,7 +266,11 @@ export async function fetchIdeaByTitle(title: string): Promise<IdeaItem | null> 
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    cache: 'no-store',
+    // Cache for 10 minutes with revalidation
+    next: { 
+      revalidate: 600, // 10 minutes
+      tags: ['idea-by-title']
+    },
   });
 
   if (!res.ok) return null;
@@ -337,7 +348,11 @@ export async function fetchAllCategories(maxPages = 10): Promise<string[]> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      cache: 'no-store',
+      // Cache for 15 minutes with revalidation
+      next: { 
+        revalidate: 900, // 15 minutes
+        tags: ['categories']
+      },
     });
     if (!res.ok) break;
     const data = (await res.json()) as AirtableListResponse;
@@ -443,7 +458,11 @@ export async function fetchTechStacks(pageSize = 12, offset?: string, categories
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    cache: 'no-store',
+    // Cache for 5 minutes with revalidation
+    next: { 
+      revalidate: 300, // 5 minutes
+      tags: ['tech-stacks']
+    },
   });
   
   if (!res.ok) {
@@ -504,7 +523,11 @@ export async function fetchAllTechCategories(maxPages = 10): Promise<string[]> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      cache: 'no-store',
+      // Cache for 15 minutes with revalidation
+      next: { 
+        revalidate: 900, // 15 minutes
+        tags: ['tech-categories']
+      },
     });
     if (!res.ok) break;
     const data = (await res.json()) as AirtableListResponse;

@@ -12,7 +12,14 @@ export async function GET(request: NextRequest) {
 
     const result = await fetchTechStacks(pageSize, offset, categories, searchQuery);
 
-    return NextResponse.json(result);
+    const response = NextResponse.json(result);
+    
+    // Set cache headers for browser caching
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=300');
+    response.headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=300');
+    
+    return response;
   } catch (error) {
     console.error('Error fetching tech stacks:', error);
     return NextResponse.json({ items: [], offset: undefined }, { status: 500 });

@@ -106,7 +106,7 @@ const TechStackCard: React.FC<TechStackCardProps> = ({ item, index }) => {
                     e.stopPropagation();
                     window.open(item.url, '_blank', 'noopener,noreferrer');
                   }}
-                  className="w-full py-3 rounded-full text-sm transition-all duration-200 hover:opacity-90"
+                  className="w-full py-3 px-6 rounded-full text-sm transition-all duration-200 hover:opacity-90"
                   style={{ backgroundColor: '#403f3e', color: '#f7efe3' }}
                 >
                   Open Docs <span aria-hidden style={{ marginLeft: 8 }}>→</span>

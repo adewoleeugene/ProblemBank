@@ -20,7 +20,15 @@ export async function GET(request: Request) {
     const searchQuery = searchParams.get('q') || undefined;
 
     const { items, offset: nextOffset } = await fetchIdeasPage(pageSize, offset, categories.length ? categories : undefined, searchQuery);
-    return NextResponse.json({ items, offset: nextOffset }, { status: 200 });
+    
+    const response = NextResponse.json({ items, offset: nextOffset }, { status: 200 });
+    
+    // Set cache headers for browser caching
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=300');
+    response.headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=300');
+    
+    return response;
   } catch (e) {
     console.error('Failed to fetch ideas:', e);
     // Return empty list with 200 so UI can fallback gracefully
