@@ -141,3 +141,10 @@ NEXT_PUBLIC_DEBUG_CACHE=true
 ```
 
 This will log cache operations to the console for debugging.
+
+
+
+
+
+
+

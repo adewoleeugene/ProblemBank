@@ -92,7 +92,7 @@ export default function IdeasInfiniteLoader({ initialOffset, initialCount = 0 }:
   return (
     <div>
       {items.length > 0 && (
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 items-stretch">
           {items.map((item, idx) => {
             const globalIndex = initialRenderedCount + idx + 1; // continue pattern across SSR + client
             return (

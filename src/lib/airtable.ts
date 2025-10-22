@@ -553,3 +553,80 @@ export async function fetchAllTechCategories(maxPages = 10): Promise<string[]> {
 
   return Array.from(seen).sort((a, b) => a.localeCompare(b));
 }
+
+// Fetch all ideas with minimal data for navigation purposes
+export async function fetchAllIdeasMinimal(): Promise<Array<{ id: string; title: string; slug: string }>> {
+  const token = process.env['AIRTABLE_TOKEN'];
+  const baseId = process.env['AIRTABLE_BASE_ID'];
+  const tableName = process.env['AIRTABLE_TABLE_NAME'];
+
+  if (!token || !baseId || !tableName) {
+    return [];
+  }
+
+  const sortField = process.env['AIRTABLE_SORT_FIELD'];
+  const sortDirection = (process.env['AIRTABLE_SORT_DIRECTION'] || 'asc') as 'asc' | 'desc';
+  const titleField = process.env['AIRTABLE_TITLE_FIELD'] || 'Title';
+  const orderField = sortField || undefined;
+
+  const allIdeas: Array<{ id: string; title: string; slug: string }> = [];
+  let offset: string | undefined = undefined;
+  let pages = 0;
+  const maxPages = 20; // Reasonable limit to prevent infinite loops
+
+  while (pages < maxPages) {
+    const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
+    url.searchParams.set('pageSize', '100');
+    if (offset) url.searchParams.set('offset', offset);
+    if (sortField) {
+      url.searchParams.set('sort[0][field]', sortField);
+      url.searchParams.set('sort[0][direction]', sortDirection);
+    }
+
+    const res = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      // Cache for 5 minutes with revalidation
+      next: { 
+        revalidate: 300, // 5 minutes
+        tags: ['all-ideas-minimal']
+      },
+    });
+
+    if (!res.ok) {
+      console.warn(`Airtable API error: ${res.status} ${res.statusText}`);
+      break;
+    }
+
+    const data = (await res.json()) as AirtableListResponse;
+
+    for (const r of data.records) {
+      const f = r.fields || {};
+      const title = (f[titleField] as string) || (f['Name'] as string) || (f['Idea'] as string) || 'Untitled Idea';
+      const slug = slugifyTitle(title);
+      
+      allIdeas.push({
+        id: r.id,
+        title,
+        slug
+      });
+    }
+
+    offset = data.offset;
+    pages += 1;
+    if (!offset) break;
+  }
+
+  // Sort client-side if a numeric sort field exists
+  if (orderField) {
+    allIdeas.sort((a, b) => {
+      // This is a simplified sort - in practice, we'd need to fetch the order field
+      // For now, we'll rely on the server-side sort from Airtable
+      return 0;
+    });
+  }
+
+  return allIdeas;
+}

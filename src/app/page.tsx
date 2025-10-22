@@ -275,7 +275,7 @@ export default function Home() {
           </h2>
 
           {/* Cards Grid */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 items-stretch">
             {ideas.map((item, idx) => (
               <Link
                 key={item.title}
@@ -543,7 +543,7 @@ function BuilderKitsSection() {
         </p>
 
         {/* Cards Grid (derived from first four resources kits) */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 items-stretch">
           {featuredKits.map((k) => (
             <div
               key={k.title}

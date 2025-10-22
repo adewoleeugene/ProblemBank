@@ -475,3 +475,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Navigation Menu Visibility Fix - Force menu to show at 1024px+ */
+.nav-menu-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-menu-desktop {
+    display: block !important;
+  }
+}

@@ -100,9 +100,9 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
       items: [
         'Gamma-ready pitch deck prompts',
         'Executive summary template',
-        'Demo script and Q&A guide',
+        
       ],
-      moreLabel: '+1 more',
+      moreLabel: '+2 more',
     },
     {
       title: 'COMPLETE BRANDING KIT',
@@ -134,7 +134,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
           Start with these proven workflows to achieve specific outcomes
         </p>
 
-       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 items-stretch">
   {kits.map((kit, idx) => (
     <div key={idx} className="block">
       <div

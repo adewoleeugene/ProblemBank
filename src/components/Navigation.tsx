@@ -14,6 +14,7 @@ const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const pathname = usePathname();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const items = [
     { label: 'Ideas', href: '/ideas' },
@@ -40,12 +41,17 @@ const Navigation: React.FC<NavigationProps> = ({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   return (
     <nav className="sticky top-0 z-50 bg-[#f9f2e9] border-b border-[#e8ddd0]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center h-16">
           {/* Left: Brand */}
-          <div className="flex items-center">
+          <div className="flex items-center col-start-1">
             <Link href="/" aria-label="Go to home" className="flex items-center space-x-2">
               <img 
                 src="/images/black%20logo%20mark%20size=48@2x.png" 
@@ -61,45 +67,48 @@ const Navigation: React.FC<NavigationProps> = ({
             </Link>
           </div>
 
-          {/* Center: Menu (visible on all breakpoints, centered) */}
-          <div className="flex justify-center items-center gap-8">
-            {items.map((item) => {
-              const active = isActive(item.href);
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={
-                    `px-3 py-2 rounded-full transition-colors ${active ? 'ring-2 ring-[#d8cdbc]' : ''}`
-                  }
-                  style={{
-                    fontFamily: 'Raleway, sans-serif',
-                    fontWeight: 500,
-                    color: '#403f3e',
-                    backgroundColor: active ? '#f2e8dc' : 'transparent',
-                    border: active ? '1px solid #d8cdbc' : 'none',
-                    transform: active ? 'rotate(-2deg)' : undefined,
-                  }}
-                >
-                  <span className="px-2 py-1 rounded-full hover:bg-[#fffaf3] hover:text-[#1e1e1e]">
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
+          {/* Center: Menu (hidden on mobile/tablet, visible on desktop) */}
+          <div className="nav-menu-desktop lg:col-start-2">
+            <div className="flex justify-center items-center gap-8">
+              {items.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={
+                      `px-3 py-2 rounded-full transition-colors ${active ? 'ring-2 ring-[#d8cdbc]' : ''}`
+                    }
+                    style={{
+                      fontFamily: 'Raleway, sans-serif',
+                      fontWeight: 500,
+                      color: '#403f3e',
+                      backgroundColor: active ? '#f2e8dc' : 'transparent',
+                      border: active ? '1px solid #d8cdbc' : 'none',
+                      transform: active ? 'rotate(-2deg)' : undefined,
+                    }}
+                  >
+                    <span className="px-2 py-1 rounded-full hover:bg-[#fffaf3] hover:text-[#1e1e1e]">
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Right: Search pill (interactive) */}
-          <div className="flex items-center justify-end">
+          {/* Right: Search pill + Mobile menu button */}
+          <div className="flex items-center justify-end gap-3 col-start-2 lg:col-start-3">
+            {/* Search icon button */}
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="flex items-center gap-2 bg-[#fffaf3] border border-[#e8ddd0] rounded-full shadow-sm px-4 py-2 w-40 md:w-64 shrink-0 hover:bg-[#f2e8dc] transition-colors"
+              className="flex items-center justify-center w-10 h-10 bg-[#fffaf3] border border-[#e8ddd0] rounded-full shadow-sm hover:bg-[#f2e8dc] transition-colors"
+              aria-label="Search (⌘K)"
             >
-              {/* Magnifying glass icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
+                width="20"
+                height="20"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -111,19 +120,29 @@ const Navigation: React.FC<NavigationProps> = ({
                   strokeLinejoin="round"
                 />
               </svg>
-              {/* Placeholder text */}
-              <span className="text-sm" style={{ color: '#403f3e' }}>Search…</span>
-              {/* Keycap */}
+            </button>
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="flex lg:hidden flex-col justify-center items-center w-8 h-8 p-1"
+              aria-label="Toggle mobile menu"
+            >
               <span
-                className="ml-auto rounded-md px-2 py-0.5 text-xs"
-                style={{
-                  backgroundColor: '#e8ddd0',
-                  border: '1px solid #e8ddd0',
-                  color: '#403f3e',
-                }}
-              >
-                ⌘ K
-              </span>
+                className={`block w-5 h-0.5 bg-[#403f3e] transition-all duration-300 ${
+                  isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
+                }`}
+              />
+              <span
+                className={`block w-5 h-0.5 bg-[#403f3e] mt-1 transition-all duration-300 ${
+                  isMobileMenuOpen ? 'opacity-0' : ''
+                }`}
+              />
+              <span
+                className={`block w-5 h-0.5 bg-[#403f3e] mt-1 transition-all duration-300 ${
+                  isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''
+                }`}
+              />
             </button>
           </div>
         </div>
@@ -134,6 +153,69 @@ const Navigation: React.FC<NavigationProps> = ({
         isOpen={isCommandPaletteOpen} 
         onClose={() => setIsCommandPaletteOpen(false)} 
       />
+
+      {/* Mobile Drawer */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Drawer */}
+          <div className="fixed top-0 right-0 h-full w-80 max-w-[80vw] bg-[#f9f2e9] border-l border-[#e8ddd0] z-50 lg:hidden transform transition-transform duration-300 ease-in-out">
+            <div className="flex flex-col h-full">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between p-4 border-b border-[#e8ddd0]">
+                <h2 className="text-lg font-semibold" style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e' }}>
+                  Menu
+                </h2>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 hover:bg-[#f2e8dc] rounded-full transition-colors"
+                  aria-label="Close menu"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="#403f3e" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Drawer Menu Items */}
+              <div className="flex-1 p-4">
+                <nav className="space-y-2">
+                  {items.map((item) => {
+                    const active = isActive(item.href);
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className={`block px-4 py-3 rounded-full transition-colors ${
+                          active ? 'ring-2 ring-[#d8cdbc]' : ''
+                        }`}
+                        style={{
+                          fontFamily: 'Raleway, sans-serif',
+                          fontWeight: 500,
+                          color: '#403f3e',
+                          backgroundColor: active ? '#f2e8dc' : 'transparent',
+                          border: active ? '1px solid #d8cdbc' : 'none',
+                          transform: active ? 'rotate(-2deg)' : undefined,
+                        }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="block px-2 py-1 rounded-full hover:bg-[#fffaf3] hover:text-[#1e1e1e]">
+                          {item.label}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </nav>
   );
 };

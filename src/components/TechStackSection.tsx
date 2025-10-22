@@ -130,7 +130,7 @@ export default function TechStackSection({ repo }: TechStackSectionProps) {
 
       {/* Content */}
       {activeTab === 'ai-vibe' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 items-stretch">
           {aiTools.map((tool, idx) => (
             <div key={tool.name} className="block">
               <div
@@ -196,7 +196,7 @@ export default function TechStackSection({ repo }: TechStackSectionProps) {
       )}
 
       {activeTab === 'dev-stack' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 items-stretch">
           {repo ? (
             <div className="block">
               <div
