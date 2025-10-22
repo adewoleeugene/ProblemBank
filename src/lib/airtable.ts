@@ -435,8 +435,9 @@ export async function fetchTechStacks(pageSize = 12, offset?: string, categories
   // Apply category filter if provided (multi-select OR logic)
   if (categories && categories.length > 0) {
     const esc = (s: string) => s.replace(/'/g, "\\'");
-    const joinedExpr = `"," & ARRAYJOIN({${categoryField}}, ",") & ","`;
-    const perCat = categories.map((c) => `OR({${categoryField}} = '${esc(c)}', FIND("," & '${esc(c)}' & ",", ${joinedExpr}))`);
+    const perCat = categories.map((c) => 
+      `OR({${categoryField}} = '${esc(c)}', FIND('${esc(c)}', ARRAYJOIN({${categoryField}})))`
+    );
     filterParts.push(`OR(${perCat.join(',')})`);
   }
   
@@ -451,7 +452,10 @@ export async function fetchTechStacks(pageSize = 12, offset?: string, categories
   if (filterParts.length > 0) {
     const formula = filterParts.length === 1 ? filterParts[0] : `AND(${filterParts.join(',')})`;
     url.searchParams.set('filterByFormula', formula);
+    console.log('Tech Stack Filter Formula:', formula);
   }
+  
+  console.log('Tech Stack API URL:', url.toString());
 
   const res = await fetch(url.toString(), {
     headers: {
@@ -467,6 +471,12 @@ export async function fetchTechStacks(pageSize = 12, offset?: string, categories
   
   if (!res.ok) {
     console.error('Airtable API error:', res.status, res.statusText);
+    try {
+      const errorBody = await res.text();
+      console.error('Airtable API error body:', errorBody);
+    } catch (e) {
+      console.error('Could not read error response body:', e);
+    }
     return { items: [], offset: undefined };
   }
 
@@ -529,7 +539,16 @@ export async function fetchAllTechCategories(maxPages = 10): Promise<string[]> {
         tags: ['tech-categories']
       },
     });
-    if (!res.ok) break;
+    if (!res.ok) {
+      console.error('Airtable categories API error:', res.status, res.statusText);
+      try {
+        const errorBody = await res.text();
+        console.error('Airtable categories error body:', errorBody);
+      } catch (e) {
+        console.error('Could not read categories error response body:', e);
+      }
+      break;
+    }
     const data = (await res.json()) as AirtableListResponse;
 
     for (const r of data.records) {
@@ -538,11 +557,13 @@ export async function fetchAllTechCategories(maxPages = 10): Promise<string[]> {
       if (!raw) continue;
       if (Array.isArray(raw)) {
         for (const v of raw as AirtableSelectOption[]) {
-          if (typeof v === 'string') seen.add(v);
-          else if (v && typeof v === 'object' && 'name' in v) seen.add((v as { name: string }).name);
+          if (typeof v === 'string' && v.trim()) seen.add(v.trim());
+          else if (v && typeof v === 'object' && 'name' in v && (v as { name: string }).name?.trim()) {
+            seen.add((v as { name: string }).name.trim());
+          }
         }
-      } else if (typeof raw === 'string') {
-        seen.add(raw);
+      } else if (typeof raw === 'string' && raw.trim()) {
+        seen.add(raw.trim());
       }
     }
 

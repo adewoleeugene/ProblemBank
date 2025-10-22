@@ -54,8 +54,9 @@ function getRotationAngleForGlobalIndex(index1Based: number): number {
   return block % 2 === 0 ? angle : -angle;
 }
 
-export default async function IdeasPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
-  const categoriesCsv = (searchParams?.categories as string) || '';
+export default async function IdeasPage({ searchParams }: { searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
+  const params = await searchParams;
+  const categoriesCsv = (params?.categories as string) || '';
   const categories = categoriesCsv.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
 
   // Server-side rendering: fetch first page with filters
