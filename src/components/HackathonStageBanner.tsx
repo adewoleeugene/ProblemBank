@@ -47,52 +47,38 @@ const HACKATHON_STAGES: HackathonStage[] = [
   {
     id: 'bootcamp',
     title: 'Bootcamp (Freetown)',
-    startDate: new Date('2025-10-27T00:00:00Z'),
-    endDate: new Date('2025-11-05T23:59:59Z'),
+    startDate: null,
+    endDate: null,
     description: '10-day immersive training with AI & blockchain experts. Team formation.',
     status: 'upcoming'
   },
   {
     id: 'solution-development',
     title: 'Solution Development Standstill',
-    startDate: new Date('2025-11-06T00:00:00Z'),
-    endDate: new Date('2025-12-02T23:59:59Z'),
+    startDate: null,
+    endDate: null,
     description: 'Teams refine prototypes with virtual mentorship and assessments.',
     status: 'upcoming'
   },
   {
     id: 'final-hackathon',
     title: 'Final Hackathon',
-    startDate: new Date('2025-12-05T00:00:00Z'),
-    endDate: new Date('2025-12-07T23:59:59Z'),
+    startDate: null,
+    endDate: null,
     description: '48-Hour Non-Stop Hackathon: Teams Refine Final Solution, Present Solutions, Winners Awarded.',
     status: 'upcoming'
   }
 ];
 
 function getCurrentStage(): HackathonStage | null {
-  const now = new Date();
-  
-  // Find the current active stage
-  for (const stage of HACKATHON_STAGES) {
-    if (stage.startDate && stage.endDate) {
-      if (now >= stage.startDate && now <= stage.endDate) {
-        return { ...stage, status: 'active' };
-      }
-    }
+  // Return the Shortlisting stage as requested
+  const shortlistingStage = HACKATHON_STAGES.find(stage => stage.id === 'shortlisting');
+  if (shortlistingStage) {
+    return { ...shortlistingStage, status: 'upcoming' };
   }
   
-  // If no active stage, find the next upcoming stage
-  const upcomingStages = HACKATHON_STAGES.filter(stage => 
-    stage.startDate && stage.startDate > now
-  );
-  
-  if (upcomingStages.length > 0) {
-    return { ...upcomingStages[0], status: 'upcoming' };
-  }
-  
-  // If all stages are completed, return the last stage
-  return { ...HACKATHON_STAGES[HACKATHON_STAGES.length - 1], status: 'completed' };
+  // Fallback to first stage if shortlisting not found
+  return HACKATHON_STAGES.length > 0 ? { ...HACKATHON_STAGES[0], status: 'upcoming' } : null;
 }
 
 function formatDateRange(startDate: Date | null, endDate: Date | null): string {
