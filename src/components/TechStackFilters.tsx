@@ -87,7 +87,7 @@ const TechStackFilters: React.FC<TechStackFiltersProps> = ({
         </div>
 
         {/* Search Input */}
-        <div className="flex-shrink-0 max-w-md">
+        <div className="flex-shrink-0 w-full sm:max-w-md">
           <div className="relative">
             <input
               type="text"
