@@ -423,6 +423,7 @@ function ParallaxLaunchpadSection() {
       bg: '#f2e8dc',
       baseRotate: -2,
       link: '/ideas',
+      isExternal: false,
     },
     {
       title: 'Step-by-Step Builder Kits',
@@ -432,6 +433,7 @@ function ParallaxLaunchpadSection() {
       bg: '#fffaf3',
       baseRotate: 1.4,
       link: '/resources',
+      isExternal: false,
     },
     {
       title: 'Join Our Community',
