@@ -8,20 +8,20 @@ const ResourcesSubnav: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex justify-center mb-8">
-      <div 
-        className="inline-flex items-center rounded-full border px-6 py-3"
-        style={{ 
-          backgroundColor: '#fffaf3', 
+    <div className="flex justify-center mb-8 px-4 sm:px-0">
+      <div
+        className="flex items-center rounded-full border px-3 py-2 sm:px-6 sm:py-3 w-full sm:w-auto max-w-md sm:max-w-none"
+        style={{
+          backgroundColor: '#fffaf3',
           borderColor: '#e8ddd0',
           fontFamily: 'Raleway, sans-serif'
         }}
       >
         <Link
           href="/resources/kits"
-          className={`px-4 py-2 rounded-full transition-all duration-200 ${
-            pathname === '/resources/kits' 
-              ? 'font-semibold' 
+          className={`flex-1 sm:flex-none px-3 py-2 sm:px-4 sm:py-2 rounded-full transition-all duration-200 text-xs sm:text-base text-center ${
+            pathname === '/resources/kits'
+              ? 'font-semibold'
               : 'hover:bg-[#f2e8dc]'
           }`}
           style={{
@@ -31,17 +31,17 @@ const ResourcesSubnav: React.FC = () => {
         >
           Builder&apos;s Kits
         </Link>
-        <span 
-          className="mx-2 text-sm"
+        <span
+          className="mx-1 sm:mx-2 text-xs sm:text-sm"
           style={{ color: '#d8cdbc' }}
         >
           |
         </span>
         <Link
           href="/resources/tech"
-          className={`px-4 py-2 rounded-full transition-all duration-200 ${
-            pathname === '/resources/tech' 
-              ? 'font-semibold' 
+          className={`flex-1 sm:flex-none px-3 py-2 sm:px-4 sm:py-2 rounded-full transition-all duration-200 text-xs sm:text-base text-center ${
+            pathname === '/resources/tech'
+              ? 'font-semibold'
               : 'hover:bg-[#f2e8dc]'
           }`}
           style={{

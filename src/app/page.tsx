@@ -10,6 +10,9 @@ import FAQSection from '../components/FAQSection';
 
 type IdeaCard = { title: string; blurb: string; category?: string };
 
+// Global Discord link
+export const DISCORD_LINK = 'https://discord.com/invite/christexfndn';
+
 // Category → emoji path mapping (uses exact labels, fallback to coffee icon)
 const CATEGORY_ICON_MAP: Record<string, string> = {
   'Feed Salone': '/images/6707c6af78a3dd5acec5512e_flower_64.webp',
@@ -162,38 +165,62 @@ export default function Home() {
             />
           </div>
         )}
-        <div className="relative z-10 text-center max-w-4xl mx-auto -mt-24">
+        <div className="relative z-50 text-center max-w-4xl mx-auto -mt-24">
           {/* Main Heading */}
-          <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-8xl leading-none tracking-tight text-[#1e1e1e] mb-6">
-            <div 
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl leading-none tracking-tight text-[#1e1e1e] mb-6">
+            <div
               className="block"
-              style={{ 
-                fontFamily: 'Decoy, sans-serif', 
+              style={{
+                fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
-                transform: 'rotate(-2.2deg)' 
+                transform: 'rotate(-2.2deg)',
+                display: 'block',
+                whiteSpace: 'nowrap'
               }}
             >
               FIND IDEAS
             </div>
-            <div 
-              className="block"
-              style={{ 
-                fontFamily: 'Decoy, sans-serif', 
+            <div
+              className="block md:!hidden"
+              style={{
+                fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
-                transform: 'rotate(-1.9deg)' 
+                transform: 'rotate(-1.9deg)'
+              }}
+            >
+              FOR YOUR
+            </div>
+            <div
+              className="!hidden md:!block"
+              style={{
+                fontFamily: 'Decoy, sans-serif',
+                fontWeight: 500,
+                transform: 'rotate(-1.9deg)'
               }}
             >
               FOR YOUR NEXT
             </div>
-            <div 
-              className="block"
-              style={{ 
-                fontFamily: 'Decoy, sans-serif', 
+            <div
+              className="block md:!hidden"
+              style={{
+                fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
-                transform: 'rotate(1.1deg)' 
+                transform: 'rotate(-0.5deg)'
               }}
             >
-              BIG SOLUTION
+              NEXT BIG
+            </div>
+            <div
+              className="block"
+              style={{
+                fontFamily: 'Decoy, sans-serif',
+                fontWeight: 500,
+                transform: 'rotate(1.1deg)',
+                display: 'block'
+              }}
+            >
+              <span className="md:!hidden">SOLUTION</span>
+              <span className="!hidden md:!inline">BIG SOLUTION</span>
             </div>
           </h1>
           
@@ -395,6 +422,7 @@ function ParallaxLaunchpadSection() {
       icon: '/images/6708d8d83911c95f3000bbfa_star_120.webp',
       bg: '#f2e8dc',
       baseRotate: -2,
+      link: '/ideas',
     },
     {
       title: 'Step-by-Step Builder Kits',
@@ -403,6 +431,7 @@ function ParallaxLaunchpadSection() {
       icon: '/images/6708d8dfbf6d79d76ebd68eb_lightning_120.webp',
       bg: '#fffaf3',
       baseRotate: 1.4,
+      link: '/resources',
     },
     {
       title: 'Join Our Community',
@@ -411,6 +440,8 @@ function ParallaxLaunchpadSection() {
       icon: '/images/6707c6aff10ed02bb97c61f9_brilliant_64.webp',
       bg: '#f2e8dc',
       baseRotate: -1.2,
+      link: DISCORD_LINK,
+      isExternal: true,
     },
   ] as const;
 
@@ -421,17 +452,17 @@ function ParallaxLaunchpadSection() {
           <div className="px-4 md:px-8 py-24 md:py-32">
             {/* Heading */}
             <div className="relative flex flex-col items-center text-center select-none">
-              <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <motion.div style={{ y: y1, rotate: r1 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
                   YOUR
                 </span>
               </motion.div>
-              <motion.div style={{ y: y2, rotate: r2 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <motion.div style={{ y: y2, rotate: r2 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(0.8deg)' }}>
                   INNOVATION
                 </span>
               </motion.div>
-              <motion.div style={{ y: y3, rotate: r3 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
+              <motion.div style={{ y: y3, rotate: r3 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
                   LAUNCHPAD
                 </span>
@@ -439,54 +470,67 @@ function ParallaxLaunchpadSection() {
             </div>
 
             {/* Cards */}
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
-              {cards.map((c, i) => (
-                <div key={c.title} className="transform" style={{ transform: `rotate(${c.baseRotate}deg)` }}>
-                  <motion.div
-                    className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px]"
-                    style={{
-                      y: cardY[i],
-                      rotate: cardR[i],
-                      scale: cardS,
-                      backgroundColor: c.bg,
-                      height: '340px',
-                      willChange: 'transform',
-                    }}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-y-12 md:gap-x-8 lg:gap-8 max-w-4xl mx-auto">
+              {cards.map((c, i) => {
+                const CardWrapper = c.isExternal ? 'a' : Link;
+                const linkProps = c.isExternal
+                  ? { href: c.link, target: '_blank', rel: 'noopener noreferrer' }
+                  : { href: c.link };
+
+                return (
+                  <div
+                    key={c.title}
+                    className={`transform ${i === 2 ? 'md:col-span-2 md:justify-self-center md:w-full md:max-w-[calc(50%-1rem)] lg:col-span-1 lg:max-w-none' : ''}`}
+                    style={{ transform: `rotate(${c.baseRotate}deg)` }}
                   >
-                    {/* Speckled texture overlay */}
-                    <div
-                      className="absolute inset-0 opacity-10 pointer-events-none"
-                      style={{
-                        backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
-                        backgroundSize: '200px 200px',
-                        backgroundRepeat: 'repeat',
-                      }}
-                    />
-                    {/* Card content */}
-                    <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
-                      <div className="text-center">
-                        <h3
-                          className="text-2xl mb-3"
-                          style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e' }}
-                        >
-                          {c.title}
-                        </h3>
-                      </div>
-                      <div className="mt-auto">
-                        <div className="flex justify-center mb-2">
-                          <img src={c.icon} alt="icon" width={56} height={56} style={{ display: 'block' }} />
+                    <CardWrapper {...linkProps} className="block no-underline">
+                      <motion.div
+                        className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] cursor-pointer"
+                        style={{
+                          y: cardY[i],
+                          rotate: cardR[i],
+                          scale: cardS,
+                          backgroundColor: c.bg,
+                          height: '340px',
+                          willChange: 'transform',
+                        }}
+                      >
+                        {/* Speckled texture overlay */}
+                        <div
+                          className="absolute inset-0 opacity-10 pointer-events-none"
+                          style={{
+                            backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
+                            backgroundSize: '200px 200px',
+                            backgroundRepeat: 'repeat',
+                          }}
+                        />
+                        {/* Card content */}
+                        <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
+                          <div className="text-center">
+                            <h3
+                              className="text-2xl mb-3"
+                              style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e' }}
+                            >
+                              {c.title}
+                            </h3>
+                          </div>
+                          <div className="mt-auto">
+                            <div className="flex justify-center mb-2">
+                              <img src={c.icon} alt="icon" width={56} height={56} style={{ display: 'block' }} />
+                            </div>
+                            <p
+                              className="text-sm leading-relaxed text-center"
+                              style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
+                            >
+                              {c.blurb}
+                            </p>
+                          </div>
                         </div>
-                        <p
-                          className="text-sm leading-relaxed text-center"
-                          style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
-                        >
-                          {c.blurb}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              ))}
+                      </motion.div>
+                    </CardWrapper>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -590,11 +634,11 @@ function BuilderKitsSection() {
         </div>
 
         {/* Discover All Button */}
-        <div className="mt-12 flex justify-center">
-          <a href="/resources" className="group relative overflow-hidden w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border-2 border-gray-400 text-gray-700 font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105">
+        <div className="mt-12 flex justify-center px-4">
+          <a href="/resources" className="group relative overflow-hidden w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-transparent border-2 border-gray-400 text-gray-700 font-medium text-base sm:text-lg transition-all duration-300 hover:scale-105 text-center">
             <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
             <div className="absolute inset-0 bg-black transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100 rounded-full" />
-            <span className="relative z-10 transition-colors duration-300 group-hover:text-white">DISCOVER ALL BUILDER KITS</span>
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-white break-words">DISCOVER ALL BUILDER KITS</span>
           </a>
         </div>
       </div>
@@ -660,9 +704,9 @@ function HackathonAnnouncementSection() {
     <section className="relative z-40 w-full py-12 md:py-16 lg:py-20 col">
       <div className="-mt-4 md:-mt-8 lg:-mt-12 mx-auto max-w-7xl px-4 md:px-8">
         <div ref={ref} className="bg-[#121212] overflow-hidden rounded-[28px] md:rounded-[40px] lg:rounded-[56px]">
-          <div className="px-4 md:px-8 py-16 md:py-20 lg:py-20 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="px-4 md:px-8 py-16 md:py-20 lg:py-20 grid grid-cols-1 2xl:grid-cols-2 gap-8">
             {/* Heading */}
-            <div className="relative flex flex-col items-center text-center select-none md:mt-6">
+            <div className="relative flex flex-col items-center text-center select-none 2xl:mt-6">
               {(countdown.label === 'Starts in' || countdown.label === 'In Progress') && (
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-[#f7efe3] px-4 py-1 text-[#f7efe3]" aria-label="Upcoming Event">
                   <span
@@ -685,17 +729,17 @@ function HackathonAnnouncementSection() {
                   <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, letterSpacing: '0.02em' }}>Upcoming Event</span>
                 </div>
               )}
-              <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
                   BIG 5  A.I. &
                 </span>
               </motion.div>
-              <motion.div style={{ y: y2, rotate: r2 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <motion.div style={{ y: y2, rotate: r2 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(0.8deg)' }}>
                   BLOCKCHAIN
                 </span>
               </motion.div>
-              <motion.div style={{ y: y3, rotate: r3 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
+              <motion.div style={{ y: y3, rotate: r3 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-none mb-4 md:mb-6">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
                   HACKATHON
                 </span>
@@ -704,7 +748,7 @@ function HackathonAnnouncementSection() {
             </div>
 
             {/* Countdown Card */}
-            <div className="relative justify-self-center md:justify-self-end" style={{ transform: 'rotate(1.4deg)' }}>
+            <div className="relative justify-self-center 2xl:justify-self-end" style={{ transform: 'rotate(1.4deg)' }}>
               <div className="w-full max-w-[420px] md:max-w-[460px] border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] bg-[#f2e8dc] p-6 md:p-8 text-center">
                 {/* Subheading */}
                 <p className="text-center text-base md:text-lg mb-2" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600 }}>
@@ -740,7 +784,7 @@ function HackathonAnnouncementSection() {
               </div>
             </div>
             {/* Learn More CTA centered across section */}
-            <div className="md:col-span-2 mt-10 flex justify-center">
+            <div className="2xl:col-span-2 mt-10 flex justify-center">
               <a
                 href="https://mocti.gov.sl/ai-challenge/"
                 target="_blank"

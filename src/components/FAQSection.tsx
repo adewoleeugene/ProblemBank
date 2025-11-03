@@ -97,17 +97,17 @@ export default function FAQSection() {
           <div className="py-16 md:py-20">
             {/* Heading */}
             <div className="relative flex flex-col items-center text-center select-none">
-              <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <motion.div style={{ y: y1, rotate: r1 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e', display: 'block', transform: 'rotate(-2deg)' }}>
                   FREQUENTLY
                 </span>
               </motion.div>
-              <motion.div style={{ y: y2, rotate: r2 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <motion.div style={{ y: y2, rotate: r2 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e', display: 'block', transform: 'rotate(0.8deg)' }}>
                   ASKED
                 </span>
               </motion.div>
-              <motion.div style={{ y: y3, rotate: r3 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
+              <motion.div style={{ y: y3, rotate: r3 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e', display: 'block', transform: 'rotate(-2deg)' }}>
                   QUESTIONS
                 </span>

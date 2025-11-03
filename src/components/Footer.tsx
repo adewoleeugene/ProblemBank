@@ -66,7 +66,7 @@ export default function Footer() {
         />
         
         {/* Social Media Icons */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-12 flex-wrap justify-center">
           {socialLinks.map((link) => (
             <a
               key={link.name}
