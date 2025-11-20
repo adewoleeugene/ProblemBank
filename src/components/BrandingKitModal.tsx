@@ -17,8 +17,9 @@ export type BrandingInputs = {
 };
 
 interface BrandingKitModalProps {
-  problemText: string; // from Idea Title per spec
-  solutionText: string; // from Proposed Solution (or blurb fallback)
+  isOpen: boolean;
+  problemText?: string; // from Idea Title per spec
+  solutionText?: string; // from Proposed Solution (or blurb fallback)
   defaultBusinessName?: string;
   onClose: () => void;
 }
@@ -300,7 +301,7 @@ const stepLabels = ['Context', 'Core Identity', 'Brand Assets', 'Review & Export
 
 type StepKey = typeof stepLabels[number];
 
-const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, solutionText, defaultBusinessName, onClose }) => {
+const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ isOpen, problemText, solutionText, defaultBusinessName, onClose }) => {
   const [step, setStep] = useState<number>(0);
   const [inputs, setInputs] = useState<BrandingInputs>({
     businessName: '',
@@ -345,7 +346,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
       inputs.differentiator.trim().length > 0 &&
       personalityCount >= 3
     );
-  }, [inputs, personalityCount]);
+  }, [inputs.businessName, inputs.industry, inputs.targetAudience, inputs.differentiator, personalityCount]);
 
   const canGenerate = useMemo(() => {
     return (
@@ -356,7 +357,18 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
       inputs.competitors.trim().length > 0 &&
       personalityCount >= 3
     );
-  }, [inputs, personalityCount]);
+  }, [inputs.businessName, inputs.industry, inputs.targetAudience, inputs.differentiator, inputs.competitors, personalityCount]);
+
+  useEffect(() => {
+    if (isOpen && typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
 
   const handleGenerate = () => {
     // Determine if the user actually changed any color selector from defaults
@@ -365,7 +377,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
     const accentChanged = stripHashLower(inputs.accentColor) !== stripHashLower(DEFAULT_COLORS.accent);
     const colorsModified = !!(primaryChanged || secondaryChanged || accentChanged);
 
-    const obj = buildPrompts(problemText, solutionText, inputs, colorsModified);
+    const obj = buildPrompts(problemText || '', solutionText || '', inputs, colorsModified);
     setGenerated(JSON.stringify(obj, null, 2));
     setGeneratedObj(obj);
     setStep(3);
@@ -418,7 +430,7 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
 
@@ -454,11 +466,11 @@ const BrandingKitModal: React.FC<BrandingKitModalProps> = ({ problemText, soluti
               <div className="space-y-3">
                 <div>
                   <label className="text-sm" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}>Problem</label>
-                  <div className="mt-1 p-3 rounded-lg border" style={{ borderColor: '#e8ddd0', backgroundColor: '#fff' }}>{problemText}</div>
+                  <div className="mt-1 p-3 rounded-lg border" style={{ borderColor: '#e8ddd0', backgroundColor: '#fff' }}>{problemText || 'Not provided'}</div>
                 </div>
                 <div>
                   <label className="text-sm" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}>Proposed Solution</label>
-                  <div className="mt-1 p-3 rounded-lg border" style={{ borderColor: '#e8ddd0', backgroundColor: '#fff' }}>{solutionText}</div>
+                  <div className="mt-1 p-3 rounded-lg border" style={{ borderColor: '#e8ddd0', backgroundColor: '#fff' }}>{solutionText || 'Not provided'}</div>
                 </div>
               </div>
             </div>

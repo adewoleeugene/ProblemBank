@@ -18,6 +18,7 @@ export default function BrandingKitClient({ problemText, solutionText, defaultBu
       <BrandingKitCard onStartBuilding={() => setOpen(true)} />
       {open && (
         <BrandingKitModal
+          isOpen={open}
           problemText={problemText}
           solutionText={solutionText}
           defaultBusinessName={defaultBusinessName}

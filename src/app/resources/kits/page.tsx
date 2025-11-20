@@ -189,18 +189,18 @@ export default function ResourcesKitsPage() {
                       </div>
                     )}
 
-                    <div className="mt-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartBuilding(kit.title);
-                        }}
-                        className="w-full py-3 rounded-full text-sm transition-all duration-200 hover:opacity-90"
-                        style={{ backgroundColor: '#403f3e', color: '#f7efe3' }}
-                      >
-                        Start Building <span aria-hidden style={{ marginLeft: 8 }}>→</span>
-                      </button>
-                    </div>
+                     <div className="mt-2">
+                       <button
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           onStartBuilding(kit.title);
+                         }}
+                         className="group relative overflow-hidden w-full py-3 rounded-full bg-black text-white font-medium text-sm whitespace-nowrap transition-all duration-300 hover:scale-105"
+                       >
+                         <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
+                         <span className="relative z-10">Start Building <span aria-hidden style={{ marginLeft: 8 }}>→</span></span>
+                       </button>
+                     </div>
                   </div>
                 </div>
               </div>
@@ -212,6 +212,7 @@ export default function ResourcesKitsPage() {
       {/* Modals */}
       {openBranding && (
         <BrandingKitModal
+          isOpen={openBranding}
           problemText="Build a comprehensive brand identity"
           solutionText="Create professional branding assets using AI-powered tools and strategic guidance"
           defaultBusinessName=""
@@ -220,6 +221,7 @@ export default function ResourcesKitsPage() {
       )}
       {openUIProto && (
         <PRDKitModal
+          isOpen={openUIProto}
           problemText=""
           solutionText=""
           technology=""
@@ -228,6 +230,7 @@ export default function ResourcesKitsPage() {
       )}
       {openPitchMaster && (
         <PitchMasterKitModal
+          isOpen={openPitchMaster}
           problemText=""
           solutionText=""
           allowEditing={true}

@@ -6,11 +6,15 @@ import { Footer } from "../components";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap", // Better font loading performance
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -18,6 +22,10 @@ export const metadata: Metadata = {
   description: "Find inspiration for your next build with vetted ideas and step-by-step guidance",
   icons: {
     icon: "/images/black%20logo%20mark%20size=48@2x.png",
+  },
+  other: {
+    // Resource hints for performance
+    'preconnect': 'https://fonts.googleapis.com',
   },
 };
 

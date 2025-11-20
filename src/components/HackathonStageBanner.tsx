@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 interface HackathonStage {
   id: string;
@@ -47,10 +47,10 @@ const HACKATHON_STAGES: HackathonStage[] = [
   {
     id: 'bootcamp',
     title: 'Bootcamp (Freetown)',
-    startDate: null,
-    endDate: null,
+    startDate: new Date('2025-11-10T00:00:00Z'),
+    endDate: new Date('2025-11-19T23:59:59Z'),
     description: '10-day immersive training with AI & blockchain experts. Team formation.',
-    status: 'upcoming'
+    status: 'active'
   },
   {
     id: 'solution-development',
@@ -63,21 +63,21 @@ const HACKATHON_STAGES: HackathonStage[] = [
   {
     id: 'final-hackathon',
     title: 'Final Hackathon',
-    startDate: null,
-    endDate: null,
+    startDate: new Date('2025-11-20T00:00:00Z'),
+    endDate: new Date('2025-11-22T23:59:59Z'),
     description: '48-Hour Non-Stop Hackathon: Teams Refine Final Solution, Present Solutions, Winners Awarded.',
     status: 'upcoming'
   }
 ];
 
 function getCurrentStage(): HackathonStage | null {
-  // Return the Shortlisting stage as requested
-  const shortlistingStage = HACKATHON_STAGES.find(stage => stage.id === 'shortlisting');
-  if (shortlistingStage) {
-    return { ...shortlistingStage, status: 'upcoming' };
+  // Return the Bootcamp stage (ending at midnight tonight!)
+  const bootcampStage = HACKATHON_STAGES.find(stage => stage.id === 'bootcamp');
+  if (bootcampStage) {
+    return { ...bootcampStage, status: 'active' };
   }
-  
-  // Fallback to first stage if shortlisting not found
+
+  // Fallback to first stage if bootcamp not found
   return HACKATHON_STAGES.length > 0 ? { ...HACKATHON_STAGES[0], status: 'upcoming' } : null;
 }
 
@@ -104,7 +104,7 @@ interface CountdownTime {
   seconds: number;
 }
 
-export default function HackathonStageBanner() {
+const HackathonStageBanner = memo(function HackathonStageBanner() {
   const [currentStage, setCurrentStage] = useState<HackathonStage | null>(null);
   const [countdown, setCountdown] = useState<CountdownTime>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
@@ -128,18 +128,39 @@ export default function HackathonStageBanner() {
     const updateStageAndCountdown = () => {
       const stage = getCurrentStage();
       setCurrentStage(stage);
-      
+
       if (stage?.endDate) {
         setCountdown(calculateCountdown(stage.endDate));
       }
     };
-    
+
     updateStageAndCountdown();
-    
-    // Update every second for countdown
-    const interval = setInterval(updateStageAndCountdown, 1000);
-    
-    return () => clearInterval(interval);
+
+    // Only update countdown if component is visible and stage is active
+    const stage = getCurrentStage();
+    if (!stage?.endDate || stage.status === 'completed') {
+      return; // No need for interval if no countdown needed
+    }
+
+    // Use requestAnimationFrame for better performance, but throttle to ~1 update per second
+    let rafId: number;
+    let lastUpdate = Date.now();
+
+    const tick = () => {
+      const now = Date.now();
+      if (now - lastUpdate >= 1000) { // Only update once per second
+        lastUpdate = now;
+        const newCountdown = calculateCountdown(stage.endDate);
+        setCountdown(newCountdown);
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   if (!currentStage) return null;
@@ -362,4 +383,6 @@ export default function HackathonStageBanner() {
       </a>
     </div>
   );
-}
+});
+
+export default HackathonStageBanner;

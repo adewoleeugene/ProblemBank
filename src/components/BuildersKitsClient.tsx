@@ -252,6 +252,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
 
       {open && (
         <BrandingKitModal
+          isOpen={open}
           problemText={problemText}
           solutionText={solutionText}
           defaultBusinessName={defaultBusinessName}
@@ -260,6 +261,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
       )}
       {openUIProto && (
         <PRDKitModal
+          isOpen={openUIProto}
           problemText={problemText}
           solutionText={solutionText}
           technology={technology}
@@ -268,6 +270,7 @@ export default function BuildersKitsClient({ problemText, solutionText, defaultB
       )}
       {openPitchMaster && (
         <PitchMasterKitModal
+          isOpen={openPitchMaster}
           problemText={problemText}
           solutionText={solutionText}
           onClose={() => setOpenPitchMaster(false)}

@@ -1,12 +1,22 @@
 'use client';
 import { Navigation } from '../components';
 import Link from 'next/link';
-import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
+import { useEffect, useState, useRef, memo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { kits as kitsData, slugifyTitle } from '../lib/kits';
-import PixelBlast from '../components/PixelBlast';
 import HackathonStageBanner from '../components/HackathonStageBanner';
 import FAQSection from '../components/FAQSection';
+import PRDKitModal from '../components/PRDKitModal';
+import PitchMasterKitModal from '../components/PitchMasterKitModal';
+import BrandingKitModal from '../components/BrandingKitModal';
+import dynamic from 'next/dynamic';
+
+// Lazy load PixelBlast - only loads when needed (not on mobile)
+const PixelBlast = dynamic(() => import('../components/PixelBlast'), {
+  ssr: false, // Disable SSR for Three.js component
+  loading: () => null, // No loading state needed for background effect
+});
 
 type IdeaCard = { title: string; blurb: string; category?: string };
 
@@ -29,42 +39,55 @@ function getCategoryIcon(label?: string): string {
 }
 
 // Breakpoint-aware intensity: full on desktop, 40% under md (<= 767px), disabled under sm (<= 639px)
-function useBreakpointIntensity() {
-  const [intensity, setIntensity] = useState(1);
+// Memoized to prevent recreating the function on every render
+const useBreakpointIntensity = () => {
+  const [intensity, setIntensity] = useState(() => {
+    // Initialize with correct value to avoid flash
+    if (typeof window === 'undefined') return 1;
+    if (window.matchMedia('(max-width: 639px)').matches) return 0;
+    if (window.matchMedia('(max-width: 767px)').matches) return 0.4;
+    return 1;
+  });
+
   useEffect(() => {
     const sm = window.matchMedia('(max-width: 639px)');
     const md = window.matchMedia('(max-width: 767px)');
+
     const update = () => {
       if (sm.matches) setIntensity(0);
       else if (md.matches) setIntensity(0.4);
       else setIntensity(1);
     };
-    update();
+
     sm.addEventListener('change', update);
     md.addEventListener('change', update);
+
     return () => {
       sm.removeEventListener('change', update);
       md.removeEventListener('change', update);
     };
   }, []);
-  return intensity;
-}
 
-// Mobile detection for PixelBlast optimization
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  
+  return intensity;
+};
+
+// Mobile detection for PixelBlast optimization - memoized and optimized
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 639px)').matches;
+  });
+
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia('(max-width: 639px)').matches);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const mq = window.matchMedia('(max-width: 639px)');
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+
+    mq.addEventListener('change', handleChange);
+    return () => mq.removeEventListener('change', handleChange);
   }, []);
-  
+
   return isMobile;
-}
+};
 
 export default function Home() {
   // Mobile detection for PixelBlast optimization
@@ -273,7 +296,7 @@ export default function Home() {
                 }}
                 className="group relative overflow-hidden w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border-2 border-gray-400 text-gray-700 font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105"
               >
-                <div 
+                <div
                   className="absolute inset-0 opacity-10 mix-blend-overlay"
                   style={{
                     backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
@@ -315,6 +338,7 @@ export default function Home() {
                   transformOrigin: 'center center',
                   willChange: 'transform',
                 }}
+                prefetch={idx === 0} // Only prefetch first card
               >
                 {/* Speckled texture overlay */}
                 <div
@@ -350,12 +374,15 @@ export default function Home() {
                   {/* Bottom group: Emoji and subtext anchored to bottom */}
                   <div className="mt-auto">
                     <div className="flex justify-center mb-2">
-                      <img
+                      <Image
                         src={getCategoryIcon(item.category)}
                         alt={item.category ? `${item.category} icon` : 'Category icon'}
                         width={56}
                         height={56}
                         style={{ display: 'block' }}
+                        loading={idx < 2 ? 'eager' : 'lazy'} // Load first 2 eagerly
+                        quality={85}
+                        priority={idx === 0} // Prioritize first image
                       />
                     </div>
                     <p
@@ -384,35 +411,8 @@ export default function Home() {
   );
 }
 
-function ParallaxLaunchpadSection() {
-  const intensity = useBreakpointIntensity();
+const ParallaxLaunchpadSection = memo(function ParallaxLaunchpadSection() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-
-  // Helper to scale values by intensity
-  const scale = (v: number) => v * intensity;
-
-  // Heading line parallax (0.8x, 1.0x, 1.2x speeds)
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, scale(-40)]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, scale(-50)]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, scale(-60)]);
-
-  const r1 = useTransform(scrollYProgress, [0, 1], [0, scale(-2)]);
-  const r2 = useTransform(scrollYProgress, [0, 1], [0, scale(0)]);
-  const r3 = useTransform(scrollYProgress, [0, 1], [0, scale(2)]);
-
-  // Cards motion values
-  const cardY = [
-    useTransform(scrollYProgress, [0, 1], [0, scale(-24)]),
-    useTransform(scrollYProgress, [0, 1], [0, scale(-30)]),
-    useTransform(scrollYProgress, [0, 1], [0, scale(-36)]),
-  ];
-  const cardR = [
-    useTransform(scrollYProgress, [0, 1], [0, scale(2)]),
-    useTransform(scrollYProgress, [0, 1], [0, scale(-3)]),
-    useTransform(scrollYProgress, [0, 1], [0, scale(2)]),
-  ];
-  const cardS = useTransform(scrollYProgress, [0, 1], [1, 1 + 0.03 * intensity]);
 
   const cards = [
     {
@@ -454,21 +454,21 @@ function ParallaxLaunchpadSection() {
           <div className="px-4 md:px-8 py-24 md:py-32">
             {/* Heading */}
             <div className="relative flex flex-col items-center text-center select-none">
-              <motion.div style={{ y: y1, rotate: r1 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
                   YOUR
                 </span>
-              </motion.div>
-              <motion.div style={{ y: y2, rotate: r2 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+              </div>
+              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(0.8deg)' }}>
                   INNOVATION
                 </span>
-              </motion.div>
-              <motion.div style={{ y: y3, rotate: r3 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
+              </div>
+              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-8 md:mb-12">
                 <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
                   LAUNCHPAD
                 </span>
-              </motion.div>
+              </div>
             </div>
 
             {/* Cards */}
@@ -486,15 +486,11 @@ function ParallaxLaunchpadSection() {
                     style={{ transform: `rotate(${c.baseRotate}deg)` }}
                   >
                     <CardWrapper {...linkProps} className="block no-underline">
-                      <motion.div
+                      <div
                         className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] cursor-pointer"
                         style={{
-                          y: cardY[i],
-                          rotate: cardR[i],
-                          scale: cardS,
                           backgroundColor: c.bg,
                           height: '340px',
-                          willChange: 'transform',
                         }}
                       >
                         {/* Speckled texture overlay */}
@@ -518,7 +514,7 @@ function ParallaxLaunchpadSection() {
                           </div>
                           <div className="mt-auto">
                             <div className="flex justify-center mb-2">
-                              <img src={c.icon} alt="icon" width={56} height={56} style={{ display: 'block' }} />
+                              <Image src={c.icon} alt="icon" width={56} height={56} style={{ display: 'block' }} loading="lazy" quality={85} />
                             </div>
                             <p
                               className="text-sm leading-relaxed text-center"
@@ -528,7 +524,7 @@ function ParallaxLaunchpadSection() {
                             </p>
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     </CardWrapper>
                   </div>
                 );
@@ -539,47 +535,43 @@ function ParallaxLaunchpadSection() {
       </div>
     </section>
   );
-}
+});
 
-function BuilderKitsSection() {
-  const intensity = useBreakpointIntensity();
+const BuilderKitsSection = memo(function BuilderKitsSection() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const scale = (v: number) => v * intensity;
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, scale(-40)]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, scale(-50)]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, scale(-60)]);
-  const r1 = useTransform(scrollYProgress, [0, 1], [0, scale(-2)]);
-  const r2 = useTransform(scrollYProgress, [0, 1], [0, scale(0)]);
-  const r3 = useTransform(scrollYProgress, [0, 1], [0, scale(2)]);
+  const [prdModalOpen, setPrdModalOpen] = useState(false);
+  const [pitchModalOpen, setPitchModalOpen] = useState(false);
+  const [brandingModalOpen, setBrandingModalOpen] = useState(false);
+
   const featuredKits = kitsData.slice(0, 4).map((k, i) => ({
     title: k.title,
     blurb: k.description,
     link: `/resources#${slugifyTitle(k.title)}`,
     baseRotate: [-2, 1.4, -1.2, 1.8][i % 4],
     bg: i % 2 === 0 ? '#fffaf3' : '#f2e8dc',
+    hasModal: ['PRD Kit', 'Pitch Master Kit', 'COMPLETE BRANDING KIT'].includes(k.title),
   }));
 
   return (
     <section className="relative z-30 w-full" style={{ backgroundColor: '#f9f2e9' }}>
       <div ref={ref} className="mx-auto max-w-7xl px-4 md:px-8 py-16 md:py-20 lg:py-24">
-        {/* Parallax Heading (3 lines) */}
+        {/* Heading (3 lines) */}
         <div className="relative flex flex-col items-center text-center select-none">
-          <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+          <div className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
             <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e', display: 'block', transform: 'rotate(-2deg)' }}>
               Build Smarter
             </span>
-          </motion.div>
-          <motion.div style={{ y: y2, rotate: r2 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+          </div>
+          <div className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
             <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e', display: 'block', transform: 'rotate(0.8deg)' }}>
               With our
             </span>
-          </motion.div>
-          <motion.div style={{ y: y3, rotate: r3 }} className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-6 md:mb-8">
+          </div>
+          <div className="text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-6 md:mb-8">
             <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#403f3e', display: 'block', transform: 'rotate(-2deg)' }}>
               Builder Kits
             </span>
-          </motion.div>
+          </div>
         </div>
 
         {/* Subheading split into two lines */}
@@ -590,49 +582,68 @@ function BuilderKitsSection() {
 
         {/* Cards Grid (derived from first four resources kits) */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 items-stretch">
-          {featuredKits.map((k) => (
-            <div
-              key={k.title}
-              className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px]"
-              style={{
-                backgroundColor: k.bg,
-                transform: `rotate(${k.baseRotate}deg)`,
-                transformOrigin: 'center center',
-                willChange: 'transform',
-                height: '360px',
-              }}
-            >
-              {/* Speckled texture overlay */}
+          {featuredKits.map((k) => {
+            const handleClick = () => {
+              if (k.title === 'PRD Kit') {
+                setPrdModalOpen(true);
+              } else if (k.title === 'Pitch Master Kit') {
+                setPitchModalOpen(true);
+              } else if (k.title === 'COMPLETE BRANDING KIT') {
+                setBrandingModalOpen(true);
+              }
+            };
+
+            return (
               <div
-                className="absolute inset-0 opacity-10 pointer-events-none"
+                key={k.title}
+                className="relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px]"
                 style={{
-                  backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
-                  backgroundSize: '200px 200px',
-                  backgroundRepeat: 'repeat',
+                  backgroundColor: k.bg,
+                  transform: `rotate(${k.baseRotate}deg)`,
+                  transformOrigin: 'center center',
+                  willChange: 'transform',
+                  height: '360px',
                 }}
-              />
-              {/* Card content */}
-              <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
-                {/* Title */}
-                <h3 className="text-2xl mb-2 text-center" style={{ fontFamily: 'Decoy', fontWeight: 500, color: '#403f3e' }}>
-                  {k.title}
-                </h3>
+              >
+                {/* Speckled texture overlay */}
+                <div
+                  className="absolute inset-0 opacity-10 pointer-events-none"
+                  style={{
+                    backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
+                    backgroundSize: '200px 200px',
+                    backgroundRepeat: 'repeat',
+                  }}
+                />
+                {/* Card content */}
+                <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
+                  {/* Title */}
+                  <h3 className="text-2xl mb-2 text-center" style={{ fontFamily: 'Decoy', fontWeight: 500, color: '#403f3e' }}>
+                    {k.title}
+                  </h3>
 
-                {/* Blurb */}
-                <p className="text-sm leading-relaxed text-center" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}>
-                  {k.blurb}
-                </p>
+                  {/* Blurb */}
+                  <p className="text-sm leading-relaxed text-center" style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}>
+                    {k.blurb}
+                  </p>
 
-                {/* CTA */}
-                <div className="mt-auto pt-4 flex justify-center">
-                  <a href={k.link} className="group relative overflow-hidden px-6 py-3 rounded-full bg-black text-white font-medium text-sm whitespace-nowrap transition-all duration-300 hover:scale-105">
-                    <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
-                    <span className="relative z-10">Explore Kit</span>
-                  </a>
+                  {/* CTA */}
+                  <div className="mt-auto pt-4 flex justify-center">
+                    {k.hasModal ? (
+                      <button onClick={handleClick} className="group relative overflow-hidden px-6 py-3 rounded-full bg-black text-white font-medium text-sm whitespace-nowrap transition-all duration-300 hover:scale-105">
+                        <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
+                        <span className="relative z-10">Explore Kit</span>
+                      </button>
+                    ) : (
+                      <a href={k.link} className="group relative overflow-hidden px-6 py-3 rounded-full bg-black text-white font-medium text-sm whitespace-nowrap transition-all duration-300 hover:scale-105">
+                        <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
+                        <span className="relative z-10">Explore Kit</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Discover All Button */}
@@ -644,23 +655,17 @@ function BuilderKitsSection() {
           </a>
         </div>
       </div>
+
+      {/* Modals */}
+      <PRDKitModal isOpen={prdModalOpen} onClose={() => setPrdModalOpen(false)} />
+      <PitchMasterKitModal isOpen={pitchModalOpen} onClose={() => setPitchModalOpen(false)} />
+      <BrandingKitModal isOpen={brandingModalOpen} onClose={() => setBrandingModalOpen(false)} />
     </section>
   );
-}
+});
 
-function HackathonAnnouncementSection() {
-  const intensity = useBreakpointIntensity();
+const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const scale = (v: number) => v * intensity;
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, scale(-40)]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, scale(-50)]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, scale(-60)]);
-
-  const r1 = useTransform(scrollYProgress, [0, 1], [0, scale(-2)]);
-  const r2 = useTransform(scrollYProgress, [0, 1], [0, scale(0)]);
-  const r3 = useTransform(scrollYProgress, [0, 1], [0, scale(2)]);
 
   // Countdown
   const [countdown, setCountdown] = useState<{ label: 'Starts in' | 'In Progress' | 'Completed'; days: number; hours: number; minutes: number; seconds: number }>({
@@ -672,9 +677,9 @@ function HackathonAnnouncementSection() {
   });
 
   useEffect(() => {
-    const START_DATE = new Date('2025-11-06T00:00:00Z'); // Sierra Leone (UTC+0)
-    const END_DATE = new Date('2025-12-02T00:00:00Z'); // End date start-of-day
-    
+    const START_DATE = new Date('2025-11-20T00:00:00Z'); // Sierra Leone (UTC+0)
+    const END_DATE = new Date('2025-12-04T00:00:00Z'); // End date start-of-day
+
     const tick = () => {
       const now = new Date();
       let target = START_DATE;
@@ -698,59 +703,89 @@ function HackathonAnnouncementSection() {
     };
 
     tick();
-    const interval = setInterval(tick, 1000);
-    return () => clearInterval(interval);
+
+    // Use requestAnimationFrame for better performance
+    let rafId: number;
+    let lastUpdate = Date.now();
+
+    const rafTick = () => {
+      const now = Date.now();
+      if (now - lastUpdate >= 1000) {
+        lastUpdate = now;
+        tick();
+      }
+      rafId = requestAnimationFrame(rafTick);
+    };
+
+    rafId = requestAnimationFrame(rafTick);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
     <section className="relative z-40 w-full py-12 md:py-16 lg:py-20 col">
       <div className="-mt-4 md:-mt-8 lg:-mt-12 mx-auto max-w-7xl px-4 md:px-8">
         <div ref={ref} className="bg-[#121212] overflow-hidden rounded-[28px] md:rounded-[40px] lg:rounded-[56px]">
-          <div className="px-4 md:px-8 py-16 md:py-20 lg:py-20 grid grid-cols-1 2xl:grid-cols-2 gap-8">
-            {/* Heading */}
-            <div className="relative flex flex-col items-center text-center select-none 2xl:mt-6">
-              {(countdown.label === 'Starts in' || countdown.label === 'In Progress') && (
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-[#f7efe3] px-4 py-1 text-[#f7efe3]" aria-label="Upcoming Event">
-                  <span
-                    className="inline-block"
-                    aria-hidden="true"
-                    style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: '#f7efe3',
-                      WebkitMaskImage: 'url(/images/calendar-blank.svg)',
-                      maskImage: 'url(/images/calendar-blank.svg)',
-                      WebkitMaskSize: 'contain',
-                      maskSize: 'contain',
-                      WebkitMaskRepeat: 'no-repeat',
-                      maskRepeat: 'no-repeat',
-                      WebkitMaskPosition: 'center',
-                      maskPosition: 'center',
-                    }}
-                  />
-                  <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, letterSpacing: '0.02em' }}>Upcoming Event</span>
-                </div>
-              )}
-              <motion.div style={{ y: y1, rotate: r1 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-none">
-                <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
-                  BIG 5  A.I. &
-                </span>
-              </motion.div>
-              <motion.div style={{ y: y2, rotate: r2 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-none">
-                <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(0.8deg)' }}>
-                  BLOCKCHAIN
-                </span>
-              </motion.div>
-              <motion.div style={{ y: y3, rotate: r3 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-none mb-4 md:mb-6">
-                <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
-                  HACKATHON
-                </span>
-              </motion.div>
-              {/* Learn More CTA moved below to center across section */}
+          <div className="px-4 md:px-8 py-16 md:py-20 lg:py-20">
+            {/* Ministry Logo - Centered at top */}
+            <div className="flex justify-center mb-8">
+              <Image
+                src="/images/mocti-logo.png"
+                alt="Ministry of Communication, Technology & Innovation - Government of Sierra Leone"
+                width={120}
+                height={120}
+                className="rounded-full"
+                unoptimized
+              />
             </div>
 
-            {/* Countdown Card */}
-            <div className="relative justify-self-center 2xl:justify-self-end" style={{ transform: 'rotate(1.4deg)' }}>
+            {/* Title and Card in a row with equal margins */}
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-8 items-center justify-items-center">
+              {/* Heading */}
+              <div className="relative flex flex-col items-center text-center select-none 2xl:justify-self-end">
+                {(countdown.label === 'Starts in' || countdown.label === 'In Progress') && (
+                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-[#f7efe3] px-4 py-1 text-[#f7efe3]" aria-label="Upcoming Event">
+                    <span
+                      className="inline-block"
+                      aria-hidden="true"
+                      style={{
+                        width: 20,
+                        height: 20,
+                        backgroundColor: '#f7efe3',
+                        WebkitMaskImage: 'url(/images/calendar-blank.svg)',
+                        maskImage: 'url(/images/calendar-blank.svg)',
+                        WebkitMaskSize: 'contain',
+                        maskSize: 'contain',
+                        WebkitMaskRepeat: 'no-repeat',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskPosition: 'center',
+                        maskPosition: 'center',
+                      }}
+                    />
+                    <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, letterSpacing: '0.02em' }}>Upcoming Event</span>
+                  </div>
+                )}
+                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+                  <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
+                    BIG 5  A.I. &
+                  </span>
+                </div>
+                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none">
+                  <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(0.8deg)' }}>
+                    BLOCKCHAIN
+                  </span>
+                </div>
+                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl uppercase leading-none mb-4 md:mb-6">
+                  <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#f7efe3', display: 'block', transform: 'rotate(-2deg)' }}>
+                    HACKATHON
+                  </span>
+                </div>
+              </div>
+
+              {/* Countdown Card */}
+              <div className="relative 2xl:justify-self-start" style={{ transform: 'rotate(1.4deg)' }}>
               <div className="w-full max-w-[420px] md:max-w-[460px] border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] md:rounded-[34px] lg:rounded-[38px] bg-[#f2e8dc] p-6 md:p-8 text-center">
                 {/* Subheading */}
                 <p className="text-center text-base md:text-lg mb-2" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600 }}>
@@ -758,7 +793,7 @@ function HackathonAnnouncementSection() {
                 </p>
                 {/* Date */}
                 <p className="mt-4 text-center text-sm md:text-base" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 900, fontSize: '28px' }}>
-                  6 Nov – 2 Dec 2025
+                  20 Nov – 4 Dec 2025
                 </p>
                 {/* Countdown */}
                 <div className="mt-6 flex flex-col items-center">
@@ -784,9 +819,11 @@ function HackathonAnnouncementSection() {
                   )}
                 </div>
               </div>
+              </div>
             </div>
-            {/* Learn More CTA centered across section */}
-            <div className="2xl:col-span-2 mt-10 flex justify-center">
+
+            {/* Learn More CTA centered */}
+            <div className="mt-10 flex justify-center">
               <a
                 href="https://mocti.gov.sl/ai-challenge/"
                 target="_blank"
@@ -806,4 +843,4 @@ function HackathonAnnouncementSection() {
       </div>
     </section>
   );
-}
+});

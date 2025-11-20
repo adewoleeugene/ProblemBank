@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 
 interface PitchMasterKitModalProps {
+  isOpen: boolean;
   onClose: () => void;
   problemText?: string;
   solutionText?: string;
@@ -343,7 +344,7 @@ function buildPitchDeckPrompts(problemText: string | undefined, solutionText: st
 
 const stepLabels = ['Core Story', 'Opportunity', 'Business Engine', 'Future & Ask', 'Team & Vision', 'Generate Assets'] as const;
 
-const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, problemText, solutionText, allowEditing = false }) => {
+const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ isOpen, onClose, problemText, solutionText, allowEditing = false }) => {
   const [step, setStep] = useState<number>(0);
   const [inputs, setInputs] = useState<PitchDeckInputs>({
     coreStory: {
@@ -426,6 +427,17 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
     return [0, 1, 2, 3, 4].every(i => canProceedStep(i));
   }, [inputs]);
 
+  useEffect(() => {
+    if (isOpen && typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
   const handleGenerate = () => {
     const obj = buildPitchDeckPrompts(problemText, solutionText, inputs);
     setGenerated(obj);
@@ -463,7 +475,7 @@ const PitchMasterKitModal: React.FC<PitchMasterKitModalProps> = ({ onClose, prob
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
 
       <div

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface PRDKitModalProps {
+  isOpen: boolean;
   onClose: () => void;
   problemText?: string;
   solutionText?: string;
@@ -45,7 +46,7 @@ type ImplementationPhase = {
 
 const stepLabels = ['Core Concept', 'Target Users', 'Features & User Stories', 'Scope Definition', 'Success Metrics'] as const;
 
-const PRDKitModal: React.FC<PRDKitModalProps> = ({ onClose, problemText, solutionText, technology }) => {
+const PRDKitModal: React.FC<PRDKitModalProps> = ({ isOpen, onClose, problemText, solutionText, technology }) => {
   const [step, setStep] = useState<number>(0);
   const [projectName, setProjectName] = useState('');
   const [coreProblem, setCoreProblem] = useState(problemText || '');
@@ -58,27 +59,38 @@ const PRDKitModal: React.FC<PRDKitModalProps> = ({ onClose, problemText, solutio
     whatsapp: false,
     sms: false,
   });
-  
+
   const [userPersonas, setUserPersonas] = useState<UserPersona[]>([
     { id: '1', name: '', description: '', coreTask: '', goals: '', frustrations: '' }
   ]);
-  
+
   const [features, setFeatures] = useState<Feature[]>([
     { id: '1', name: '', userStory: '', acceptanceCriteria: '' }
   ]);
-  
+
   const [outOfScope, setOutOfScope] = useState('');
   const [kpis, setKpis] = useState('');
   const [impactGoal, setImpactGoal] = useState('');
   const [generatedPRD, setGeneratedPRD] = useState('');
   const [implementationPhases, setImplementationPhases] = useState<ImplementationPhase[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  
+
   const [showStep0Errors, setShowStep0Errors] = useState(false);
   const [showStep1Errors, setShowStep1Errors] = useState(false);
   const [showStep2Errors, setShowStep2Errors] = useState(false);
   const [showStep4Errors, setShowStep4Errors] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
 
   // Validation functions
   const canProceedStep0 = () => {
@@ -609,7 +621,7 @@ ${impactGoal}`,
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
 
