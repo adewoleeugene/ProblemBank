@@ -20,8 +20,10 @@ export default function Big5Page() {
         }}
       />
 
-      {/* Navigation */}
-      <Navigation logoText="ProblemBank" />
+      {/* Navigation - Higher z-index to ensure visibility */}
+      <div className="relative z-50">
+        <Navigation logoText="ProblemBank" />
+      </div>
 
       {/* Hero Section */}
       <Big5Hero />
