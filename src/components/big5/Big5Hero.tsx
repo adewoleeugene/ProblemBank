@@ -229,7 +229,7 @@ export default function Big5Hero() {
 
               {/* Prize Amount */}
               <div
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2 whitespace-nowrap"
                 style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#1e1e1e' }}
               >
                 1.2M NLE
