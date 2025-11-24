@@ -1,5 +1,5 @@
 'use client';
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 
 const JudgingCriteria = memo(function JudgingCriteria() {
   const [isScrollOpen, setIsScrollOpen] = useState(false);
@@ -36,7 +36,7 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               height: 500px !important;
             }
             .scroll-container.closed {
-              height: 100px !important;
+              height: 110px !important;
             }
             .scroll-content-inner {
               height: 400px !important;
@@ -44,27 +44,19 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             .scroll-content {
               padding: 32px 24px !important;
             }
-            .scroll-prompt {
-              padding: 16px 20px !important;
-              font-size: 1rem !important;
-            }
           }
           @media (max-width: 640px) {
             .scroll-container {
               height: 450px !important;
             }
             .scroll-container.closed {
-              height: 90px !important;
+              height: 100px !important;
             }
             .scroll-content-inner {
               height: 360px !important;
             }
             .scroll-content {
               padding: 24px 20px !important;
-            }
-            .scroll-prompt {
-              padding: 14px 16px !important;
-              font-size: 0.9rem !important;
             }
           }
         `
@@ -123,12 +115,12 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             }}
           >
             <span
-              className="scroll-prompt-text text-sm sm:text-base md:text-lg lg:text-xl whitespace-nowrap"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 letterSpacing: '0.05em',
                 fontWeight: 500,
                 color: '#33261a',
+                fontSize: '1.25rem',
               }}
             >
               {isScrollOpen ? 'Roll Up Guide' : 'Read Participation Guide'}
