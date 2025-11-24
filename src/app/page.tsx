@@ -825,9 +825,7 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
             {/* Learn More CTA centered */}
             <div className="mt-10 flex justify-center">
               <a
-                href="https://mocti.gov.sl/ai-challenge/"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/big5"
                 className="group relative overflow-hidden px-8 py-4 rounded-full bg-[#E6B800] text-white font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105"
               >
                 <div
