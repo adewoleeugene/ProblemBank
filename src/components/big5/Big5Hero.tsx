@@ -142,17 +142,17 @@ export default function Big5Hero() {
       <div className="relative z-50 text-center max-w-5xl mx-auto -mt-24">
         {/* Ministry Logo + Event Badge */}
         {countdown.label !== 'Completed' && (
-          <div className="mb-8 inline-flex items-center gap-4 rounded-full border-2 border-[#1e1e1e] px-6 py-3 bg-[#E6B800]">
+          <div className="mb-8 inline-flex items-center gap-3 sm:gap-4 rounded-full border-2 border-[#1e1e1e] px-4 sm:px-6 py-2 sm:py-3 bg-[#E6B800]">
             <Image
               src="/images/mocti-logo.png"
               alt="Ministry of Communication, Technology & Innovation - Government of Sierra Leone"
-              width={48}
-              height={48}
-              className="rounded-full"
+              width={40}
+              height={40}
+              className="rounded-full sm:w-12 sm:h-12"
               unoptimized
               priority
             />
-            <span style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: '#1e1e1e', fontSize: '1.125rem' }}>
+            <span className="text-sm sm:text-base md:text-lg" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: '#1e1e1e' }}>
               National Innovation Competition
             </span>
           </div>
@@ -195,17 +195,17 @@ export default function Big5Hero() {
 
         {/* Subtitle */}
         <p
-          className="text-lg md:text-xl text-gray-700 mt-8 max-w-3xl mx-auto"
-          style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600 }}
+          className="text-base sm:text-lg md:text-xl text-gray-700 mt-8 max-w-3xl mx-auto px-4"
+          style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, lineHeight: '1.6' }}
         >
           Build AI and blockchain solutions aligned with Sierra Leone&apos;s development priorities.
           Join young developers and innovators in creating impactful technology.
         </p>
 
         {/* Grand Prize Banner */}
-        <div className="mt-12 inline-block">
+        <div className="mt-12 inline-block px-4 w-full max-w-md">
           <div
-            className="relative border-2 border-[#1e1e1e] shadow-xl overflow-hidden rounded-[28px] md:rounded-[34px] bg-[#E6B800] px-12 md:px-16 py-8 md:py-10 text-center"
+            className="relative border-2 border-[#1e1e1e] shadow-xl overflow-hidden rounded-[24px] md:rounded-[28px] lg:rounded-[34px] bg-[#E6B800] px-8 sm:px-12 md:px-16 py-6 sm:py-8 md:py-10 text-center"
             style={{ transform: 'rotate(-1.2deg)' }}
           >
             {/* Noise overlay */}
@@ -221,7 +221,7 @@ export default function Big5Hero() {
              <div className="relative z-10">
                {/* Label */}
               <p
-                className="text-base md:text-lg mb-2"
+                className="text-sm sm:text-base md:text-lg mb-2"
                 style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: '#1e1e1e', letterSpacing: '0.05em' }}
               >
                 GRAND PRIZE POOL
@@ -229,7 +229,7 @@ export default function Big5Hero() {
 
               {/* Prize Amount */}
               <div
-                className="text-5xl md:text-6xl lg:text-7xl mb-2"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-2"
                 style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#1e1e1e' }}
               >
                 1.2M NLE
@@ -237,7 +237,7 @@ export default function Big5Hero() {
 
               {/* Subtext */}
               <p
-                className="text-sm md:text-base"
+                className="text-xs sm:text-sm md:text-base"
                 style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#1e1e1e', opacity: 0.9 }}
               >
                 + Mentorship & Incubation Support

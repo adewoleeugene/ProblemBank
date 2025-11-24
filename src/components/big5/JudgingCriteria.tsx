@@ -32,13 +32,39 @@ const JudgingCriteria = memo(function JudgingCriteria() {
 
           /* Responsive adjustments */
           @media (max-width: 768px) {
+            .scroll-container {
+              height: 500px !important;
+            }
+            .scroll-container.closed {
+              height: 100px !important;
+            }
+            .scroll-content-inner {
+              height: 400px !important;
+            }
             .scroll-content {
               padding: 32px 24px !important;
             }
+            .scroll-prompt {
+              padding: 16px 20px !important;
+              font-size: 1rem !important;
+            }
           }
           @media (max-width: 640px) {
+            .scroll-container {
+              height: 450px !important;
+            }
+            .scroll-container.closed {
+              height: 90px !important;
+            }
+            .scroll-content-inner {
+              height: 360px !important;
+            }
             .scroll-content {
               padding: 24px 20px !important;
+            }
+            .scroll-prompt {
+              padding: 14px 16px !important;
+              font-size: 0.9rem !important;
             }
           }
         `
@@ -47,7 +73,7 @@ const JudgingCriteria = memo(function JudgingCriteria() {
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         {/* Scroll Container */}
         <div
-          className={`scroll-container ${isScrollOpen ? 'unrolled' : ''}`}
+          className={`scroll-container ${isScrollOpen ? 'unrolled' : 'closed'}`}
           onClick={toggleScroll}
           style={{
             width: '100%',
@@ -84,15 +110,16 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             }}
           >
             <span
-              className="scroll-prompt-text"
+              className="scroll-prompt-text text-base md:text-lg lg:text-xl"
               style={{
                 fontFamily: 'Decoy, sans-serif',
-                letterSpacing: '0.1em',
+                letterSpacing: '0.05em',
                 fontWeight: 500,
                 color: '#33261a',
               }}
             >
-              {isScrollOpen ? 'Click to Roll Up Guide' : 'Click to Read the Participation Guide'}
+              <span className="hidden sm:inline">{isScrollOpen ? 'Click to Roll Up Guide' : 'Click to Read the Participation Guide'}</span>
+              <span className="sm:hidden">{isScrollOpen ? 'Roll Up Guide' : 'Read Participation Guide'}</span>
             </span>
             <span
               className="down-arrow"
@@ -126,12 +153,12 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             }}
           >
             <h2
+              className="text-2xl md:text-3xl lg:text-4xl"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
                 color: '#5c422c',
                 textAlign: 'center',
-                fontSize: '2.5rem',
                 marginBottom: '10px',
                 textTransform: 'uppercase',
                 borderBottom: '2px solid #5c422c',
@@ -141,12 +168,12 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               Big 5 AI and Blockchain Hackathon
             </h2>
             <h3
+              className="text-xl md:text-2xl lg:text-3xl"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
                 color: '#5c422c',
                 textAlign: 'center',
-                fontSize: '1.85rem',
                 marginBottom: '30px',
                 borderBottom: '2px solid #5c422c',
                 paddingBottom: '5px',
@@ -163,11 +190,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               }}
             >
               <h4
+                className="text-lg md:text-xl lg:text-2xl"
                 style={{
                   fontFamily: 'Decoy, sans-serif',
                   fontWeight: 500,
                   color: '#5c422c',
-                  fontSize: '1.5rem',
                   marginTop: '20px',
                   marginBottom: '10px',
                 }}
@@ -190,11 +217,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               }}
             >
               <h4
+                className="text-lg md:text-xl lg:text-2xl"
                 style={{
                   fontFamily: 'Decoy, sans-serif',
                   fontWeight: 500,
                   color: '#5c422c',
-                  fontSize: '1.5rem',
                   marginTop: '20px',
                   marginBottom: '10px',
                 }}
@@ -225,11 +252,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               }}
             >
               <h4
+                className="text-lg md:text-xl lg:text-2xl"
                 style={{
                   fontFamily: 'Decoy, sans-serif',
                   fontWeight: 500,
                   color: '#5c422c',
-                  fontSize: '1.5rem',
                   marginTop: '20px',
                   marginBottom: '10px',
                 }}
@@ -286,11 +313,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               }}
             >
               <h4
+                className="text-lg md:text-xl lg:text-2xl"
                 style={{
                   fontFamily: 'Decoy, sans-serif',
                   fontWeight: 500,
                   color: '#5c422c',
-                  fontSize: '1.5rem',
                   marginTop: '20px',
                   marginBottom: '10px',
                 }}
@@ -316,11 +343,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               }}
             >
               <h4
+                className="text-lg md:text-xl lg:text-2xl"
                 style={{
                   fontFamily: 'Decoy, sans-serif',
                   fontWeight: 500,
                   color: '#5c422c',
-                  fontSize: '1.5rem',
                   marginTop: '20px',
                   marginBottom: '10px',
                 }}
@@ -338,11 +365,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               }}
             >
               <h4
+                className="text-lg md:text-xl lg:text-2xl"
                 style={{
                   fontFamily: 'Decoy, sans-serif',
                   fontWeight: 500,
                   color: '#5c422c',
-                  fontSize: '1.5rem',
                   marginTop: '20px',
                   marginBottom: '10px',
                 }}
@@ -353,11 +380,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             </div>
 
             <h3
+              className="text-xl md:text-2xl lg:text-3xl"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
                 color: '#5c422c',
-                fontSize: '1.85rem',
                 marginTop: '30px',
                 marginBottom: '20px',
                 textAlign: 'center',
@@ -395,11 +422,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
                 }}
               >
                 <h4
+                  className="text-base md:text-lg lg:text-xl"
                   style={{
                     fontFamily: 'Decoy, sans-serif',
                     fontWeight: 500,
                     color: '#5c422c',
-                    fontSize: '1.3rem',
                     marginTop: '0',
                     marginBottom: '8px',
                   }}
@@ -428,11 +455,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
                 }}
               >
                 <h4
+                  className="text-base md:text-lg lg:text-xl"
                   style={{
                     fontFamily: 'Decoy, sans-serif',
                     fontWeight: 500,
                     color: '#5c422c',
-                    fontSize: '1.3rem',
                     marginTop: '0',
                     marginBottom: '8px',
                   }}
@@ -453,11 +480,11 @@ const JudgingCriteria = memo(function JudgingCriteria() {
         </div>
 
             <h3
+              className="text-xl md:text-2xl lg:text-3xl"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 fontWeight: 500,
                 color: '#5c422c',
-                fontSize: '1.85rem',
                 marginTop: '30px',
                 marginBottom: '20px',
                 textAlign: 'center',
