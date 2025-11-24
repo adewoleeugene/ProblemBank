@@ -71,6 +71,20 @@ const JudgingCriteria = memo(function JudgingCriteria() {
       }} />
       <section className="relative z-40 w-full py-20 md:py-24 lg:py-32" style={{ backgroundColor: '#f9f2e9' }}>
       <div className="mx-auto max-w-7xl px-4 md:px-8">
+        {/* Section Heading */}
+        <div className="relative flex flex-col items-center text-center select-none mb-12">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase leading-tight">
+            <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#1e1e1e', display: 'block', transform: 'rotate(-1deg)' }}>
+              JUDGING &
+            </span>
+          </h2>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase leading-tight mb-4">
+            <span style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500, color: '#1e1e1e', display: 'block', transform: 'rotate(0.5deg)' }}>
+              PARTICIPATION
+            </span>
+          </h2>
+        </div>
+
         {/* Scroll Container */}
         <div
           className={`scroll-container ${isScrollOpen ? 'unrolled' : 'closed'}`}
