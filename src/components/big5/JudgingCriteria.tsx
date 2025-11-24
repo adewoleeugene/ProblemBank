@@ -101,7 +101,6 @@ const JudgingCriteria = memo(function JudgingCriteria() {
               color: '#33261a',
               textAlign: 'center',
               padding: '24px 32px',
-              fontSize: '1.25rem',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
@@ -110,7 +109,7 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             }}
           >
             <span
-              className="scroll-prompt-text text-base md:text-lg lg:text-xl"
+              className="scroll-prompt-text text-sm sm:text-base md:text-lg lg:text-xl"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 letterSpacing: '0.05em',
