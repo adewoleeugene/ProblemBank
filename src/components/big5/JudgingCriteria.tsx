@@ -123,7 +123,7 @@ const JudgingCriteria = memo(function JudgingCriteria() {
             }}
           >
             <span
-              className="scroll-prompt-text text-sm sm:text-base md:text-lg lg:text-xl"
+              className="scroll-prompt-text text-sm sm:text-base md:text-lg lg:text-xl whitespace-nowrap"
               style={{
                 fontFamily: 'Decoy, sans-serif',
                 letterSpacing: '0.05em',
@@ -131,8 +131,7 @@ const JudgingCriteria = memo(function JudgingCriteria() {
                 color: '#33261a',
               }}
             >
-              <span className="hidden sm:inline">{isScrollOpen ? 'Click to Roll Up Guide' : 'Click to Read the Participation Guide'}</span>
-              <span className="sm:hidden">{isScrollOpen ? 'Roll Up Guide' : 'Read Participation Guide'}</span>
+              {isScrollOpen ? 'Roll Up Guide' : 'Read Participation Guide'}
             </span>
             <span
               className="down-arrow"
