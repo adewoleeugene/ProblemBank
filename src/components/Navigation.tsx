@@ -53,10 +53,10 @@ const Navigation: React.FC<NavigationProps> = ({
         <div className="grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center h-16">
           {/* Left: Brand */}
           <div className="flex items-center col-start-1">
-            <Link href="/" aria-label="Go to home" className="flex items-center space-x-2">
-              <img 
-                src="/images/black%20logo%20mark%20size=48@2x.png" 
-                alt="Problem Bank logo" 
+            <Link href="/" aria-label="Go to home" className="flex items-center space-x-3 sm:space-x-2">
+              <img
+                src="/images/black%20logo%20mark%20size=48@2x.png"
+                alt="Problem Bank logo"
                 className="w-8 h-8"
               />
               <span
@@ -99,7 +99,7 @@ const Navigation: React.FC<NavigationProps> = ({
           </div>
 
           {/* Right: Search pill + Mobile menu button */}
-          <div className="flex items-center justify-end gap-3 col-start-2 lg:col-start-3">
+          <div className="flex items-center justify-end gap-4 sm:gap-3 col-start-2 lg:col-start-3">
             {/* Search icon button */}
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
