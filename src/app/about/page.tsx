@@ -98,8 +98,8 @@ export default function AboutPage() {
                     {/* Card content */}
                     <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
                       <div className="text-center mb-4">
-                        <div 
-                          className="w-12 h-12 rounded-full bg-[#E6B800] flex items-center justify-center text-white font-bold text-lg mx-auto mb-4"
+                        <div
+                          className="w-12 h-12 rounded-full bg-[#E6B800] border-2 border-[#1e1e1e] flex items-center justify-center text-[#1e1e1e] font-bold text-lg mx-auto mb-4"
                           style={{ fontFamily: 'Raleway, sans-serif' }}
                         >
                           1
@@ -137,8 +137,8 @@ export default function AboutPage() {
                     {/* Card content */}
                     <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
                       <div className="text-center mb-4">
-                        <div 
-                          className="w-12 h-12 rounded-full bg-[#E6B800] flex items-center justify-center text-white font-bold text-lg mx-auto mb-4"
+                        <div
+                          className="w-12 h-12 rounded-full bg-[#E6B800] border-2 border-[#1e1e1e] flex items-center justify-center text-[#1e1e1e] font-bold text-lg mx-auto mb-4"
                           style={{ fontFamily: 'Raleway, sans-serif' }}
                         >
                           2
@@ -176,8 +176,8 @@ export default function AboutPage() {
                     {/* Card content */}
                     <div className="relative flex flex-col h-full px-6 pt-6 pb-6">
                       <div className="text-center mb-4">
-                        <div 
-                          className="w-12 h-12 rounded-full bg-[#E6B800] flex items-center justify-center text-white font-bold text-lg mx-auto mb-4"
+                        <div
+                          className="w-12 h-12 rounded-full bg-[#E6B800] border-2 border-[#1e1e1e] flex items-center justify-center text-[#1e1e1e] font-bold text-lg mx-auto mb-4"
                           style={{ fontFamily: 'Raleway, sans-serif' }}
                         >
                           3

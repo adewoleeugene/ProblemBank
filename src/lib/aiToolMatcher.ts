@@ -15,33 +15,33 @@ export interface MatchingContext {
 // Category-to-tool mappings based on the 5 main categories
 const CATEGORY_TOOL_MAPPINGS: Record<string, string[]> = {
   'Feed Salone': ['Bubble', 'Firebase Studio'], // Agriculture/food systems
-  'Human Capital Development': ['Tempo', 'Lovable', 'v0', 'Vibecode', 'Google AI Studio'], // Education/development
-  'Youth Employment Scheme': ['Bolt', 'Base44', 'Dreamflow', 'Vibecode'], // Employment/opportunities
+  'Human Capital Development': ['Cursor', 'Tempo', 'Lovable', 'v0', 'Vibecode', 'Google AI Studio', 'The Open Builder'], // Education/development
+  'Youth Employment Scheme': ['Cursor', 'Bolt', 'Base44', 'Dreamflow', 'Vibecode', 'The Open Builder'], // Employment/opportunities
   'Public Service Architecture Revamp': ['Firebase Studio', 'Bubble', 'Google AI Studio'], // Government/infrastructure
-  'Tech and Infrastructure': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Vibecode', 'Google AI Studio'] // All tools relevant
+  'Tech and Infrastructure': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Vibecode', 'Google AI Studio', 'The Open Builder'] // All tools relevant
 };
 
 // Keyword-to-tool mappings for problem/solution text matching
 const KEYWORD_TOOL_MAPPINGS: Record<string, string[]> = {
   // Development keywords
-  'development': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Vibecode', 'Google AI Studio'],
-  'build': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Vibecode', 'Google AI Studio'],
-  'code': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Vibecode', 'Google AI Studio'],
-  'app': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Bubble', 'Vibecode'],
-  'website': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
-  'platform': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Bubble', 'Vibecode', 'Google AI Studio'],
+  'development': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Vibecode', 'Google AI Studio', 'The Open Builder'],
+  'build': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Vibecode', 'Google AI Studio', 'The Open Builder'],
+  'code': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Vibecode', 'Google AI Studio', 'The Open Builder'],
+  'app': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Bubble', 'Vibecode', 'The Open Builder'],
+  'website': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode', 'The Open Builder'],
+  'platform': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Firebase Studio', 'Bubble', 'Vibecode', 'Google AI Studio', 'The Open Builder'],
   
   // UI/UX keywords
   'interface': ['v0', 'Bubble', 'Dreamflow'],
   'design': ['v0', 'Bubble', 'Dreamflow'],
   'ui': ['v0', 'Bubble', 'Dreamflow'],
-  'frontend': ['v0', 'Tempo', 'Lovable', 'Bolt', 'Base44', 'Dreamflow'],
+  'frontend': ['Cursor', 'v0', 'Tempo', 'Lovable', 'Bolt', 'Base44', 'Dreamflow'],
   
   // Backend/infrastructure keywords
-  'backend': ['Firebase Studio', 'Tempo', 'Lovable', 'Bolt'],
-  'database': ['Firebase Studio', 'Tempo', 'Lovable'],
-  'api': ['Firebase Studio', 'Tempo', 'Lovable', 'Bolt'],
-  'server': ['Firebase Studio', 'Tempo', 'Lovable', 'Bolt'],
+  'backend': ['Cursor', 'Firebase Studio', 'Tempo', 'Lovable', 'Bolt'],
+  'database': ['Cursor', 'Firebase Studio', 'Tempo', 'Lovable'],
+  'api': ['Cursor', 'Firebase Studio', 'Tempo', 'Lovable', 'Bolt'],
+  'server': ['Cursor', 'Firebase Studio', 'Tempo', 'Lovable', 'Bolt'],
   
   // Mobile keywords
   'mobile': ['Firebase Studio', 'Bubble', 'Vibecode'],
@@ -54,15 +54,26 @@ const KEYWORD_TOOL_MAPPINGS: Record<string, string[]> = {
   'visual': ['Bubble', 'Dreamflow', 'v0'],
   
   // Rapid prototyping keywords
-  'prototype': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
-  'mvp': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
-  'quick': ['Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
+  'prototype': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
+  'mvp': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
+  'quick': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'v0', 'Base44', 'Dreamflow', 'Bubble', 'Vibecode'],
   
   // AI/ML keywords
-  'ai': ['Google AI Studio', 'Tempo', 'Lovable', 'Bolt', 'Vibecode'],
+  'ai': ['Cursor', 'Google AI Studio', 'Tempo', 'Lovable', 'Bolt', 'Vibecode', 'The Open Builder'],
   'machine learning': ['Google AI Studio'],
   'google': ['Google AI Studio'],
-  'integration': ['Google AI Studio', 'Firebase Studio', 'Tempo', 'Lovable']
+  'integration': ['Google AI Studio', 'Firebase Studio', 'Tempo', 'Lovable'],
+
+  // Code editor/IDE keywords
+  'coding': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'Vibecode', 'The Open Builder'],
+  'editor': ['Cursor'],
+  'ide': ['Cursor'],
+  'programming': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'Vibecode', 'Google AI Studio', 'The Open Builder'],
+  'full-stack': ['Cursor', 'Tempo', 'Lovable', 'Bolt', 'Firebase Studio', 'The Open Builder'],
+
+  // Open source keywords
+  'open source': ['The Open Builder'],
+  'deployment': ['The Open Builder', 'Firebase Studio']
 };
 
 /**
@@ -101,11 +112,13 @@ function scoreTool(tool: AITool, context: MatchingContext): number {
 
 /**
  * Get recommended AI tools for a given context
+ * ALWAYS prioritizes Cursor and v0 as the first two recommended tools
  */
 export function getRecommendedTools(
-  allTools: AITool[], 
+  allTools: AITool[],
   context: MatchingContext
 ): ToolMatch[] {
+  // Create matches for all tools
   const matches: ToolMatch[] = allTools.map(tool => {
     const score = scoreTool(tool, context);
     return {
@@ -114,11 +127,36 @@ export function getRecommendedTools(
       isRecommended: score >= 2
     };
   });
-  
-  // Filter out tools with score 0 and sort by score (highest first)
-  return matches
+
+  // Separate Cursor and v0 from other tools
+  const priorityTools: ToolMatch[] = [];
+  const otherTools: ToolMatch[] = [];
+
+  matches.forEach(match => {
+    if (match.tool.name === 'Cursor' || match.tool.name === 'v0') {
+      // Give Cursor and v0 maximum priority scores
+      match.score = match.score + 1000; // Ensure they're always highest
+      match.isRecommended = true;
+      priorityTools.push(match);
+    } else {
+      otherTools.push(match);
+    }
+  });
+
+  // Sort priority tools: Cursor first, then v0
+  priorityTools.sort((a, b) => {
+    if (a.tool.name === 'Cursor') return -1;
+    if (b.tool.name === 'Cursor') return 1;
+    return 0;
+  });
+
+  // Sort other tools by score
+  const sortedOtherTools = otherTools
     .filter(match => match.score > 0)
     .sort((a, b) => b.score - a.score);
+
+  // Return priority tools first, then other tools
+  return [...priorityTools, ...sortedOtherTools];
 }
 
 /**

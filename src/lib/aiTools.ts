@@ -4,9 +4,24 @@ export interface AITool {
   url: string;
   categories?: string[];
   keywords?: string[];
+  isFree?: boolean;
 }
 
 export const aiTools: AITool[] = [
+  {
+    name: 'v0',
+    description: 'Vercel\'s generative UI tool that creates React components from text prompts',
+    url: 'https://v0.dev/',
+    categories: ['Human Capital Development', 'Tech and Infrastructure'],
+    keywords: ['ui', 'react', 'components', 'design', 'frontend', 'interface', 'visual']
+  },
+  {
+    name: 'Cursor',
+    description: 'AI-first code editor built for pair-programming with AI',
+    url: 'https://www.cursor.com/',
+    categories: ['Human Capital Development', 'Tech and Infrastructure', 'Youth Employment Scheme'],
+    keywords: ['code editor', 'ai coding', 'development', 'ide', 'programming', 'ai assistant', 'full-stack']
+  },
   {
     name: 'Tempo',
     description: 'AI-powered development environment for building full-stack applications with natural language',
@@ -27,13 +42,6 @@ export const aiTools: AITool[] = [
     url: 'https://bolt.new/',
     categories: ['Youth Employment Scheme', 'Tech and Infrastructure'],
     keywords: ['prompt to app', 'web development', 'full-stack', 'rapid prototyping', 'mvp']
-  },
-  {
-    name: 'v0',
-    description: 'Vercel\'s generative UI tool that creates React components from text prompts',
-    url: 'https://v0.app/',
-    categories: ['Human Capital Development', 'Tech and Infrastructure'],
-    keywords: ['ui', 'react', 'components', 'design', 'frontend', 'interface', 'visual']
   },
   {
     name: 'Base44',
@@ -76,5 +84,20 @@ export const aiTools: AITool[] = [
     url: 'https://aistudio.google.com/',
     categories: ['Human Capital Development', 'Tech and Infrastructure', 'Public Service Architecture Revamp'],
     keywords: ['ai', 'machine learning', 'google', 'development', 'api', 'backend', 'platform', 'integration']
+  },
+  {
+    name: 'Google Antigravity',
+    description: 'Free AI tool from Google for creative exploration and experimentation',
+    url: 'https://antigravity.google/',
+    categories: ['Human Capital Development', 'Tech and Infrastructure'],
+    keywords: ['ai', 'google', 'creative', 'experimentation', 'exploration', 'free'],
+    isFree: true
+  },
+  {
+    name: 'The Open Builder',
+    description: 'Open-source platform for building and deploying AI-powered applications',
+    url: 'https://theopenbuilder.com/',
+    categories: ['Human Capital Development', 'Tech and Infrastructure', 'Youth Employment Scheme'],
+    keywords: ['open source', 'ai', 'development', 'platform', 'full-stack', 'deployment', 'applications']
   }
 ];

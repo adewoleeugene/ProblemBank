@@ -62,22 +62,22 @@ const HACKATHON_STAGES: HackathonStage[] = [
   },
   {
     id: 'final-hackathon',
-    title: 'Final Hackathon',
-    startDate: new Date('2025-11-20T00:00:00Z'),
-    endDate: new Date('2025-11-22T23:59:59Z'),
-    description: '48-Hour Non-Stop Hackathon: Teams Refine Final Solution, Present Solutions, Winners Awarded.',
-    status: 'upcoming'
+    title: 'Hackathon Started!',
+    startDate: new Date('2025-11-26T00:00:00Z'),
+    endDate: new Date('2025-12-10T23:59:59Z'),
+    description: 'Two-Week Innovation Sprint: Build Solutions, Refine Prototypes, Showcase Your Work, and Compete for Prizes!',
+    status: 'active'
   }
 ];
 
 function getCurrentStage(): HackathonStage | null {
-  // Return the Bootcamp stage (ending at midnight tonight!)
-  const bootcampStage = HACKATHON_STAGES.find(stage => stage.id === 'bootcamp');
-  if (bootcampStage) {
-    return { ...bootcampStage, status: 'active' };
+  // Return the Final Hackathon stage - Hackathon Started!
+  const finalHackathonStage = HACKATHON_STAGES.find(stage => stage.id === 'final-hackathon');
+  if (finalHackathonStage) {
+    return { ...finalHackathonStage, status: 'active' };
   }
 
-  // Fallback to first stage if bootcamp not found
+  // Fallback to first stage if final hackathon not found
   return HACKATHON_STAGES.length > 0 ? { ...HACKATHON_STAGES[0], status: 'upcoming' } : null;
 }
 
@@ -168,7 +168,7 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'bg-[#E6B800] text-white';
+        return 'bg-[#E6B800] text-[#1e1e1e] border-2 border-[#1e1e1e]';
       case 'upcoming':
         return 'bg-[#f2e8dc] text-[#403f3e]';
       case 'completed':
@@ -224,7 +224,7 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
               <div
                 className="w-2 h-2 rounded-full mr-2"
                 style={{
-                  backgroundColor: currentStage.status === 'active' ? '#fff' : '#403f3e',
+                  backgroundColor: currentStage.status === 'active' ? '#1e1e1e' : '#403f3e',
                 }}
               />
               {getStatusText(currentStage.status)}

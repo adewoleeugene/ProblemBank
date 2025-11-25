@@ -26,15 +26,18 @@ export default function IdeaSidebar({
     solutionText
   };
 
-  // Get top 3 recommended tools
-  const recommendedTools = getRecommendedTools(aiTools, matchingContext).slice(0, 3);
+  // Get top 2 recommended tools (Cursor and v0)
+  const recommendedTools = getRecommendedTools(aiTools, matchingContext).slice(0, 2);
+
+  // Get free tools
+  const freeTools = aiTools.filter(tool => tool.isFree);
 
   return (
     <div className="w-full lg:w-80 space-y-6">
-      {/* Recommended AI Tools Section - Limited to 3 */}
+      {/* Recommended AI Tools Section - Limited to 2 (Cursor and v0) */}
       {recommendedTools.length > 0 && (
         <div>
-          <h3 
+          <h3
             className="text-lg font-semibold mb-4 text-center lg:text-left"
             style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e' }}
           >
@@ -47,6 +50,28 @@ export default function IdeaSidebar({
                 tool={match.tool}
                 isRecommended={match.isRecommended}
                 index={index}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Free Tools Section */}
+      {freeTools.length > 0 && (
+        <div>
+          <h3
+            className="text-lg font-semibold mb-4 text-center lg:text-left"
+            style={{ fontFamily: 'Decoy, sans-serif', color: '#403f3e' }}
+          >
+            Free Tools
+          </h3>
+          <div className="space-y-4">
+            {freeTools.map((tool, index) => (
+              <AIToolCard
+                key={tool.name}
+                tool={tool}
+                isRecommended={false}
+                index={recommendedTools.length + index}
               />
             ))}
           </div>

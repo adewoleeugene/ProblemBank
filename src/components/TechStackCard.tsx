@@ -106,10 +106,10 @@ const TechStackCard: React.FC<TechStackCardProps> = ({ item, index }) => {
                     e.stopPropagation();
                     window.open(item.url, '_blank', 'noopener,noreferrer');
                   }}
-                  className="w-full py-3 px-6 rounded-full text-sm transition-all duration-200 hover:opacity-90"
-                  style={{ backgroundColor: '#403f3e', color: '#f7efe3' }}
+                  className="group relative overflow-hidden w-full py-3 rounded-full bg-black text-white font-medium text-sm whitespace-nowrap transition-all duration-300 hover:scale-105"
                 >
-                  Open Docs <span aria-hidden style={{ marginLeft: 8 }}>→</span>
+                  <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
+                  <span className="relative z-10">Open Docs <span aria-hidden style={{ marginLeft: 8 }}>→</span></span>
                 </button>
               ) : (
                 <div 

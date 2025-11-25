@@ -259,8 +259,8 @@ export default function Home() {
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-12 justify-center items-stretch w-full px-4 sm:px-0 sm:max-w-none mx-auto">
               {/* Explore Ideas Button */}
-              <Link href="/ideas" className="group relative overflow-hidden w-full sm:w-auto px-8 py-4 rounded-full bg-[#E6B800] text-white font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105">
-                <div 
+              <Link href="/ideas" className="group relative overflow-hidden w-full sm:w-auto px-8 py-4 rounded-full bg-[#E6B800] border-2 border-[#1e1e1e] text-[#1e1e1e] font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105">
+                <div
                   className="absolute inset-0 opacity-20 mix-blend-overlay"
                   style={{
                     backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)',
@@ -826,7 +826,7 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
             <div className="mt-10 flex justify-center">
               <a
                 href="/big5"
-                className="group relative overflow-hidden px-8 py-4 rounded-full bg-[#E6B800] text-white font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105"
+                className="group relative overflow-hidden px-8 py-4 rounded-full bg-[#E6B800] border-2 border-[#1e1e1e] text-[#1e1e1e] font-medium text-lg whitespace-nowrap transition-all duration-300 hover:scale-105"
               >
                 <div
                   className="absolute inset-0 opacity-20 mix-blend-overlay"
