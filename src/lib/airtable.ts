@@ -62,7 +62,12 @@ export async function fetchFeaturedIdeas(limit = 4): Promise<IdeaItem[]> {
 
   const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
   if (view) url.searchParams.set('view', view);
-  if (filterFormula) url.searchParams.set('filterByFormula', filterFormula);
+
+  // Add Status='Published' filter
+  const statusFilter = "{Status} = 'Published'";
+  const combinedFilter = filterFormula ? `AND(${statusFilter}, ${filterFormula})` : statusFilter;
+  url.searchParams.set('filterByFormula', combinedFilter);
+
   url.searchParams.set('pageSize', String(Math.max(limit, pageSize)));
   // Sorting (only if sortField specified)
   if (sortField) {
@@ -159,9 +164,12 @@ export async function fetchIdeasPage(pageSize = 12, offset?: string, categories?
     url.searchParams.set('sort[0][direction]', sortDirection);
   }
 
-  // Build filter formula combining categories and search
+  // Build filter formula combining categories, search, and status
   const filterParts: string[] = [];
-  
+
+  // Always filter by Status='Published'
+  filterParts.push("{Status} = 'Published'");
+
   // Apply category filter if provided (multi-select OR logic)
   if (categories && categories.length > 0) {
     const esc = (s: string) => s.replace(/'/g, "\\'");
@@ -170,7 +178,7 @@ export async function fetchIdeasPage(pageSize = 12, offset?: string, categories?
     const perCat = categories.map((c) => `OR({${categoryField}} = '${esc(c)}', FIND("," & '${esc(c)}' & ",", ${joinedExpr}))`);
     filterParts.push(`OR(${perCat.join(',')})`);
   }
-  
+
  // Apply search filter if provided (simplified to avoid formula errors)
 if (searchQuery && searchQuery.trim()) {
   const esc = (s: string) => s.replace(/'/g, "\\'");
@@ -180,10 +188,8 @@ if (searchQuery && searchQuery.trim()) {
   filterParts.push(`OR(FIND('${query}', LOWER({${titleField}})), FIND('${query}', LOWER({${blurbField}})))`);
 }
   // Combine filters with AND logic
-  if (filterParts.length > 0) {
-    const formula = filterParts.length === 1 ? filterParts[0] : `AND(${filterParts.join(',')})`;
-    url.searchParams.set('filterByFormula', formula);
-  }
+  const formula = filterParts.length === 1 ? filterParts[0] : `AND(${filterParts.join(',')})`;
+  url.searchParams.set('filterByFormula', formula);
 
   let data: AirtableListResponse;
   
@@ -257,8 +263,10 @@ export async function fetchIdeaByTitle(title: string): Promise<IdeaItem | null> 
   const titleField = process.env['AIRTABLE_TITLE_FIELD'] || 'Title';
   const lowerTitle = title.toLowerCase();
   const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
-  // Filter by formula: LOWER({Title}) = 'lowercase title'
-  url.searchParams.set('filterByFormula', `LOWER({${titleField}}) = '${lowerTitle.replace(/'/g, "\\'")}'`);
+  // Filter by formula: LOWER({Title}) = 'lowercase title' AND Status='Published'
+  const titleFilter = `LOWER({${titleField}}) = '${lowerTitle.replace(/'/g, "\\'")}'`;
+  const statusFilter = "{Status} = 'Published'";
+  url.searchParams.set('filterByFormula', `AND(${titleFilter}, ${statusFilter})`);
   url.searchParams.set('pageSize', '1');
 
   const res = await fetch(url.toString(), {
@@ -599,6 +607,8 @@ export async function fetchAllIdeasMinimal(): Promise<Array<{ id: string; title:
     const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
     url.searchParams.set('pageSize', '100');
     if (offset) url.searchParams.set('offset', offset);
+    // Add Status='Published' filter
+    url.searchParams.set('filterByFormula', "{Status} = 'Published'");
     if (sortField) {
       url.searchParams.set('sort[0][field]', sortField);
       url.searchParams.set('sort[0][direction]', sortDirection);
