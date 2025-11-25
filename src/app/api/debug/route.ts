@@ -20,10 +20,10 @@ export async function GET() {
   };
 
   // Test Airtable API connection
-  let apiTest = {
-    success: false,
-    error: null as string | null,
-    recordCount: 0,
+  let apiTest: {
+    success: boolean;
+    error: string | null;
+    recordCount: number;
   };
 
   if (config.hasToken && config.hasBaseId && config.hasTableName) {
@@ -40,17 +40,32 @@ export async function GET() {
 
       if (res.ok) {
         const data = await res.json();
-        apiTest.success = true;
-        apiTest.recordCount = data.records?.length || 0;
+        apiTest = {
+          success: true,
+          error: null,
+          recordCount: data.records?.length || 0,
+        };
       } else {
         const errorText = await res.text();
-        apiTest.error = `${res.status} ${res.statusText}: ${errorText}`;
+        apiTest = {
+          success: false,
+          error: `${res.status} ${res.statusText}: ${errorText}`,
+          recordCount: 0,
+        };
       }
     } catch (error) {
-      apiTest.error = error instanceof Error ? error.message : 'Unknown error';
+      apiTest = {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        recordCount: 0,
+      };
     }
   } else {
-    apiTest.error = 'Missing required environment variables';
+    apiTest = {
+      success: false,
+      error: 'Missing required environment variables',
+      recordCount: 0,
+    };
   }
 
   return NextResponse.json({
