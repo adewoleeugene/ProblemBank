@@ -350,6 +350,8 @@ export async function fetchAllCategories(maxPages = 10): Promise<string[]> {
     if (offset) url.searchParams.set('offset', offset);
     // Request only the category field to minimize payload
     url.searchParams.append('fields[]', categoryField);
+    // Only fetch categories from published ideas
+    url.searchParams.set('filterByFormula', "{Status} = 'Published'");
 
     const res = await fetch(url.toString(), {
       headers: {

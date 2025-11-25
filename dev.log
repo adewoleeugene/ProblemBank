@@ -1,0 +1,48 @@
+
+> purpose-talent-clone@0.1.0 dev
+> next dev --turbopack
+
+ ⚠ Port 3000 is in use by process 31110, using available port 3005 instead.
+   ▲ Next.js 15.5.4 (Turbopack)
+   - Local:        http://localhost:3005
+   - Network:      http://192.168.1.215:3005
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+ ✓ Starting...
+ ✓ Ready in 878ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.3s
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.mfcclkb1hrj'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.mfcclkb1hrj'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 753ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.v7acr5l9xd'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.v7acr5l9xd'
+}
+[Error: ENOENT: no such file or directory, open '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.mfcclkb1hrj'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.mfcclkb1hrj'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.moxa8ro4ji'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.moxa8ro4ji'
+}
+[Error: ENOENT: no such file or directory, open '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.jvbei51k3a'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/christexfoundation/ProblemBank19Nov/ProblemBank/.next/static/development/_buildManifest.js.tmp.jvbei51k3a'
+}
+[?25h
