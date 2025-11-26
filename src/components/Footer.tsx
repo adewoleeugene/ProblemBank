@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Footer() {
   const socialLinks = [
@@ -85,8 +86,17 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        
-        <p className="text-sm">© 2025 Problem Bank. All rights reserved.</p>
+
+        {/* Footer Links */}
+        <div className="flex flex-col items-center gap-2 text-sm">
+          <p>© 2025 Problem Bank. All rights reserved.</p>
+          <Link
+            href="/terms"
+            className="text-[#E6B800] hover:text-[#f0b420] transition-colors duration-200 hover:underline"
+          >
+            Terms & Conditions
+          </Link>
+        </div>
       </div>
     </footer>
   );
