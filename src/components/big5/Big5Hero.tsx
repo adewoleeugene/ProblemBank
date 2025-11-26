@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 // Lazy load DotGrid
@@ -246,8 +247,16 @@ export default function Big5Hero() {
           </div>
         </div>
 
-
-
+        {/* Terms & Conditions Link */}
+        <div className="mt-6">
+          <Link
+            href="/terms"
+            className="inline-block text-sm md:text-base text-[#1e1e1e] hover:text-[#403f3e] transition-colors duration-200 underline"
+            style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600 }}
+          >
+            View Terms & Conditions
+          </Link>
+        </div>
 
       </div>
     </main>
