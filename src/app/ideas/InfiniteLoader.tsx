@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import type { IdeaItem } from '../../lib/airtable';
@@ -136,12 +137,14 @@ export default function IdeasInfiniteLoader({ initialOffset, initialCount = 0 }:
                     </div>
                     <div className="mt-auto">
                       <div className="flex justify-center mb-2">
-                        <img
+                        <Image
                           src={getCategoryIcon(item.category)}
                           alt={item.category ? `${item.category} icon` : 'Category icon'}
                           width={56}
                           height={56}
                           style={{ display: 'block' }}
+                          loading="lazy"
+                          quality={85}
                         />
                       </div>
                       <p

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 export interface BrandingKitCardProps {
   onStartBuilding: () => void;
@@ -50,7 +51,7 @@ const BrandingKitCard: React.FC<BrandingKitCardProps> = ({
         {/* Optional icon */}
         {iconSrc && (
           <div className="flex justify-center mb-3">
-            <img src={iconSrc} alt="kit icon" width={56} height={56} style={{ display: 'block' }} />
+            <Image src={iconSrc} alt="kit icon" width={56} height={56} style={{ display: 'block' }} loading="lazy" quality={85} />
           </div>
         )}
 

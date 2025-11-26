@@ -83,9 +83,9 @@ export async function fetchFeaturedIdeas(limit = 4): Promise<IdeaItem[]> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // Cache for 5 minutes with revalidation
-      next: { 
-        revalidate: 300, // 5 minutes
+      // Cache for 1 hour with revalidation
+      next: {
+        revalidate: 3600, // 1 hour
         tags: ['featured-ideas']
       },
     });
@@ -199,9 +199,9 @@ if (searchQuery && searchQuery.trim()) {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // Cache for 5 minutes with revalidation
-      next: { 
-        revalidate: 300, // 5 minutes
+      // Cache for 1 hour with revalidation
+      next: {
+        revalidate: 3600, // 1 hour
         tags: ['ideas-page']
       },
     });
@@ -274,9 +274,9 @@ export async function fetchIdeaByTitle(title: string): Promise<IdeaItem | null> 
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    // Cache for 10 minutes with revalidation
-    next: { 
-      revalidate: 600, // 10 minutes
+    // Cache for 1 hour with revalidation
+    next: {
+      revalidate: 3600, // 1 hour
       tags: ['idea-by-title']
     },
   });
@@ -358,9 +358,9 @@ export async function fetchAllCategories(maxPages = 10): Promise<string[]> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // Cache for 15 minutes with revalidation
-      next: { 
-        revalidate: 900, // 15 minutes
+      // Cache for 2 hours with revalidation
+      next: {
+        revalidate: 7200, // 2 hours
         tags: ['categories']
       },
     });
@@ -472,9 +472,9 @@ export async function fetchTechStacks(pageSize = 12, offset?: string, categories
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    // Cache for 5 minutes with revalidation
-    next: { 
-      revalidate: 300, // 5 minutes
+    // Cache for 1 hour with revalidation
+    next: {
+      revalidate: 3600, // 1 hour
       tags: ['tech-stacks']
     },
   });
@@ -543,9 +543,9 @@ export async function fetchAllTechCategories(maxPages = 10): Promise<string[]> {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // Cache for 15 minutes with revalidation
-      next: { 
-        revalidate: 900, // 15 minutes
+      // Cache for 2 hours with revalidation
+      next: {
+        revalidate: 7200, // 2 hours
         tags: ['tech-categories']
       },
     });
@@ -621,9 +621,9 @@ export async function fetchAllIdeasMinimal(): Promise<Array<{ id: string; title:
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // Cache for 5 minutes with revalidation
-      next: { 
-        revalidate: 300, // 5 minutes
+      // Cache for 1 hour with revalidation
+      next: {
+        revalidate: 3600, // 1 hour
         tags: ['all-ideas-minimal']
       },
     });

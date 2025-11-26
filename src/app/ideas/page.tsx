@@ -1,6 +1,7 @@
 import { Navigation } from '../../components';
 import { fetchIdeasPage, fetchAllCategories } from '../../lib/airtable';
 import Link from 'next/link';
+import Image from 'next/image';
 import IdeasInfiniteLoader from './InfiniteLoader';
 
 // Category captions mapping
@@ -182,12 +183,14 @@ export default async function IdeasPage({ searchParams }: { searchParams?: Promi
                       </div>
                       <div className="mt-auto">
                         <div className="flex justify-center mb-2">
-                          <img
+                          <Image
                             src={getCategoryIcon(item.category)}
                             alt={item.category ? `${item.category} icon` : 'Category icon'}
                             width={56}
                             height={56}
                             style={{ display: 'block' }}
+                            loading="lazy"
+                            quality={85}
                           />
                         </div>
                         <p

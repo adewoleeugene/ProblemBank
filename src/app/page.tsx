@@ -3,7 +3,6 @@ import { Navigation } from '../components';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState, useRef, memo } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { kits as kitsData, slugifyTitle } from '../lib/kits';
 import HackathonStageBanner from '../components/HackathonStageBanner';
 import FAQSection from '../components/FAQSection';
@@ -37,39 +36,6 @@ function getCategoryIcon(label?: string): string {
   const key = label.trim();
   return CATEGORY_ICON_MAP[key] || FALLBACK_ICON;
 }
-
-// Breakpoint-aware intensity: full on desktop, 40% under md (<= 767px), disabled under sm (<= 639px)
-// Memoized to prevent recreating the function on every render
-const useBreakpointIntensity = () => {
-  const [intensity, setIntensity] = useState(() => {
-    // Initialize with correct value to avoid flash
-    if (typeof window === 'undefined') return 1;
-    if (window.matchMedia('(max-width: 639px)').matches) return 0;
-    if (window.matchMedia('(max-width: 767px)').matches) return 0.4;
-    return 1;
-  });
-
-  useEffect(() => {
-    const sm = window.matchMedia('(max-width: 639px)');
-    const md = window.matchMedia('(max-width: 767px)');
-
-    const update = () => {
-      if (sm.matches) setIntensity(0);
-      else if (md.matches) setIntensity(0.4);
-      else setIntensity(1);
-    };
-
-    sm.addEventListener('change', update);
-    md.addEventListener('change', update);
-
-    return () => {
-      sm.removeEventListener('change', update);
-      md.removeEventListener('change', update);
-    };
-  }, []);
-
-  return intensity;
-};
 
 // Mobile detection for PixelBlast optimization - memoized and optimized
 const useIsMobile = () => {
@@ -704,23 +670,11 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
 
     tick();
 
-    // Use requestAnimationFrame for better performance
-    let rafId: number;
-    let lastUpdate = Date.now();
-
-    const rafTick = () => {
-      const now = Date.now();
-      if (now - lastUpdate >= 1000) {
-        lastUpdate = now;
-        tick();
-      }
-      rafId = requestAnimationFrame(rafTick);
-    };
-
-    rafId = requestAnimationFrame(rafTick);
+    // Use setInterval for efficient 1-second updates
+    const intervalId = setInterval(tick, 1000);
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
+      clearInterval(intervalId);
     };
   }, []);
 

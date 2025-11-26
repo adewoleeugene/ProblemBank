@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import CommandPalette from './CommandPalette';
 
@@ -54,10 +55,13 @@ const Navigation: React.FC<NavigationProps> = ({
           {/* Left: Brand */}
           <div className="flex items-center col-start-1">
             <Link href="/" aria-label="Go to home" className="flex items-center space-x-3 sm:space-x-2">
-              <img
+              <Image
                 src="/images/black%20logo%20mark%20size=48@2x.png"
                 alt="Problem Bank logo"
                 className="w-8 h-8"
+                width={32}
+                height={32}
+                priority
               />
               <span
                 className="text-[22px] inline-block"
