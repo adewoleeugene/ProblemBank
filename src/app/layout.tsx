@@ -23,6 +23,29 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/hero.png",
   },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'build.christex.foundation',
+    siteName: 'ProblemBank',
+    title: 'ProblemBank - Find Your Next Build Idea',
+    description: 'Find inspiration for your next build with vetted ideas and step-by-step guidance',
+    images: [
+      {
+        url: '/images/hero.png',
+        width: 1200,
+        height: 630,
+        alt: 'ProblemBank - Build Ideas & Resources',
+        type: 'image/png',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ProblemBank - Find Your Next Build Idea',
+    description: 'Find inspiration for your next build with vetted ideas and step-by-step guidance',
+    images: ['/images/hero.png'],
+  },
 };
 
 export default function RootLayout({
