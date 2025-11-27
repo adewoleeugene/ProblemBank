@@ -26,6 +26,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [allIdeas, setAllIdeas] = useState<IdeaItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -39,6 +40,28 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     }
   }, []);
 
+  // Fetch all ideas ONCE when component opens
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const fetchAllIdeas = async () => {
+      setLoading(true);
+      try {
+        // Fetch all ideas without query parameter to get everything
+        const response = await fetch('/api/ideas?pageSize=1000');
+        const data = await response.json();
+        setAllIdeas(data.items || []);
+      } catch (error) {
+        console.error('Failed to fetch ideas:', error);
+        setAllIdeas([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllIdeas();
+  }, [isOpen]);
+
   // Focus input when opened
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -46,89 +69,64 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     }
   }, [isOpen]);
 
-  // Update suggestions as user types
+  // Real-time client-side search as user types
   useEffect(() => {
-    if (!isOpen) return;
-
-    if (query.trim()) {
-      // Get autosuggestions from Ideas API and Resources
-      const updateSuggestions = async () => {
-        try {
-          // Get Ideas suggestions
-          const ideasResponse = await fetch(`/api/ideas?pageSize=5&q=${encodeURIComponent(query)}`);
-          const ideasData = await ideasResponse.json();
-          const ideaTitles = (ideasData.items || []).map((item: IdeaItem) => item.title);
-          
-          // Get Resources suggestions
-          const resourceTitles = getSuggestions(kits, query, 3);
-          
-          setSuggestions([...ideaTitles, ...resourceTitles].slice(0, 5));
-          setShowSuggestions(true);
-        } catch (error) {
-          console.error('Failed to get suggestions:', error);
-        }
-      };
-      
-      const timeoutId = setTimeout(updateSuggestions, 200);
-      return () => clearTimeout(timeoutId);
-    } else {
+    if (!query.trim()) {
+      setResults([]);
       setSuggestions([]);
       setShowSuggestions(false);
+      return;
     }
-  }, [query, isOpen]);
 
-  // Search with debounce
-  useEffect(() => {
-    if (!isOpen) return;
+    const searchQuery = query.toLowerCase();
 
-    const timeoutId = setTimeout(async () => {
-      if (!query.trim()) {
-        setResults([]);
-        setShowSuggestions(false);
-        return;
+    // Filter ideas client-side
+    const filteredIdeas = allIdeas.filter(idea =>
+      idea.title.toLowerCase().includes(searchQuery) ||
+      (idea.blurb && idea.blurb.toLowerCase().includes(searchQuery))
+    );
+
+    // Get suggestions from filtered ideas
+    const ideaTitles = filteredIdeas.slice(0, 5).map(item => item.title);
+
+    // Get Resources suggestions
+    const resourceTitles = getSuggestions(kits, query, 3);
+
+    // Set suggestions
+    setSuggestions([...ideaTitles, ...resourceTitles].slice(0, 5));
+    setShowSuggestions(true);
+
+    // Create search results
+    const ideaResults: SearchResult[] = filteredIdeas.slice(0, 8).map((item: IdeaItem) => ({
+      type: 'idea' as const,
+      id: item.id,
+      title: item.title,
+      description: item.blurb || '',
+      url: `/ideas/${slugifyTitle(item.title)}`,
+    }));
+
+    // Search Resources locally
+    const resourceResults: SearchResult[] = filterKits(kits, [], query).map(kit => ({
+      type: 'resource' as const,
+      id: slugifyTitle(kit.title),
+      title: kit.title,
+      description: kit.description,
+      url: `/resources#${slugifyTitle(kit.title)}`,
+    }));
+
+    setResults([...ideaResults, ...resourceResults]);
+
+    // Save to recent searches (debounced)
+    const timeoutId = setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        const newRecent = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+        setRecentSearches(newRecent);
+        localStorage.setItem('recentSearches', JSON.stringify(newRecent));
       }
-
-      setLoading(true);
-      try {
-        // Search Ideas from API
-        const ideasResponse = await fetch(`/api/ideas?pageSize=8&q=${encodeURIComponent(query)}`);
-        const ideasData = await ideasResponse.json();
-        const ideaResults: SearchResult[] = (ideasData.items || []).map((item: IdeaItem) => ({
-          type: 'idea' as const,
-          id: item.id,
-          title: item.title,
-          description: item.blurb || '',
-          url: `/ideas/${slugifyTitle(item.title)}`,
-        }));
-
-        // Search Resources locally
-        const resourceResults: SearchResult[] = filterKits(kits, [], query).map(kit => ({
-          type: 'resource' as const,
-          id: slugifyTitle(kit.title),
-          title: kit.title,
-          description: kit.description,
-          url: `/resources#${slugifyTitle(kit.title)}`,
-        }));
-
-        setResults([...ideaResults, ...resourceResults]);
-        setShowSuggestions(false);
-        
-        // Save to recent searches
-        if (typeof window !== 'undefined') {
-          const newRecent = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
-          setRecentSearches(newRecent);
-          localStorage.setItem('recentSearches', JSON.stringify(newRecent));
-        }
-      } catch (error) {
-        console.error('Search failed:', error);
-        setResults([]);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
+    }, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [query, isOpen, recentSearches]);
+  }, [query, allIdeas, recentSearches]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {

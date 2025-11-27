@@ -21,11 +21,7 @@ export const metadata: Metadata = {
   title: "ProblemBank",
   description: "Find inspiration for your next build with vetted ideas and step-by-step guidance",
   icons: {
-    icon: "/images/black%20logo%20mark%20size=48@2x.png",
-  },
-  other: {
-    // Resource hints for performance
-    'preconnect': 'https://fonts.googleapis.com',
+    icon: "/images/hero.png",
   },
 };
 
