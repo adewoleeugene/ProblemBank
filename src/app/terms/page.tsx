@@ -59,11 +59,10 @@ export default function TermsPage() {
                 className="text-2xl md:text-3xl mb-4 text-[#1e1e1e]"
                 style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500 }}
               >
-                2. Government Ownership of the Core Idea
+                2. Government Right to Use Solutions
               </h2>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>You acknowledge and agree that the Government of Sierra Leone owns the underlying idea, concept, or problem statement assigned to you during the Hackathon.</li>
-                <li>Because of this, the Government of Sierra Leone will be your first user, and may deploy or use the solution free of charge, in line with its open-source policy.</li>
+                <li>The Government of Sierra Leone has the right to use any of the solutions, with or without modification, that is submitted for the Hackathon.</li>
               </ul>
             </div>
 
@@ -87,11 +86,12 @@ export default function TermsPage() {
                 className="text-2xl md:text-3xl mb-4 text-[#1e1e1e]"
                 style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500 }}
               >
-                4. Business Logic and Intellectual Property
+                4. Program Integration
               </h2>
+              <p className="text-gray-700 mb-2">By participating, you consent that your project may be integrated into:</p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>While the source code is open source, any additional business logic, commercial layers, services, or proprietary models you create on top of the open-source code will remain your personal property.</li>
-                <li>Only the base source code and technical solution developed during the Hackathon are required to remain open source.</li>
+                <li>The Government&apos;s innovation pipeline, and</li>
+                <li>The Digital Public Goods (DPG) Pipeline, as part of ongoing national digital transformation efforts.</li>
               </ul>
             </div>
 
@@ -101,22 +101,7 @@ export default function TermsPage() {
                 className="text-2xl md:text-3xl mb-4 text-[#1e1e1e]"
                 style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500 }}
               >
-                5. Program Integration
-              </h2>
-              <p className="text-gray-700 mb-2">By participating, you consent that your project may be integrated into:</p>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                <li>The Government&apos;s innovation pipeline, and</li>
-                <li>The Digital Public Goods (DPG) Pipeline, as part of ongoing national digital transformation efforts.</li>
-              </ul>
-            </div>
-
-            {/* Section 6 */}
-            <div className="mb-8">
-              <h2
-                className="text-2xl md:text-3xl mb-4 text-[#1e1e1e]"
-                style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500 }}
-              >
-                6. Legal Claims
+                5. Legal Claims
               </h2>
               <p className="text-gray-700 mb-2">By entering the Hackathon, you agree that no legal claims of any kind may be brought against the Government of Sierra Leone arising from:</p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -126,13 +111,13 @@ export default function TermsPage() {
               </ul>
             </div>
 
-            {/* Section 7 */}
+            {/* Section 6 */}
             <div className="mb-8">
               <h2
                 className="text-2xl md:text-3xl mb-4 text-[#1e1e1e]"
                 style={{ fontFamily: 'Decoy, sans-serif', fontWeight: 500 }}
               >
-                7. Acceptance of Terms
+                6. Acceptance of Terms
               </h2>
               <p className="text-gray-700">
                 Your participation in the Hackathon constitutes full acceptance of these Terms and Conditions.
