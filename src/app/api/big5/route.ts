@@ -64,6 +64,11 @@ export async function POST(request: NextRequest) {
       ideaTitle,
       teamMembers,
       githubRepo,
+      presentationVideo,
+      technicalVideo,
+      productLogo,
+      location,
+      productDescription,
       website // honeypot field
     } = body;
 
@@ -120,6 +125,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!githubRepo || !githubRepo.trim()) {
+      return NextResponse.json(
+        { error: 'GitHub repository is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!presentationVideo || !presentationVideo.trim()) {
+      return NextResponse.json(
+        { error: 'Presentation video is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!technicalVideo || !technicalVideo.trim()) {
+      return NextResponse.json(
+        { error: 'Technical video is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!productLogo || !productLogo.trim()) {
+      return NextResponse.json(
+        { error: 'Product logo is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!location || !location.trim()) {
+      return NextResponse.json(
+        { error: 'Team location is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!productDescription || !productDescription.trim()) {
+      return NextResponse.json(
+        { error: 'Product description is required' },
+        { status: 400 }
+      );
+    }
+
     // Create submission
     const result = await createBig5Submission({
       teamName: teamName?.trim() || undefined,
@@ -131,7 +178,12 @@ export async function POST(request: NextRequest) {
       ideaTitle: ideaTitle.trim(),
       ideaSummary: '',
       teamMembers: teamMembers?.trim() || undefined,
-      githubRepo: githubRepo?.trim() || undefined,
+      githubRepo: githubRepo.trim(),
+      presentationVideo: presentationVideo.trim(),
+      technicalVideo: technicalVideo.trim(),
+      productLogo: productLogo.trim(),
+      location: location.trim(),
+      productDescription: productDescription.trim(),
       clientIp: ip,
     });
 

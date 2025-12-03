@@ -23,6 +23,11 @@ export default function Big5SubmissionForm() {
     ideaTitle: '',
     teamMembers: '',
     githubRepo: '',
+    presentationVideo: '',
+    technicalVideo: '',
+    productLogo: '',
+    location: '',
+    productDescription: '',
     website: '', // honeypot field
   });
 
@@ -106,6 +111,11 @@ export default function Big5SubmissionForm() {
         ideaTitle: '',
         teamMembers: '',
         githubRepo: '',
+        presentationVideo: '',
+        technicalVideo: '',
+        productLogo: '',
+        location: '',
+        productDescription: '',
         website: '',
       });
 
@@ -456,14 +466,14 @@ export default function Big5SubmissionForm() {
               />
             </div>
 
-            {/* GitHub Repo - Optional */}
+            {/* GitHub Repo - Required */}
             <div>
               <label
                 htmlFor="githubRepo"
                 className="block text-sm font-medium mb-2"
                 style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
               >
-                GitHub Repository (Optional)
+                GitHub Repository *
               </label>
               <input
                 type="url"
@@ -472,6 +482,7 @@ export default function Big5SubmissionForm() {
                 value={formData.githubRepo}
                 onChange={handleChange}
                 placeholder="https://github.com/username/repo"
+                required
                 className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
                 style={{
                   borderColor: '#d8cdbc',
@@ -484,7 +495,172 @@ export default function Big5SubmissionForm() {
                 className="text-xs mt-1"
                 style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}
               >
-                Share your project repository if available
+                Share your project repository (GitHub, v0, etc.)
+              </p>
+            </div>
+
+            {/* Presentation Video - Required */}
+            <div>
+              <label
+                htmlFor="presentationVideo"
+                className="block text-sm font-medium mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
+              >
+                Presentation Video Link *
+              </label>
+              <input
+                type="url"
+                id="presentationVideo"
+                name="presentationVideo"
+                value={formData.presentationVideo}
+                onChange={handleChange}
+                placeholder="https://youtube.com/watch?v=..."
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{
+                  borderColor: '#d8cdbc',
+                  backgroundColor: '#fffaf3',
+                  color: '#403f3e',
+                  fontFamily: 'Raleway, sans-serif'
+                }}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}
+              >
+                Maximum 3 minutes - Share a video presenting your solution
+              </p>
+            </div>
+
+            {/* Technical Video - Required */}
+            <div>
+              <label
+                htmlFor="technicalVideo"
+                className="block text-sm font-medium mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
+              >
+                Technical Overview Video Link *
+              </label>
+              <input
+                type="url"
+                id="technicalVideo"
+                name="technicalVideo"
+                value={formData.technicalVideo}
+                onChange={handleChange}
+                placeholder="https://youtube.com/watch?v=..."
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{
+                  borderColor: '#d8cdbc',
+                  backgroundColor: '#fffaf3',
+                  color: '#403f3e',
+                  fontFamily: 'Raleway, sans-serif'
+                }}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}
+              >
+                Maximum 3 minutes - Technical walkthrough of your solution
+              </p>
+            </div>
+
+            {/* Product Logo - Required */}
+            <div>
+              <label
+                htmlFor="productLogo"
+                className="block text-sm font-medium mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
+              >
+                Product Logo/Graphic Link *
+              </label>
+              <input
+                type="url"
+                id="productLogo"
+                name="productLogo"
+                value={formData.productLogo}
+                onChange={handleChange}
+                placeholder="https://example.com/logo.png"
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{
+                  borderColor: '#d8cdbc',
+                  backgroundColor: '#fffaf3',
+                  color: '#403f3e',
+                  fontFamily: 'Raleway, sans-serif'
+                }}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}
+              >
+                Link to your product logo or graphic
+              </p>
+            </div>
+
+            {/* Location - Required */}
+            <div>
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
+              >
+                Team Location *
+              </label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="e.g., Freetown, Sierra Leone"
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent"
+                style={{
+                  borderColor: '#d8cdbc',
+                  backgroundColor: '#fffaf3',
+                  color: '#403f3e',
+                  fontFamily: 'Raleway, sans-serif'
+                }}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}
+              >
+                Where is your team located?
+              </p>
+            </div>
+
+            {/* Product Description - Required */}
+            <div>
+              <label
+                htmlFor="productDescription"
+                className="block text-sm font-medium mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e', fontWeight: 600 }}
+              >
+                Product Description *
+              </label>
+              <textarea
+                id="productDescription"
+                name="productDescription"
+                value={formData.productDescription}
+                onChange={handleChange}
+                placeholder="Brief description of your product..."
+                rows={4}
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent resize-none"
+                style={{
+                  borderColor: '#d8cdbc',
+                  backgroundColor: '#fffaf3',
+                  color: '#403f3e',
+                  fontFamily: 'Raleway, sans-serif'
+                }}
+              />
+              <p
+                className="text-xs mt-1"
+                style={{ fontFamily: 'Raleway, sans-serif', color: '#403f3e' }}
+              >
+                Short description of your product
               </p>
             </div>
 

@@ -44,7 +44,12 @@ export async function createBig5Submission(input: {
   ideaTitle: string;
   ideaSummary?: string;
   teamMembers?: string;
-  githubRepo?: string;
+  githubRepo: string;
+  presentationVideo: string;
+  technicalVideo: string;
+  productLogo: string;
+  location: string;
+  productDescription: string;
   clientIp?: string;
 }): Promise<{ id: string }> {
   const token = getEnv('AIRTABLE_BIG5_TOKEN', process.env['AIRTABLE_TOKEN']);
@@ -72,6 +77,12 @@ export async function createBig5Submission(input: {
     'Phone': input.phone,
     'Track': input.track,
     'Idea Title': input.ideaTitle,
+    'Link to submission (GitHub Repo, v0 etc...)': input.githubRepo,
+    'Presentation Video': input.presentationVideo,
+    'Technical Video': input.technicalVideo,
+    'Product Logo': input.productLogo,
+    'Location': input.location,
+    'Product Description': input.productDescription,
   };
 
   // Add optional fields only if they have values
@@ -80,9 +91,6 @@ export async function createBig5Submission(input: {
   }
   if (input.teamMembers && input.teamMembers.trim()) {
     fields['Team Members'] = input.teamMembers.trim();
-  }
-  if (input.githubRepo && input.githubRepo.trim()) {
-    fields['Link to submission (GitHub Repo, v0 etc...)'] = input.githubRepo.trim();
   }
 
   const record = { fields };
