@@ -644,7 +644,7 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
 
   useEffect(() => {
     const START_DATE = new Date('2025-11-26T00:00:00Z'); // Sierra Leone (UTC+0)
-    const END_DATE = new Date('2025-12-10T00:00:00Z'); // End date start-of-day
+    const END_DATE = new Date('2025-12-06T00:00:00Z'); // End date start-of-day
 
     const tick = () => {
       const now = new Date();
@@ -747,7 +747,7 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
                 </p>
                 {/* Date */}
                 <p className="mt-4 text-center text-sm md:text-base" style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 900, fontSize: '28px' }}>
-                  26 Nov – 10 Dec 2025
+                  26 Nov – 6 Dec 2025
                 </p>
                 {/* Countdown */}
                 <div className="mt-6 flex flex-col items-center">
