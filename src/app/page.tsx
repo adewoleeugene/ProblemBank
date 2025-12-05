@@ -776,7 +776,7 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
               </div>
             </div>
 
-            {/* Learn More CTA centered */}
+            {/* View Ideas CTA centered */}
             <div className="mt-10 flex justify-center">
               <a
                 href="/big5"
@@ -787,7 +787,7 @@ const HackathonAnnouncementSection = memo(function HackathonAnnouncementSection(
                   style={{ backgroundImage: 'url(/images/6707b45e1c28f88fc781209a_noise.webp)', backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }}
                 />
                 <div className="absolute inset-0 bg-[#f7efe3] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100 rounded-full" />
-                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#403f3e]">Learn More →</span>
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#403f3e]">View Ideas →</span>
               </a>
             </div>
           </div>
