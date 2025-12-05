@@ -1,6 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, memo } from 'react';
+import dynamic from 'next/dynamic';
+
+const Big5SubmissionForm = dynamic(() => import('./big5/Big5SubmissionForm'), {
+  ssr: false,
+});
 
 interface HackathonStage {
   id: string;
@@ -377,6 +382,18 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
               >
                 Stage Completed
               </div>
+            </div>
+          )}
+
+          {/* Submit Idea Button - Only show when hackathon is active */}
+          {currentStage.status === 'active' && (
+            <div
+              className="mt-8 flex justify-center"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent parent link click
+              }}
+            >
+              <Big5SubmissionForm />
             </div>
           )}
         </div>
