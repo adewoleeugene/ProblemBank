@@ -1,6 +1,10 @@
 'use client';
 import { useState } from 'react';
-import CivicRegistrationModal from './CivicRegistrationModal';
+import dynamic from 'next/dynamic';
+
+const CivicRegistrationModal = dynamic(() => import('./CivicRegistrationModal'), {
+  ssr: false,
+});
 
 export default function RegistrationCTA() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +30,7 @@ export default function RegistrationCTA() {
           className="text-center text-lg mb-16 max-w-2xl mx-auto"
           style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e', lineHeight: '1.8' }}
         >
-          Secure your spot at the Civic Youth Hackathon and be part of the movement transforming Sierra Leone
+          Secure your spot at the Civic Youth Innovation Hackathon and be part of the movement transforming Sierra Leone
           through the Six Civic Pillars.
         </p>
 
@@ -49,7 +53,7 @@ export default function RegistrationCTA() {
               className="text-xl mb-8"
               style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 700, color: '#403f3e' }}
             >
-              Ready to make an impact on Sierra Leone's future?
+              Ready to make an impact on Sierra Leone&apos;s future?
             </p>
 
             <button

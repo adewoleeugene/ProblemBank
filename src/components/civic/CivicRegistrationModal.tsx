@@ -140,7 +140,7 @@ export default function CivicRegistrationModal({ isOpen, onClose }: CivicRegistr
             className="text-center mb-8 text-base"
             style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
           >
-            Thank you for registering for the Civic Youth Hackathon! We've received your application
+            Thank you for registering for the Civic Youth Innovation Hackathon! We&apos;ve received your application
             for the <strong>{formData.track}</strong>.
           </p>
 
@@ -208,7 +208,7 @@ export default function CivicRegistrationModal({ isOpen, onClose }: CivicRegistr
               color: '#f7efe3',
             }}
           >
-            CIVIC YOUTH HACKATHON REGISTRATION
+            CIVIC YOUTH INNOVATION HACKATHON REGISTRATION
           </h2>
           <p
             className="text-center mt-2 text-sm"

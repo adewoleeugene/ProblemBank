@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEffect, useState, useRef, memo } from 'react';
 import { kits as kitsData, slugifyTitle } from '../lib/kits';
 import HackathonStageBanner from '../components/HackathonStageBanner';
+import CivicHackathonBanner from '../components/CivicHackathonBanner';
 import FAQSection from '../components/FAQSection';
 import PRDKitModal from '../components/PRDKitModal';
 import PitchMasterKitModal from '../components/PitchMasterKitModal';
@@ -119,6 +120,11 @@ export default function Home() {
 
       {/* Shared Navigation */}
       <Navigation logoText="ProblemBank" />
+
+      {/* Civic Hackathon Banner */}
+      <div className="relative z-40">
+        <CivicHackathonBanner />
+      </div>
 
       {/* Hero Section */}
       <main className="relative z-30 flex flex-col items-center justify-center min-h-screen px-4 md:px-8 pb-50">

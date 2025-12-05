@@ -44,9 +44,9 @@ export default function AboutSection() {
                 className="text-base leading-relaxed"
                 style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
               >
-                Despite ongoing national reforms, young people—the country's largest demographic group
+                Despite ongoing national reforms, young people—the country&apos;s largest demographic group
                 (approximately 70% of the population under age 35)—remain under-engaged in shaping national
-                narratives, policies, and solutions. The Civic Youth Hackathon seeks to address persistent
+                narratives, policies, and solutions. The Civic Youth Innovation Hackathon seeks to address persistent
                 civic gaps by enabling youth-driven innovations across the Six Civic Pillars.
               </p>
             </div>
