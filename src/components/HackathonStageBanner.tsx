@@ -198,11 +198,8 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 mt-2">
-      <a
-        href="https://mocti.gov.sl/ai-challenge/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] p-6 md:p-8 cursor-pointer"
+      <div
+        className="block relative border border-[#e8ddd0] shadow-sm transition-all duration-200 hover:shadow-md hover:border-[#d8cdbc] overflow-hidden rounded-[28px] p-6 md:p-8"
         style={{
           backgroundColor: currentStage.status === 'active' ? '#513f2a' : '#F1E7DB',
           transform: 'rotate(1.2deg)',
@@ -387,17 +384,12 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
 
           {/* Submit Idea Button - Only show when hackathon is active */}
           {currentStage.status === 'active' && (
-            <div
-              className="mt-8 flex justify-center"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent parent link click
-              }}
-            >
+            <div className="mt-8 flex justify-center">
               <Big5SubmissionForm />
             </div>
           )}
         </div>
-      </a>
+      </div>
     </div>
   );
 });
