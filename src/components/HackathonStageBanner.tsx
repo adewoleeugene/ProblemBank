@@ -69,7 +69,7 @@ const HACKATHON_STAGES: HackathonStage[] = [
     id: 'final-hackathon',
     title: 'Hackathon Started!',
     startDate: new Date('2025-11-26T00:00:00Z'),
-    endDate: new Date('2025-12-06T23:59:59Z'),
+    endDate: new Date('2025-12-07T23:59:59Z'),
     description: 'Two-Week Innovation Sprint: Build Solutions, Refine Prototypes, Showcase Your Work, and Compete for Prizes!',
     status: 'active'
   }
@@ -382,8 +382,8 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
             </div>
           )}
 
-          {/* Submit Idea Button - Only show when hackathon is active */}
-          {currentStage.status === 'active' && (
+          {/* Submit Idea Button - Only show when hackathon is active and before deadline */}
+          {currentStage.status === 'active' && currentStage.endDate && new Date() < currentStage.endDate && (
             <div className="mt-8 flex justify-center">
               <Big5SubmissionForm />
             </div>

@@ -41,7 +41,7 @@ export default function Big5Page() {
        {/* Prizes Section */}
        <PrizesSection />
 
-       {/* Application CTA Section */}
+       {/* Application CTA Section - Auto-hides after deadline */}
        <ApplicationCTA />
     </div>
   );
