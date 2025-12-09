@@ -59,13 +59,15 @@ export default function ChallengeThemes() {
         {/* Heading */}
         <div className="text-center mb-4">
           <h2
+            className="leading-tight"
             style={{
               fontFamily: 'Decoy, sans-serif',
-              fontSize: 'clamp(3rem, 8vw, 5rem)',
+              fontSize: 'clamp(2.5rem, 7vw, 5rem)',
               fontWeight: 500,
               color: '#f7efe3',
               transform: 'rotate(-1.5deg)',
               display: 'inline-block',
+              wordSpacing: '100vw',
             }}
           >
             THE SIX CIVIC PILLARS

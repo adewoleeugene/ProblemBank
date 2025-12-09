@@ -176,7 +176,7 @@ export default function CivicHero() {
                 </span>
               </div>
               <p style={{ fontFamily: 'Decoy, sans-serif', fontSize: '28px', fontWeight: 500, color: '#ffffff', lineHeight: 1.2 }}>
-                Miatta Conference Center
+                Miatta Civic Center Youyi Building
               </p>
               <p style={{ fontFamily: 'Raleway, sans-serif', fontSize: '14px', fontWeight: 600, color: '#ffffff', opacity: 0.7, marginTop: '4px' }}>
                 Freetown, Sierra Leone
