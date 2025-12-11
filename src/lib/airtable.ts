@@ -251,6 +251,131 @@ if (searchQuery && searchQuery.trim()) {
   return { items, offset: data.offset };
 }
 
+// Fetch from a single base with given config
+async function fetchIdeasFromBase(
+  token: string,
+  baseId: string,
+  tableName: string,
+  pageSize: number,
+  categories?: string[],
+  searchQuery?: string
+): Promise<IdeaItem[]> {
+  const categoryField = process.env['AIRTABLE_CATEGORY_FIELD'] || 'Category';
+  const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
+  url.searchParams.set('pageSize', String(pageSize));
+
+  const filterParts: string[] = [];
+  filterParts.push("{Status} = 'Published'");
+
+  if (categories && categories.length > 0) {
+    const esc = (s: string) => s.replace(/'/g, "\\'");
+    const joinedExpr = `"," & ARRAYJOIN({${categoryField}}, ",") & ","`;
+    const perCat = categories.map((c) => `OR({${categoryField}} = '${esc(c)}', FIND("," & '${esc(c)}' & ",", ${joinedExpr}))`);
+    filterParts.push(`OR(${perCat.join(',')})`);
+  }
+
+  if (searchQuery && searchQuery.trim()) {
+    const esc = (s: string) => s.replace(/'/g, "\\'");
+    const titleField = process.env['AIRTABLE_TITLE_FIELD'] || 'Title';
+    const blurbField = process.env['AIRTABLE_BLURB_FIELD'] || 'Blurb';
+    const query = esc(searchQuery.trim().toLowerCase());
+    filterParts.push(`OR(FIND('${query}', LOWER({${titleField}})), FIND('${query}', LOWER({${blurbField}})))`);
+  }
+
+  const formula = filterParts.length === 1 ? filterParts[0] : `AND(${filterParts.join(',')})`;
+  url.searchParams.set('filterByFormula', formula);
+
+  try {
+    const res = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      next: {
+        revalidate: 3600,
+        tags: ['ideas-page']
+      },
+    });
+
+    if (!res.ok) {
+      console.warn(`Airtable API error for ${baseId}: ${res.status} ${res.statusText}`);
+      return [];
+    }
+
+    const data = (await res.json()) as AirtableListResponse;
+    const titleField = process.env['AIRTABLE_TITLE_FIELD'] || 'Title';
+    const blurbField = process.env['AIRTABLE_BLURB_FIELD'] || 'Blurb';
+
+    return data.records.map((r) => {
+      const f = r.fields || {};
+      const title = (f[titleField] as string) || (f['Name'] as string) || 'Untitled Idea';
+      const blurb = (f[blurbField] as string) || (f['Description'] as string) || '';
+
+      const rawCategory = f[categoryField] as unknown;
+      let category: string | undefined;
+      if (Array.isArray(rawCategory)) {
+        const arr = rawCategory as AirtableSelectOption[];
+        const first = arr[0];
+        if (typeof first === 'string') category = first;
+        else if (first && typeof first === 'object' && 'name' in first) category = (first as { name: string }).name;
+      } else if (typeof rawCategory === 'string') {
+        category = rawCategory as string;
+      }
+
+      const repo = (f['Repo'] as string) || undefined;
+      return { id: r.id, title, blurb, category, repo };
+    });
+  } catch (error) {
+    console.warn(`Failed to fetch from base ${baseId}:`, error);
+    return [];
+  }
+}
+
+// Fetch ideas from BOTH bases and combine them
+export async function fetchCombinedIdeasPage(pageSize = 12, offset?: string, categories?: string[], searchQuery?: string): Promise<IdeasPage> {
+  // Fetch from main Civic base
+  const civicToken = process.env['AIRTABLE_TOKEN'];
+  const civicBaseId = process.env['AIRTABLE_BASE_ID'];
+  const civicTableName = process.env['AIRTABLE_TABLE_NAME'];
+
+  // Fetch from Big5 base
+  const big5Token = process.env['AIRTABLE_BIG5_IDEAS_TOKEN'];
+  const big5BaseId = process.env['AIRTABLE_BIG5_IDEAS_BASE_ID'];
+  const big5TableName = process.env['AIRTABLE_BIG5_IDEAS_TABLE_NAME'];
+
+  // Fetch more items from each base to ensure we get enough after deduplication
+  // We'll request 2x pageSize from each to have a good pool to combine
+  const fetchSize = pageSize * 2;
+
+  const [civicItems, big5Items] = await Promise.all([
+    civicToken && civicBaseId && civicTableName
+      ? fetchIdeasFromBase(civicToken, civicBaseId, civicTableName, fetchSize, categories, searchQuery)
+      : Promise.resolve([]),
+    big5Token && big5BaseId && big5TableName
+      ? fetchIdeasFromBase(big5Token, big5BaseId, big5TableName, fetchSize, categories, searchQuery)
+      : Promise.resolve([]),
+  ]);
+
+  // Interleave items from both bases to ensure mix in results
+  const interleaved: IdeaItem[] = [];
+  const maxLength = Math.max(civicItems.length, big5Items.length);
+  for (let i = 0; i < maxLength; i++) {
+    if (i < civicItems.length) interleaved.push(civicItems[i]);
+    if (i < big5Items.length) interleaved.push(big5Items[i]);
+  }
+
+  // Deduplicate by title
+  const seen = new Set<string>();
+  const items = interleaved.filter(item => {
+    if (seen.has(item.title.toLowerCase())) return false;
+    seen.add(item.title.toLowerCase());
+    return true;
+  });
+
+  // Return the requested page size
+  return { items: items.slice(0, pageSize), offset: undefined };
+}
+
 export async function fetchIdeaByTitle(title: string): Promise<IdeaItem | null> {
   const token = process.env['AIRTABLE_TOKEN'];
   const baseId = process.env['AIRTABLE_BASE_ID'];
@@ -389,6 +514,89 @@ export async function fetchAllCategories(maxPages = 10): Promise<string[]> {
   }
 
   return Array.from(seen).sort((a, b) => a.localeCompare(b));
+}
+
+// Fetch categories from a single base
+async function fetchCategoriesFromBase(
+  token: string,
+  baseId: string,
+  tableName: string,
+  maxPages = 10
+): Promise<string[]> {
+  const categoryField = process.env['AIRTABLE_CATEGORY_FIELD'] || 'Category';
+  const seen = new Set<string>();
+  let offset: string | undefined = undefined;
+  let pages = 0;
+
+  while (pages < maxPages) {
+    const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
+    url.searchParams.set('pageSize', '100');
+    if (offset) url.searchParams.set('offset', offset);
+    url.searchParams.append('fields[]', categoryField);
+    url.searchParams.set('filterByFormula', "{Status} = 'Published'");
+
+    try {
+      const res = await fetch(url.toString(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        next: {
+          revalidate: 7200,
+          tags: ['categories']
+        },
+      });
+
+      if (!res.ok) break;
+      const data = (await res.json()) as AirtableListResponse;
+
+      for (const r of data.records) {
+        const f = r.fields || {};
+        const raw = f[categoryField] as unknown;
+        if (!raw) continue;
+        if (Array.isArray(raw)) {
+          for (const v of raw as AirtableSelectOption[]) {
+            if (typeof v === 'string') seen.add(v);
+            else if (v && typeof v === 'object' && 'name' in v) seen.add((v as { name: string }).name);
+          }
+        } else if (typeof raw === 'string') {
+          seen.add(raw);
+        }
+      }
+
+      offset = data.offset;
+      pages += 1;
+      if (!offset) break;
+    } catch (error) {
+      console.warn(`Failed to fetch categories from ${baseId}:`, error);
+      break;
+    }
+  }
+
+  return Array.from(seen);
+}
+
+// Fetch combined categories from BOTH bases
+export async function fetchCombinedCategories(maxPages = 10): Promise<string[]> {
+  const civicToken = process.env['AIRTABLE_TOKEN'];
+  const civicBaseId = process.env['AIRTABLE_BASE_ID'];
+  const civicTableName = process.env['AIRTABLE_TABLE_NAME'];
+
+  const big5Token = process.env['AIRTABLE_BIG5_IDEAS_TOKEN'];
+  const big5BaseId = process.env['AIRTABLE_BIG5_IDEAS_BASE_ID'];
+  const big5TableName = process.env['AIRTABLE_BIG5_IDEAS_TABLE_NAME'];
+
+  const [civicCategories, big5Categories] = await Promise.all([
+    civicToken && civicBaseId && civicTableName
+      ? fetchCategoriesFromBase(civicToken, civicBaseId, civicTableName, maxPages)
+      : Promise.resolve([]),
+    big5Token && big5BaseId && big5TableName
+      ? fetchCategoriesFromBase(big5Token, big5BaseId, big5TableName, maxPages)
+      : Promise.resolve([]),
+  ]);
+
+  const combined = new Set([...civicCategories, ...big5Categories]);
+  return Array.from(combined).sort((a, b) => a.localeCompare(b));
 }
 
 // Helper to generate slugs consistently with ideas/page.tsx

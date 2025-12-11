@@ -72,17 +72,42 @@ const HACKATHON_STAGES: HackathonStage[] = [
     endDate: new Date('2025-12-07T23:59:59Z'),
     description: 'Two-Week Innovation Sprint: Build Solutions, Refine Prototypes, Showcase Your Work, and Compete for Prizes!',
     status: 'active'
+  },
+  {
+    id: 'review-period',
+    title: 'Review in Progress',
+    startDate: new Date('2025-12-08T00:00:00Z'),
+    endDate: new Date('2025-12-11T23:59:59Z'),
+    description: 'Our team is reviewing all submissions. Winners will be announced soon!',
+    status: 'active'
   }
 ];
 
 function getCurrentStage(): HackathonStage | null {
-  // Return the Final Hackathon stage - Hackathon Started!
-  const finalHackathonStage = HACKATHON_STAGES.find(stage => stage.id === 'final-hackathon');
-  if (finalHackathonStage) {
-    return { ...finalHackathonStage, status: 'active' };
+  const now = new Date();
+
+  // Check if we're in the review period (Dec 8-11)
+  const reviewStage = HACKATHON_STAGES.find(stage => stage.id === 'review-period');
+  if (reviewStage && reviewStage.startDate && reviewStage.endDate) {
+    if (now >= reviewStage.startDate && now <= reviewStage.endDate) {
+      return { ...reviewStage, status: 'active' };
+    }
   }
 
-  // Fallback to first stage if final hackathon not found
+  // Check if we're in the final hackathon period (Nov 26 - Dec 7)
+  const finalHackathonStage = HACKATHON_STAGES.find(stage => stage.id === 'final-hackathon');
+  if (finalHackathonStage && finalHackathonStage.startDate && finalHackathonStage.endDate) {
+    if (now >= finalHackathonStage.startDate && now <= finalHackathonStage.endDate) {
+      return { ...finalHackathonStage, status: 'active' };
+    }
+  }
+
+  // If past review period, show review as completed
+  if (reviewStage && reviewStage.endDate && now > reviewStage.endDate) {
+    return { ...reviewStage, status: 'completed' };
+  }
+
+  // Fallback to first stage if no active stage found
   return HACKATHON_STAGES.length > 0 ? { ...HACKATHON_STAGES[0], status: 'upcoming' } : null;
 }
 
@@ -183,7 +208,10 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusText = (status: string, stageId?: string) => {
+    if (stageId === 'review-period' && status === 'active') {
+      return 'Review in Progress';
+    }
     switch (status) {
       case 'active':
         return 'Currently Active';
@@ -229,7 +257,7 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
                   backgroundColor: currentStage.status === 'active' ? '#1e1e1e' : '#403f3e',
                 }}
               />
-              {getStatusText(currentStage.status)}
+              {getStatusText(currentStage.status, currentStage.id)}
             </div>
             
             {/* Date Range */}
@@ -382,8 +410,8 @@ const HackathonStageBanner = memo(function HackathonStageBanner() {
             </div>
           )}
 
-          {/* Submit Idea Button - Only show when hackathon is active and before deadline */}
-          {currentStage.status === 'active' && currentStage.endDate && new Date() < currentStage.endDate && (
+          {/* Submit Idea Button - Only show when hackathon is active and before deadline, but NOT during review period */}
+          {currentStage.status === 'active' && currentStage.id !== 'review-period' && currentStage.endDate && new Date() < currentStage.endDate && (
             <div className="mt-8 flex justify-center">
               <Big5SubmissionForm />
             </div>
