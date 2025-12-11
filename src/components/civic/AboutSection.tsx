@@ -13,10 +13,10 @@ export default function AboutSection() {
             fontWeight: 500,
             color: '#1e1e1e',
             transform: 'rotate(-1.5deg)',
-            wordSpacing: '100vw',
           }}
         >
-          ABOUT THE EVENT
+          <div>ABOUT THE</div>
+          <div>EVENT</div>
         </h2>
 
         {/* Content Grid */}
