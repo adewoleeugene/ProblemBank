@@ -4,26 +4,30 @@ import { useState, useEffect } from 'react';
 type CivicIdea = {
   id: string;
   title: string;
+  categories: string[]; // List of categories this idea belongs to
 };
 
-// Hardcoded civic ideas
+// Hardcoded civic ideas with their categories
 const CIVIC_IDEAS: CivicIdea[] = [
-  { id: "rec3ZNV4AKN2kemWu", title: "Agri-Opp Portal" },
-  { id: "recsWgxtR1P62Tcz4", title: "Connect Salone (The Civic Hub)" },
-  { id: "recrtRTrYpAfyXePv", title: "Eco-Watch Reporter" },
-  { id: "rechT4cRT1M1w1ttB", title: "Med-Find Salone" },
-  { id: "recuQek2mm8gnWZqe", title: "Road to Recovery (Anti-Drug)" },
-  { id: "recORkns2L53QIksA", title: "SafeSpace Salone (Tele-Therapy)" },
-  { id: "recpDqXeMnb1Pa5b4", title: "Salone Sounds" },
-  { id: "recNJFOHpMdFzca1V", title: "Salone Speaks" },
-  { id: "rec7kHZyRn02va9e7", title: "SaloneBlessed (The Live Reporters)" },
-  { id: "recqdcV7M6QY9RL90", title: "Street Law Salone" },
-  { id: "recYSwdreHDVKxrQE", title: "The \"Backyard Farmer\" Series" },
-  { id: "recmgWu4be5iZaJPs", title: "The \"Green Weekend\" Itinerary" },
-  { id: "recu0IzyXFslvrjGy", title: "The Agri-LinkedIn" },
-  { id: "recJFBL7cEQ3RO1hL", title: "The Clean-Up League" },
-  { id: "reca7qAj8FtKzVJso", title: "The Digital Heritage Vault" },
-  { id: "recxsOWBOnKPtohDT", title: "Tok Bout Salone Series" }
+  // Tech Track Ideas
+  { id: "rec3ZNV4AKN2kemWu", title: "Agri-Opp Portal", categories: ["Feed Salone - Tech Track"] },
+  { id: "recsWgxtR1P62Tcz4", title: "Connect Salone (The Civic Hub)", categories: ["Digitise Salone - Tech Track"] },
+  { id: "recrtRTrYpAfyXePv", title: "Eco-Watch Reporter", categories: ["Clean Salone - Tech Track"] },
+  { id: "rechT4cRT1M1w1ttB", title: "Med-Find Salone", categories: ["Heal Salone - Tech Track"] },
+  { id: "recORkns2L53QIksA", title: "SafeSpace Salone (Tele-Therapy)", categories: ["Heal Salone - Tech Track"] },
+  { id: "recpDqXeMnb1Pa5b4", title: "Salone Sounds", categories: ["Love Salone - Tech Track"] },
+  { id: "recNJFOHpMdFzca1V", title: "Salone Speaks", categories: ["Digitise Salone - Tech Track"] },
+  { id: "recu0IzyXFslvrjGy", title: "The Agri-LinkedIn", categories: ["Feed Salone - Tech Track"] },
+  { id: "recJFBL7cEQ3RO1hL", title: "The Clean-Up League", categories: ["Clean Salone - Tech Track"] },
+  { id: "reca7qAj8FtKzVJso", title: "The Digital Heritage Vault", categories: ["Love Salone - Tech Track"] },
+
+  // Content Track Ideas
+  { id: "recxsOWBOnKPtohDT", title: "Tok Bout Salone Series", categories: ["Love Salone - Content Track"] },
+  { id: "recYSwdreHDVKxrQE", title: "The \"Backyard Farmer\" Series", categories: ["Feed Salone - Content Track"] },
+  { id: "recmgWu4be5iZaJPs", title: "The \"Green Weekend\" Itinerary", categories: ["Clean Salone - Content Track"] },
+  { id: "recuQek2mm8gnWZqe", title: "Road to Recovery (Anti-Drug)", categories: ["Heal Salone - Content Track"] },
+  { id: "recqdcV7M6QY9RL90", title: "Street Law Salone", categories: ["Digitise Salone - Content Track"] },
+  { id: "rec7kHZyRn02va9e7", title: "SaloneBlessed (The Live Reporters)", categories: ["Salone Big Pas We All Content"] }
 ];
 
 export default function SubmissionForm() {
@@ -38,14 +42,27 @@ export default function SubmissionForm() {
     teamMembers: '',
     submissionLink: '',
     presentationVideo: '',
+    technicalVideo: '',
     productDescription: '',
+    contentLinks: '',
+    contentDescription: '',
   });
+
+  // Determine if the selected category is Tech Track or Content Track
+  const isTechTrack = formData.category.includes('Tech Track');
+  const isContentTrack = formData.category.includes('Content Track') || formData.category.includes('Content');
+
+  // Filter ideas based on selected category
+  const filteredIdeas = formData.category
+    ? CIVIC_IDEAS.filter(idea => idea.categories.includes(formData.category))
+    : [];
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Check if submission is allowed (before Dec 12 noon GMT/UTC)
-  const submissionDeadline = new Date('2025-12-12T12:00:00Z');
+  // Check if submission is allowed (before Dec 13 midnight GMT/UTC)
+  // This matches when the countdown hits 0
+  const submissionDeadline = new Date('2025-12-13T00:00:00Z');
   const now = new Date();
   const isBeforeDeadline = now < submissionDeadline;
 
@@ -63,7 +80,13 @@ export default function SubmissionForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // If category changes, reset ideaTitle since the available ideas will change
+    if (name === 'category') {
+      setFormData((prev) => ({ ...prev, [name]: value, ideaTitle: '' }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -104,7 +127,10 @@ export default function SubmissionForm() {
         teamMembers: '',
         submissionLink: '',
         presentationVideo: '',
+        technicalVideo: '',
         productDescription: '',
+        contentLinks: '',
+        contentDescription: '',
       });
     } catch (error) {
       console.error('Submission error:', error);
@@ -259,7 +285,8 @@ export default function SubmissionForm() {
             value={formData.ideaTitle}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg appearance-none"
+            disabled={!formData.category}
+            className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               fontFamily: 'Raleway, sans-serif',
               backgroundColor: '#ffffff',
@@ -270,9 +297,9 @@ export default function SubmissionForm() {
             }}
           >
             <option value="" disabled>
-              Select an idea
+              {formData.category ? 'Select an idea' : 'Please select a category first'}
             </option>
-            {CIVIC_IDEAS.map((idea) => (
+            {filteredIdeas.map((idea) => (
               <option key={idea.id} value={idea.title}>
                 {idea.title}
               </option>
@@ -321,71 +348,169 @@ export default function SubmissionForm() {
           />
         </div>
 
-        {/* Link to Submission */}
-        <div className="mb-6">
-          <label
-            htmlFor="submissionLink"
-            className="block mb-2"
-            style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
-          >
-            Link to Submission *
-          </label>
-          <input
-            type="url"
-            id="submissionLink"
-            name="submissionLink"
-            value={formData.submissionLink}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
-            style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
-            placeholder="https://"
-          />
-        </div>
+        {/* Tech Track Fields */}
+        {isTechTrack && (
+          <>
+            {/* Link to Submission */}
+            <div className="mb-6">
+              <label
+                htmlFor="submissionLink"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Link to Submission *
+              </label>
+              <input
+                type="url"
+                id="submissionLink"
+                name="submissionLink"
+                value={formData.submissionLink}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="https://"
+              />
+            </div>
 
-        {/* Presentation Video */}
-        <div className="mb-6">
-          <label
-            htmlFor="presentationVideo"
-            className="block mb-2"
-            style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
-          >
-            Presentation Video *
-          </label>
-          <input
-            type="url"
-            id="presentationVideo"
-            name="presentationVideo"
-            value={formData.presentationVideo}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
-            style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
-            placeholder="https://"
-          />
-        </div>
+            {/* Presentation Video */}
+            <div className="mb-6">
+              <label
+                htmlFor="presentationVideo"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Presentation Video *
+              </label>
+              <input
+                type="url"
+                id="presentationVideo"
+                name="presentationVideo"
+                value={formData.presentationVideo}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="https://"
+              />
+            </div>
 
-        {/* Product Description */}
-        <div className="mb-6">
-          <label
-            htmlFor="productDescription"
-            className="block mb-2"
-            style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
-          >
-            Product Description *
-          </label>
-          <textarea
-            id="productDescription"
-            name="productDescription"
-            value={formData.productDescription}
-            onChange={handleChange}
-            required
-            rows={5}
-            className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
-            style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
-            placeholder="Describe your project..."
-          />
-        </div>
+            {/* Technical Video */}
+            <div className="mb-6">
+              <label
+                htmlFor="technicalVideo"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Technical Video *
+              </label>
+              <input
+                type="url"
+                id="technicalVideo"
+                name="technicalVideo"
+                value={formData.technicalVideo}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="https://"
+              />
+            </div>
+
+            {/* Product Description */}
+            <div className="mb-6">
+              <label
+                htmlFor="productDescription"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Product Description *
+              </label>
+              <textarea
+                id="productDescription"
+                name="productDescription"
+                value={formData.productDescription}
+                onChange={handleChange}
+                required
+                rows={5}
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="Describe your project..."
+              />
+            </div>
+          </>
+        )}
+
+        {/* Content Track Fields */}
+        {isContentTrack && (
+          <>
+            {/* Content Links */}
+            <div className="mb-6">
+              <label
+                htmlFor="contentLinks"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Content Links *
+              </label>
+              <textarea
+                id="contentLinks"
+                name="contentLinks"
+                value={formData.contentLinks}
+                onChange={handleChange}
+                required
+                rows={3}
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="YouTube, social media, podcast links, etc. (one per line)"
+              />
+            </div>
+
+            {/* Presentation Video */}
+            <div className="mb-6">
+              <label
+                htmlFor="presentationVideo"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Presentation Video *
+              </label>
+              <input
+                type="url"
+                id="presentationVideo"
+                name="presentationVideo"
+                value={formData.presentationVideo}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="https://"
+              />
+            </div>
+
+            {/* Content Description */}
+            <div className="mb-6">
+              <label
+                htmlFor="contentDescription"
+                className="block mb-2"
+                style={{ fontFamily: 'Raleway, sans-serif', fontWeight: 600, color: '#403f3e' }}
+              >
+                Content Description *
+              </label>
+              <textarea
+                id="contentDescription"
+                name="contentDescription"
+                value={formData.contentDescription}
+                onChange={handleChange}
+                required
+                rows={5}
+                className="w-full px-4 py-3 border-2 border-[#d8cdbc] rounded-lg"
+                style={{ fontFamily: 'Raleway, sans-serif', backgroundColor: '#ffffff' }}
+                placeholder="Describe your content, target audience, and impact..."
+              />
+            </div>
+          </>
+        )}
 
         {/* Submit Button */}
         <button

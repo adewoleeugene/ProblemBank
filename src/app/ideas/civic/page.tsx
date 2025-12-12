@@ -66,9 +66,6 @@ export default async function CivicIdeasPage({ searchParams }: { searchParams?: 
   // Extract unique civic main categories (without the track suffixes)
   const civicMainCategories = ['Love Salone', 'Heal Salone', 'Digitise Salone', 'Feed Salone', 'Clean Salone', 'Salone Big Pas We All'];
 
-  // active map for highlighting
-  const active = new Set(categories);
-
   // Build chip links: single-select (replaces current selection)
   const chipHref = (label: string, isCivicMainCategory = false): string => {
     if (label === 'All') return '/ideas/civic';
@@ -102,6 +99,43 @@ export default async function CivicIdeasPage({ searchParams }: { searchParams?: 
             >
               <div>Civic</div> <div>Ideas</div>
             </h1>
+
+            {/* Main Group Navigation */}
+            <div className="mt-6 flex justify-center gap-4">
+              <Link
+                href="/ideas"
+                className="px-6 py-2 rounded-full border-2 text-base font-semibold transition-all"
+                style={{
+                  borderColor: '#d8cdbc',
+                  color: '#403f3e',
+                  backgroundColor: '#fffaf3'
+                }}
+              >
+                All
+              </Link>
+              <Link
+                href="/ideas/big5"
+                className="px-6 py-2 rounded-full border-2 text-base font-semibold transition-all"
+                style={{
+                  borderColor: '#d8cdbc',
+                  color: '#403f3e',
+                  backgroundColor: '#fffaf3'
+                }}
+              >
+                Big 5
+              </Link>
+              <Link
+                href="/ideas/civic"
+                className="px-6 py-2 rounded-full border-2 text-base font-semibold transition-all ring-2 ring-[#d8cdbc] scale-105"
+                style={{
+                  borderColor: '#d8cdbc',
+                  color: '#403f3e',
+                  backgroundColor: '#f2e8dc'
+                }}
+              >
+                Civic
+              </Link>
+            </div>
 
             {/* Category chips */}
             <div className="mt-6 flex flex-wrap justify-center gap-2">

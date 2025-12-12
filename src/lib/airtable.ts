@@ -608,22 +608,143 @@ function slugifyTitle(title: string): string {
     .replace(/\s+/g, '-');
 }
 
-// Robust fetch by slug: iterate pages and match by slugified title
-export async function fetchIdeaBySlug(slug: string): Promise<IdeaItem | null> {
-  // Try up to 10 pages of 50 items each
-  let offset: string | undefined = undefined;
-  for (let i = 0; i < 10; i++) {
-    const page = await fetchIdeasPage(50, offset);
-    for (const item of page.items) {
-      if (slugifyTitle(item.title) === slug) {
-        // Enrich with problem/solution via exact title fetch
-        const enriched = await fetchIdeaByTitle(item.title);
-        return enriched ?? { ...item };
-      }
-    }
-    if (!page.offset) break;
-    offset = page.offset;
+// Helper function to fetch idea by title from a specific base
+async function fetchIdeaByTitleFromBase(
+  title: string,
+  token: string,
+  baseId: string,
+  tableName: string
+): Promise<IdeaItem | null> {
+  if (!token || !baseId || !tableName) {
+    return null;
   }
+
+  const titleField = process.env['AIRTABLE_TITLE_FIELD'] || 'Title';
+  const lowerTitle = title.toLowerCase();
+  const url = new URL(`${AIRTABLE_API_BASE}/${baseId}/${encodeURIComponent(tableName)}`);
+  // Filter by formula: LOWER({Title}) = 'lowercase title' AND Status='Published'
+  const titleFilter = `LOWER({${titleField}}) = '${lowerTitle.replace(/'/g, "\\'")}'`;
+  const statusFilter = "{Status} = 'Published'";
+  url.searchParams.set('filterByFormula', `AND(${titleFilter}, ${statusFilter})`);
+  url.searchParams.set('pageSize', '1');
+
+  try {
+    const res = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      // Cache for 1 hour with revalidation
+      next: {
+        revalidate: 3600, // 1 hour
+        tags: ['idea-by-title']
+      },
+    });
+
+    if (!res.ok) return null;
+    const data = (await res.json()) as AirtableListResponse;
+    if (!data.records?.length) return null;
+
+    const record = data.records[0];
+
+    const blurbField = process.env['AIRTABLE_BLURB_FIELD'] || 'Blurb';
+    const categoryField = process.env['AIRTABLE_CATEGORY_FIELD'] || 'Category';
+    const sortField = process.env['AIRTABLE_SORT_FIELD'];
+    const typeField = 'Type';
+
+    const f = record.fields || {};
+    const mappedTitle = (f[titleField] as string) || (f['Name'] as string) || (f['Idea'] as string) || title;
+    const blurb = (f[blurbField] as string) || (f['Description'] as string) || '';
+
+    // Map Problem and Proposed Solution fields with safe coercion to strings
+    const problemField = 'The Problem';
+    const solutionField = 'Proposed Solution';
+    const asText = (v: unknown): string => {
+      if (typeof v === 'string') return v;
+      if (Array.isArray(v)) {
+        return (v as unknown[])
+          .map((x) => (typeof x === 'string' ? x : x && typeof x === 'object' && 'name' in (x as Record<string, unknown>) ? (x as { name?: string }).name ?? '' : ''))
+          .filter(Boolean)
+          .join(', ');
+      }
+      return '';
+    };
+    const problem = asText(f[problemField]);
+    const solution = asText(f[solutionField]);
+
+    const rawCategory = f[categoryField] as unknown;
+    let category: string | undefined;
+    if (Array.isArray(rawCategory)) {
+      const arr = rawCategory as AirtableSelectOption[];
+      const first = arr[0];
+      if (typeof first === 'string') category = first;
+      else if (first && typeof first === 'object' && 'name' in first) category = (first as { name: string }).name;
+    } else if (typeof rawCategory === 'string') {
+      category = rawCategory as string;
+    } else if (rawCategory && typeof rawCategory === 'object' && 'name' in (rawCategory as Record<string, unknown>)) {
+      category = (rawCategory as { name: string }).name;
+    }
+
+    const route = (f[typeField] as string) || undefined;
+    const order = sortField && typeof f[sortField] === 'number' ? (f[sortField] as number) : undefined;
+    const repo = (f['Repo'] as string) || undefined;
+
+    return { id: record.id, title: mappedTitle, blurb, category, route, order, problem, solution, repo };
+  } catch (error) {
+    console.warn(`Failed to fetch idea by title from base ${baseId}:`, error);
+    return null;
+  }
+}
+
+// Robust fetch by slug: search in BOTH bases and match by slugified title
+export async function fetchIdeaBySlug(slug: string): Promise<IdeaItem | null> {
+  // Fetch from both bases
+  const civicToken = process.env['AIRTABLE_TOKEN'];
+  const civicBaseId = process.env['AIRTABLE_BASE_ID'];
+  const civicTableName = process.env['AIRTABLE_TABLE_NAME'];
+
+  const big5Token = process.env['AIRTABLE_BIG5_IDEAS_TOKEN'];
+  const big5BaseId = process.env['AIRTABLE_BIG5_IDEAS_BASE_ID'];
+  const big5TableName = process.env['AIRTABLE_BIG5_IDEAS_TABLE_NAME'];
+
+  // Search in both bases in parallel
+  const [civicItems, big5Items] = await Promise.all([
+    civicToken && civicBaseId && civicTableName
+      ? fetchIdeasFromBase(civicToken, civicBaseId, civicTableName, 100)
+      : Promise.resolve([]),
+    big5Token && big5BaseId && big5TableName
+      ? fetchIdeasFromBase(big5Token, big5BaseId, big5TableName, 100)
+      : Promise.resolve([]),
+  ]);
+
+  // Combine all items
+  const allItems = [...civicItems, ...big5Items];
+
+  // Find matching item by slug
+  for (const item of allItems) {
+    if (slugifyTitle(item.title) === slug) {
+      // Enrich with problem/solution via exact title fetch from the appropriate base
+      // Try Civic base first, then Big5 base
+      let enriched = await fetchIdeaByTitleFromBase(
+        item.title,
+        civicToken!,
+        civicBaseId!,
+        civicTableName!
+      );
+
+      if (!enriched && big5Token && big5BaseId && big5TableName) {
+        enriched = await fetchIdeaByTitleFromBase(
+          item.title,
+          big5Token,
+          big5BaseId,
+          big5TableName
+        );
+      }
+
+      return enriched ?? { ...item };
+    }
+  }
+
   return null;
 }
 

@@ -6,16 +6,43 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // Validate required fields
-    const requiredFields = ['name', 'email', 'category', 'phone', 'ideaTitle', 'submissionLink', 'presentationVideo', 'productDescription'];
-    for (const field of requiredFields) {
+    // Common required fields
+    const commonRequiredFields = ['name', 'email', 'category', 'phone', 'ideaTitle'];
+
+    // Determine track type
+    const isTechTrack = body.category?.includes('Tech Track');
+    const isContentTrack = body.category?.includes('Content Track') || body.category?.includes('Content');
+
+    // Track-specific required fields
+    const techTrackFields = ['submissionLink', 'presentationVideo', 'technicalVideo', 'productDescription'];
+    const contentTrackFields = ['contentLinks', 'presentationVideo', 'contentDescription'];
+
+    // Validate common required fields
+    for (const field of commonRequiredFields) {
       if (!body[field]) {
         return NextResponse.json({ error: `Missing required field: ${field}` }, { status: 400 });
       }
     }
 
-    // Check if before deadline (Dec 12 noon GMT)
-    const submissionDeadline = new Date('2025-12-12T12:00:00Z');
+    // Validate track-specific required fields
+    if (isTechTrack) {
+      for (const field of techTrackFields) {
+        if (!body[field]) {
+          return NextResponse.json({ error: `Missing required field for Tech Track: ${field}` }, { status: 400 });
+        }
+      }
+    } else if (isContentTrack) {
+      for (const field of contentTrackFields) {
+        if (!body[field]) {
+          return NextResponse.json({ error: `Missing required field for Content Track: ${field}` }, { status: 400 });
+        }
+      }
+    } else {
+      return NextResponse.json({ error: 'Invalid category selected' }, { status: 400 });
+    }
+
+    // Check if before deadline (Dec 13 midnight GMT - when countdown hits 0)
+    const submissionDeadline = new Date('2025-12-13T00:00:00Z');
     const now = new Date();
     if (now >= submissionDeadline) {
       return NextResponse.json({ error: 'Submission deadline has passed' }, { status: 400 });
@@ -31,20 +58,30 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    // Create record in Airtable
+    // Create record in Airtable with common fields
+    const airtableFields: Record<string, any> = {
+      'Name': body.name,
+      'Email': body.email,
+      'Category': body.category,
+      'Phone': body.phone,
+      'Idea Title': body.ideaTitle,
+      'Team Name': body.teamName || '',
+      'Team Members': body.teamMembers || '',
+      'Presentation Video': body.presentationVideo || '',
+    };
+
+    // Add track-specific fields
+    if (isTechTrack) {
+      airtableFields['Link to Submission'] = body.submissionLink;
+      airtableFields['Technical Video'] = body.technicalVideo;
+      airtableFields['Product Description'] = body.productDescription;
+    } else if (isContentTrack) {
+      airtableFields['Content Links'] = body.contentLinks;
+      airtableFields['Content Description'] = body.contentDescription;
+    }
+
     const airtableData = {
-      fields: {
-        'Name': body.name,
-        'Email': body.email,
-        'Category': body.category,
-        'Phone': body.phone,
-        'Idea Title': body.ideaTitle,
-        'Team Name': body.teamName,
-        'Team Members': body.teamMembers,
-        'Link to Submission': body.submissionLink,
-        'Presentation Video': body.presentationVideo || '',
-        'Product Description': body.productDescription,
-      },
+      fields: airtableFields,
     };
 
     const url = `${AIRTABLE_API_BASE}/${baseId}/${tableId}`;
@@ -133,7 +170,10 @@ export async function GET(request: Request) {
       teamMembers: record.fields['Team Members'] || '',
       submissionLink: record.fields['Link to Submission'] || '',
       presentationVideo: record.fields['Presentation Video'] || '',
+      technicalVideo: record.fields['Technical Video'] || '',
       productDescription: record.fields['Product Description'] || '',
+      contentLinks: record.fields['Content Links'] || '',
+      contentDescription: record.fields['Content Description'] || '',
       submittedAt: record.fields['Submitted At'] || '',
     }));
 
