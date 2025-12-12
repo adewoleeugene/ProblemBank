@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState, useRef, memo } from 'react';
 import { kits as kitsData, slugifyTitle } from '../lib/kits';
-import HackathonStageBanner from '../components/HackathonStageBanner';
 import FAQSection from '../components/FAQSection';
 import PRDKitModal from '../components/PRDKitModal';
 import PitchMasterKitModal from '../components/PitchMasterKitModal';
@@ -121,14 +120,10 @@ export default function Home() {
       <Navigation logoText="ProblemBank" />
 
       {/* Hero Section */}
-      <main className="relative z-30 flex flex-col items-center justify-center min-h-screen px-4 md:px-8 pb-50">
-        {/* Hackathon Stage Banner */}
-        <div className="w-full top-8 left-0 right-0 z-10 mb-30 mt-10">
-          <HackathonStageBanner />
-        </div>
+      <main className="relative z-30 flex flex-col items-center justify-center min-h-screen px-4 md:px-8 pb-50 pt-32 md:pt-24">
         {/* PixelBlast Background with Feathered Hero Exclusion - Only in Hero */}
         {!isMobile && (
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none z-0"
             style={{
               WebkitMaskImage: 'radial-gradient(ellipse 40% 50% at 50% 40%, transparent 15%, black 60%)',
@@ -154,7 +149,7 @@ export default function Home() {
             />
           </div>
         )}
-        <div className="relative z-50 text-center max-w-4xl mx-auto -mt-24">
+        <div className="relative z-50 text-center max-w-4xl mx-auto">
           {/* Main Heading */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-8xl leading-none tracking-tight text-[#1e1e1e] mb-6">
             <div
