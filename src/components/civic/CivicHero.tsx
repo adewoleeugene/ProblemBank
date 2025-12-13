@@ -15,12 +15,12 @@ export default function CivicHero() {
     seconds: 0,
   });
 
-  // Check if submissions are still open (before Dec 13 noon GMT - when countdown hits 0)
-  const submissionDeadline = new Date('2025-12-13T12:00:00Z');
+  // Check if submissions are still open (before Dec 13 midnight GMT - when countdown hits 0)
+  const submissionDeadline = new Date('2025-12-13T23:59:59Z');
   const [isBeforeDeadline, setIsBeforeDeadline] = useState(true);
 
   useEffect(() => {
-    const targetDate = new Date('2025-12-13T12:00:00Z'); // Hackathon ends Dec 13th, noon GMT (when countdown hits 0)
+    const targetDate = new Date('2025-12-13T23:59:59Z'); // Hackathon ends Dec 13th, midnight GMT (when countdown hits 0)
 
     const updateCountdown = () => {
       const now = new Date();

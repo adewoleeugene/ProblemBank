@@ -4,8 +4,8 @@ import Link from 'next/link';
 import Big5SubmissionForm from './Big5SubmissionForm';
 
 const ApplicationCTA = memo(function ApplicationCTA() {
-  // Check if deadline has passed (Dec 7, 2025 at 23:59:59 UTC)
-  const deadline = new Date('2025-12-07T23:59:59Z');
+  // Check if deadline has passed (Dec 13, 2025 at 12:00 UTC - Noon)
+  const deadline = new Date('2025-12-13T12:00:00Z');
   const isBeforeDeadline = new Date() < deadline;
 
   // Don't render anything if deadline has passed

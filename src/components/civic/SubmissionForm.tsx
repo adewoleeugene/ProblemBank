@@ -59,12 +59,26 @@ export default function SubmissionForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isBeforeDeadline, setIsBeforeDeadline] = useState(true);
 
-  // Check if submission is allowed (before Dec 13 midnight GMT/UTC)
+  // Check if submission is allowed (before Dec 13 midnight GMT/UTC) in real-time
   // This matches when the countdown hits 0
-  const submissionDeadline = new Date('2025-12-13T00:00:00Z');
-  const now = new Date();
-  const isBeforeDeadline = now < submissionDeadline;
+  useEffect(() => {
+    const submissionDeadline = new Date('2025-12-13T23:59:59Z');
+
+    const checkDeadline = () => {
+      const now = new Date();
+      setIsBeforeDeadline(now < submissionDeadline);
+    };
+
+    // Check immediately
+    checkDeadline();
+
+    // Update every second to stay in sync with the countdown
+    const interval = setInterval(checkDeadline, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Listen for custom event from CivicHero button
   useEffect(() => {
