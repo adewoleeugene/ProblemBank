@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     // Check if before deadline (Dec 13 midnight GMT - when countdown hits 0)
-    const submissionDeadline = new Date('2025-12-13T00:00:00Z');
+    const submissionDeadline = new Date('2025-12-13T23:59:59Z');
     const now = new Date();
     if (now >= submissionDeadline) {
       return NextResponse.json({ error: 'Submission deadline has passed' }, { status: 400 });
